@@ -1,0 +1,122 @@
+#:kivy 1.0.9
+
+WindowManager:
+    HomeScreen:
+    NewGameScreen:
+    LoadGameScreen:
+
+<HomeScreen>
+    name: "home"
+    FloatLayout:
+        Label: 
+            text: "Clue Solver"
+            font_size: '50sp'
+            size_hint: (1, 0.5)
+            pos_hint: {"x": 0.0, "y": 0.5}
+        Button:
+            text: "Start New Game"
+            size_hint: (0.25, 0.25)
+            pos_hint: {"x":0.125, "y":0.25}
+            on_release: 
+                app.root.current = "new"
+                root.manager.transition.direction = "left"
+        Button:
+            text: "Load Previous Game"      
+            size_hint: (0.25, 0.25)
+            pos_hint: {"x":0.625, "y":0.25}            
+
+<NewGameScreen>
+    name: "new"
+    FloatLayout:
+        Button:
+            text: "Go Back"
+            font_size: '10sp'
+            size_hint: (0.0625, 0.0625)
+            pos_hint: {"x":0.0625 / 2, "y":1 - 1.5 * 0.0625}
+            on_release: 
+                app.root.current = "home"
+                root.manager.transition.direction = "right"
+
+
+
+<LoadGameScreen>
+    name: "load"
+    FloatLayout:
+        Button:
+            text: "Go Back"
+            font_size: '10sp'
+            size_hint: (0.0625, 0.0625)
+            pos_hint: {"x":0.0625 / 2, "y":1 - 1.5 * 0.0625}
+            on_release: 
+                app.root.current = "home"
+                root.manager.transition.direction = "right"
+
+
+
+
+
+
+# <FloatLayout>:
+#     Label:
+#         text: "Clue Solver"  
+#         font_size: '50sp'
+#         size_hint: (1, 0.5)
+#         pos_hint: {"x": 0.0, "y": 0.5} #, "top":1, "bottom":0.7} #, "left", "right"}
+#     Button:
+#         text: "Start New Game"
+#         size_hint: (0.25, 0.25)
+#         pos_hint: {"x":0.125, "y":0.25}
+#     Button:
+#         text: "Load Previous Game"      
+#         size_hint: (0.25, 0.25)
+#         pos_hint: {"x":0.625, "y":0.25}
+
+
+
+
+
+
+
+# <MyGrid>
+    
+#     name: name
+#     email: emaill
+
+    
+#     GridLayout:
+#         cols: 1
+#         size: root.width, root.height
+
+#         GridLayout:
+#             cols: 2
+            
+#             Label: 
+#                 text: "Name: "
+
+#             TextInput: 
+#                 id: name
+#                 multiline: False
+
+#             Label: 
+#                 text: "Email: "
+
+#             TextInput: 
+#                 id: emaill
+#                 multiline: False
+
+#         Button:
+#             text: "Submit"
+#             on_press:root.btn()
+        
+
+
+    # Button:
+    #     # pos_hint: {"x", "y", "top", "bottom", "left", "right"}
+    #     pos_hint: {"x":0.5, "top":1}               # values go from 0 to 1, coordinate system starts at bottom-left
+    #     text: "Tech with "
+    
+    # Button:
+    #     id: btn
+    #     pos_hint: {"x":0.1, "top": 0.5, "y": 0.3}
+    #     text: "Tim" if btn.state == "normal" else "Down"
+    #     background_color: 0.3, .4, .5, 1 
