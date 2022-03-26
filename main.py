@@ -41,10 +41,13 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 class HomeScreen(Screen):
     pass
 class NewGameScreen(Screen):
-    pass
+    def update(self):
+        name = self.ids.enterTextHere_textInput.text
+        self.ids.textAppearsHere_label.text = name
+        self.ids.enterTextHere_textInput.text = ""
+
 class LoadGameScreen(Screen):
     pass
-
 
 class WindowManager(ScreenManager):
     pass
@@ -54,6 +57,7 @@ kv = Builder.load_file("my.kv")
 class MyMainApp(App):
     def build(self):
         return kv
+
 
 if __name__ == "__main__":
     MyMainApp().run()

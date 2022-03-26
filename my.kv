@@ -36,7 +36,31 @@ WindowManager:
             on_release: 
                 app.root.current = "home"
                 root.manager.transition.direction = "right"
+        Label:
+            id: whatCharacter
+            text: "What character are you playing as?"
+            size_hint: (0.8, 0.5)
+            pos_hint: {"x": 0.1, "y": 0.5}
+        
+        
+        
+        
+        TextInput:
+            id: enterTextHere_textInput
+            multiline: False
+            size_hint: (0.25, 0.25)
+            pos_hint: {"x": 0.0, "y": 0.0}
+        Button:
+            text: "click here to save text"
+            size_hint: (0.25, 0.25)
+            pos_hint: {"x":0.25, "y": 0.0}
+            on_press:
+                root.update()
+        Label:
+            id: textAppearsHere_label
+            text: "blank for now"
 
+                            
 
 
 <LoadGameScreen>
