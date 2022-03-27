@@ -24,12 +24,23 @@ WindowManager:
             text: "Load Previous Game"      
             size_hint: (0.25, 0.25)
             pos_hint: {"x":0.625, "y":0.25}            
+            on_release: 
+                app.root.current = "load"
+                root.manager.transition.direction = "left"
+
 
 <NewGameScreen>
     name: "new"
+    canvas.before:
+        Color: 
+            rgba: 0, 0.5, 0.5, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
     FloatLayout:
         Button:
             text: "Go Back"
+            background_color: 0, 1, 0.2, 1
             font_size: '10sp'
             size_hint: (0.0625, 0.0625)
             pos_hint: {"x":0.0625 / 2, "y":1 - 1.5 * 0.0625}
@@ -39,26 +50,221 @@ WindowManager:
         Label:
             id: whatCharacter
             text: "What character are you playing as?"
-            size_hint: (0.8, 0.5)
-            pos_hint: {"x": 0.1, "y": 0.5}
+            text_color: 1, 1, 0, 1
+            canvas.before:
+                Color:
+                    rgba: 0.3, 0.3, 0.3, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            size_hint: (0.8, 0.2)
+            pos_hint: {"x": 0.1, "y": 0.7}
         
-        
-        
-        
-        TextInput:
-            id: enterTextHere_textInput
-            multiline: False
-            size_hint: (0.25, 0.25)
-            pos_hint: {"x": 0.0, "y": 0.0}
-        Button:
-            text: "click here to save text"
-            size_hint: (0.25, 0.25)
-            pos_hint: {"x":0.25, "y": 0.0}
-            on_press:
-                root.update()
+        ##############################################################    Character Selection    ##############################################################
+
+        #:set nameLabelSizeX 0.1
+        #:set nameLabelSizeY 0.1     
+
+        #:set checkboxSizeX 0.1
+        #:set checkboxSizeY 0.1
+
+        #:set pos_hint_x 0.35 
+        #:set pos_hint_x_FORCHECKBOX 0.5
+        #:set pos_hint_y 0.6
+        #:set pos_hint_y_interval 0.1
+                                                                                                #####       scarlett
+
+ 
         Label:
-            id: textAppearsHere_label
-            text: "blank for now"
+            id: scarlett_label
+            text: "Scarlett"
+            canvas.before:
+                Color:
+                    rgba: 0.3, 0.3, 0.3, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            size_hint: (nameLabelSizeX, nameLabelSizeY)
+            pos_hint: {"x": pos_hint_x, "y": pos_hint_y - pos_hint_y_interval * 0}
+        CheckBox:
+            id: scarlett_checkBox
+            group: "character_selection"
+            text: "scarlett checkbox text"
+            canvas.before:
+                Color:
+                    rgba: 0.3, 0.3, 0.3, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size            
+            # on_active: root.checkbox_click(self, self.active)
+            on_active: root.getUserCharacter(self.text)
+            size_hint: (checkboxSizeX, checkboxSizeY)
+            pos_hint: {"x": pos_hint_x_FORCHECKBOX, "y": pos_hint_y - pos_hint_y_interval * 0}
+
+                                                                                                #####       green
+        Label:
+            id: green_label
+            text: "Green"
+            canvas.before:
+                Color:
+                    rgba: 0.3, 0.3, 0.3, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            size_hint: (nameLabelSizeX, nameLabelSizeY)
+            pos_hint: {"x": pos_hint_x, "y": pos_hint_y - pos_hint_y_interval * 1}
+        CheckBox:
+            id: green_checkBox
+            group: "character_selection"
+            text: "green checkbox text"
+            canvas.before:
+                Color:
+                    rgba: 0.3, 0.3, 0.3, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size            
+            on_active: root.getUserCharacter(self.text)
+            size_hint: (checkboxSizeX, checkboxSizeY)
+            pos_hint: {"x": pos_hint_x_FORCHECKBOX, "y": pos_hint_y - pos_hint_y_interval * 1}
+
+                                                                                                #####       peacock
+        Label:
+            id: peacock_label
+            text: "Peacock"
+            canvas.before:
+                Color:
+                    rgba: 0.3, 0.3, 0.3, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            size_hint: (nameLabelSizeX, nameLabelSizeY)
+            pos_hint: {"x": pos_hint_x, "y": pos_hint_y - pos_hint_y_interval * 2}
+        CheckBox:
+            id: peacock_checkBox
+            group: "character_selection"
+            text: "peacock checkbox text"
+            canvas.before:
+                Color:
+                    rgba: 0.3, 0.3, 0.3, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size            
+            on_active: root.getUserCharacter(self.text)
+            size_hint: (checkboxSizeX, checkboxSizeY)
+            pos_hint: {"x": pos_hint_x_FORCHECKBOX, "y": pos_hint_y - pos_hint_y_interval * 2}
+
+                                                                                                #####       plum
+        Label:
+            id: plum_label
+            text: "Plum"
+            canvas.before:
+                Color:
+                    rgba: 0.3, 0.3, 0.3, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            size_hint: (nameLabelSizeX, nameLabelSizeY)
+            pos_hint: {"x": pos_hint_x, "y": pos_hint_y - pos_hint_y_interval * 3}
+        CheckBox:
+            id: plum_checkBox
+            group: "character_selection"
+            text: "plum checkbox text"
+            canvas.before:
+                Color:
+                    rgba: 0.3, 0.3, 0.3, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size            
+            on_active: root.getUserCharacter(self.text)
+            size_hint: (checkboxSizeX, checkboxSizeY)
+            pos_hint: {"x": pos_hint_x_FORCHECKBOX, "y": pos_hint_y - pos_hint_y_interval * 3}
+
+                                                                                                #####       mustard
+        Label:
+            id: mustard_label
+            text: "Mustard"
+            canvas.before:
+                Color:
+                    rgba: 0.3, 0.3, 0.3, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            size_hint: (nameLabelSizeX, nameLabelSizeY)
+            pos_hint: {"x": pos_hint_x, "y": pos_hint_y - pos_hint_y_interval * 4}
+        CheckBox:
+            id: mustard_checkBox
+            group: "character_selection"
+            text: "mustard checkbox text"
+            canvas.before:
+                Color:
+                    rgba: 0.3, 0.3, 0.3, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size            
+            on_active: root.getUserCharacter(self.text)
+            size_hint: (checkboxSizeX, checkboxSizeY)
+            pos_hint: {"x": pos_hint_x_FORCHECKBOX, "y": pos_hint_y - pos_hint_y_interval * 4}
+
+                                                                                                #####       orchid
+        Label:
+            id: orchid_label
+            text: "Orchid"
+            canvas.before:
+                Color:
+                    rgba: 0.3, 0.3, 0.3, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            size_hint: (nameLabelSizeX, nameLabelSizeY)
+            pos_hint: {"x": pos_hint_x, "y": pos_hint_y - pos_hint_y_interval * 5}
+        CheckBox:
+            id: orchid_checkBox
+            group: "character_selection"
+            text: "orchid checkbox text"
+            canvas.before:
+                Color:
+                    rgba: 0.3, 0.3, 0.3, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size            
+            on_active: root.getUserCharacter(self.text)
+            size_hint: (checkboxSizeX, checkboxSizeY)
+            pos_hint: {"x": pos_hint_x_FORCHECKBOX, "y": pos_hint_y - pos_hint_y_interval * 5}
+
+        ##############################################################    (END OF) Character Selection    ##############################################################
+        
+        Button:
+            text: "Next"
+            background_color: 0, 1, 0.2, 1
+            # font_size: '10sp'
+            size_hint: (0.125, 0.125)
+            pos_hint: {"x":1 - 2 * 0.125, "y":.125}
+            on_press: 
+                # root.getUserCharacter()
+                # app.root.current = "home"
+                # root.manager.transition.direction = "left"        
+
+
+
+
+
+
+
+
+        # TextInput:
+        #     id: enterTextHere_textInput
+        #     multiline: False
+        #     size_hint: (0.25, 0.25)
+        #     pos_hint: {"x": 0.0, "y": 0.0}
+        # Button:
+        #     text: "click here to save text"
+        #     size_hint: (0.25, 0.25)
+        #     pos_hint: {"x":0.25, "y": 0.0}
+        #     on_press:
+        #         root.update()
+        # Label:
+        #     id: textAppearsHere_label
+        #     text: "blank for now"
 
                             
 
