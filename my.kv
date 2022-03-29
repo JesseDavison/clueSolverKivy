@@ -4,6 +4,8 @@ WindowManager:
     HomeScreen:
     NewGameScreen:
     LoadGameScreen:
+    CardDeclarationScreen:
+    PlayerOrderScreen:
 
 <HomeScreen>
     name: "home"
@@ -89,15 +91,14 @@ WindowManager:
         CheckBox:
             id: scarlett_checkBox
             group: "character_selection"
-            text: "scarlett checkbox text"
+            text: "Scarlett"
             canvas.before:
                 Color:
                     rgba: 0.3, 0.3, 0.3, 1
                 Rectangle:
                     pos: self.pos
                     size: self.size            
-            # on_active: root.checkbox_click(self, self.active)
-            on_active: root.getUserCharacter(self.text)
+            on_active: root.setUserCharacter(self.text)
             size_hint: (checkboxSizeX, checkboxSizeY)
             pos_hint: {"x": pos_hint_x_FORCHECKBOX, "y": pos_hint_y - pos_hint_y_interval * 0}
 
@@ -116,14 +117,14 @@ WindowManager:
         CheckBox:
             id: green_checkBox
             group: "character_selection"
-            text: "green checkbox text"
+            text: "Green"
             canvas.before:
                 Color:
                     rgba: 0.3, 0.3, 0.3, 1
                 Rectangle:
                     pos: self.pos
                     size: self.size            
-            on_active: root.getUserCharacter(self.text)
+            on_active: root.setUserCharacter(self.text)
             size_hint: (checkboxSizeX, checkboxSizeY)
             pos_hint: {"x": pos_hint_x_FORCHECKBOX, "y": pos_hint_y - pos_hint_y_interval * 1}
 
@@ -142,14 +143,14 @@ WindowManager:
         CheckBox:
             id: peacock_checkBox
             group: "character_selection"
-            text: "peacock checkbox text"
+            text: "Peacock"
             canvas.before:
                 Color:
                     rgba: 0.3, 0.3, 0.3, 1
                 Rectangle:
                     pos: self.pos
                     size: self.size            
-            on_active: root.getUserCharacter(self.text)
+            on_active: root.setUserCharacter(self.text)
             size_hint: (checkboxSizeX, checkboxSizeY)
             pos_hint: {"x": pos_hint_x_FORCHECKBOX, "y": pos_hint_y - pos_hint_y_interval * 2}
 
@@ -168,14 +169,14 @@ WindowManager:
         CheckBox:
             id: plum_checkBox
             group: "character_selection"
-            text: "plum checkbox text"
+            text: "Plum"
             canvas.before:
                 Color:
                     rgba: 0.3, 0.3, 0.3, 1
                 Rectangle:
                     pos: self.pos
                     size: self.size            
-            on_active: root.getUserCharacter(self.text)
+            on_active: root.setUserCharacter(self.text)
             size_hint: (checkboxSizeX, checkboxSizeY)
             pos_hint: {"x": pos_hint_x_FORCHECKBOX, "y": pos_hint_y - pos_hint_y_interval * 3}
 
@@ -194,18 +195,18 @@ WindowManager:
         CheckBox:
             id: mustard_checkBox
             group: "character_selection"
-            text: "mustard checkbox text"
+            text: "Mustard"
             canvas.before:
                 Color:
                     rgba: 0.3, 0.3, 0.3, 1
                 Rectangle:
                     pos: self.pos
                     size: self.size            
-            on_active: root.getUserCharacter(self.text)
+            on_active: root.setUserCharacter(self.text)
             size_hint: (checkboxSizeX, checkboxSizeY)
             pos_hint: {"x": pos_hint_x_FORCHECKBOX, "y": pos_hint_y - pos_hint_y_interval * 4}
 
-                                                                                                #####       orchid
+                                                                                                #####       orchid  
         Label:
             id: orchid_label
             text: "Orchid"
@@ -220,37 +221,328 @@ WindowManager:
         CheckBox:
             id: orchid_checkBox
             group: "character_selection"
-            text: "orchid checkbox text"
+            text: "Orchid"
             canvas.before:
                 Color:
                     rgba: 0.3, 0.3, 0.3, 1
                 Rectangle:
                     pos: self.pos
                     size: self.size            
-            on_active: root.getUserCharacter(self.text)
+            on_active: root.setUserCharacter(self.text)
             size_hint: (checkboxSizeX, checkboxSizeY)
             pos_hint: {"x": pos_hint_x_FORCHECKBOX, "y": pos_hint_y - pos_hint_y_interval * 5}
 
         ##############################################################    (END OF) Character Selection    ##############################################################
         
-        Button:
+        Button:     # when this button is pressed the startGame() function will be run
             text: "Next"
             background_color: 0, 1, 0.2, 1
             # font_size: '10sp'
             size_hint: (0.125, 0.125)
             pos_hint: {"x":1 - 2 * 0.125, "y":.125}
             on_press: 
-                # root.getUserCharacter()
-                # app.root.current = "home"
-                # root.manager.transition.direction = "left"        
+                root.confirmUserCharacter()
+                app.root.current = "cardDeclaration"
+                root.manager.transition.direction = "left"        
 
 
 
+<TooManyCards@Popup>
+    auto_dismiss: False
+    title: "More than 3 cards are selected!"
+
+<CardDeclarationScreen>
+    name: "cardDeclaration"
+    
+    # on_leave: root.reset_checkbox()
+    
+    GridLayout:
+        cols: 1
+        rows: 2
+
+        Label:
+            id: whatCards
+            text: "What cards do you have?"
+            text_color: 1, 1, 0, 1
+            canvas.before:
+                Color:
+                    rgba: 0.3, 0.3, 0.3, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            size_hint: (0.9, 0.1)
+        GridLayout:
+            cols: 7
+            
+            ##################################################################      Row 1
+            #   blank label, followed by the 6 killer names
+            Label:
+                text: ""
+            Label:
+                text: "Green"
+                text_size: self.size
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Mustard"
+                text_size: self.size
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Peacock" 
+                text_size: self.size
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Plum"
+                text_size: self.size
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Scarlett"
+                text_size: self.size
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Orchid"
+                text_size: self.size
+                valign: 'bottom'
+                halign: 'center'
+            ##################################################################      Row 2            
+            Label:
+                id: killers
+                text: "Killers:"
+            CheckBox:
+                id: cardSelectionCheckbox_killer_green            
+                text: "Green"
+                on_active: root.clickOnBox(self, self.active)
+            CheckBox:
+                id: cardSelectionCheckbox_killer_mustard
+                text: "Mustard"
+                on_active: root.clickOnBox(self, self.active)
+            CheckBox:
+                id: cardSelectionCheckbox_killer_peacock
+                text: "Peacock"
+                on_active: root.clickOnBox(self, self.active)
+            CheckBox:
+                id: cardSelectionCheckbox_killer_plum
+                text: "Plum"
+                on_active: root.clickOnBox(self, self.active)
+            CheckBox:
+                id: cardSelectionCheckbox_killer_scarlett
+                text: "Scarlett"
+                on_active: root.clickOnBox(self, self.active)
+            CheckBox:
+                id: cardSelectionCheckbox_killer_orchid
+                text: "Orchid"
+                on_active: root.clickOnBox(self, self.active)
+            ##################################################################      Row 3
+            #   blank label, followed by the 6 weapon names
+            Label:
+                text: ""
+            Label:
+                text: "Candlestick"
+                text_size: self.size
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Dagger"
+                text_size: self.size
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Pipe" 
+                text_size: self.size
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Revolver"
+                text_size: self.size
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Rope"
+                text_size: self.size
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Wrench"
+                text_size: self.size
+                valign: 'bottom'
+                halign: 'center'
+            ##################################################################      Row 4
+            Label:
+                text: "Weapons:"
+                # text_color: 1, 1, 0, 1
+            CheckBox:
+                id: cardSelectionCheckbox_weapon_candlestick
+                text: "Candlestick"
+                on_active: root.clickOnBox(self, self.active)
+            CheckBox:
+                id: cardSelectionCheckbox_weapon_dagger
+                text: "Dagger"
+                on_active: root.clickOnBox(self, self.active)
+            CheckBox:
+                id: cardSelectionCheckbox_weapon_pipe
+                text: "Pipe"
+                on_active: root.clickOnBox(self, self.active)
+            CheckBox:
+                id: cardSelectionCheckbox_weapon_revolver
+                text: "Revolver"
+                on_active: root.clickOnBox(self, self.active)
+            CheckBox:
+                id: cardSelectionCheckbox_weapon_rope
+                text: "Rope"
+                on_active: root.clickOnBox(self, self.active)
+            CheckBox:
+                id: cardSelectionCheckbox_weapon_wrench
+                text: "Wrench"
+                on_active: root.clickOnBox(self, self.active)
+            ##################################################################      Row 5
+            #   blank label, followed by the 9 room names
+            Label:
+                text: ""
+            Label:
+                text: "Ballroom"
+                text_size: self.size
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Billiard Room"
+                text_size: self.size
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Conservatory" 
+                text_size: self.size
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Dining Room"
+                text_size: self.size
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Hall"
+                text_size: self.size
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Kitchen"
+                text_size: self.size
+                valign: 'bottom'
+                halign: 'center'
+            ##################################################################      Row 6
+            Label:
+                text: "Rooms:"
+            CheckBox:
+                id: cardSelectionCheckbox_room_ballroom
+                text: "Ballroom"
+                on_active: root.clickOnBox(self, self.active)
+            CheckBox:
+                id: cardSelectionCheckbox_room_billiard
+                text: "Billiard Room"
+                on_active: root.clickOnBox(self, self.active)
+            CheckBox:
+                id: cardSelectionCheckbox_room_conservatory
+                text: "Conservatory"
+                on_active: root.clickOnBox(self, self.active)
+            CheckBox:
+                id: cardSelectionCheckbox_room_dining
+                text: "Dining Room"
+                on_active: root.clickOnBox(self, self.active)
+            CheckBox:
+                id: cardSelectionCheckbox_room_hall
+                text: "Hall"
+                on_active: root.clickOnBox(self, self.active)
+            CheckBox:
+                id: cardSelectionCheckbox_room_kitchen
+                text: "Kitchen"
+                on_active: root.clickOnBox(self, self.active)
+            ##################################################################      Row 7
+            Label:
+                text: ""
+            Label:
+                text: "Library"
+                text_size: self.size
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Lounge"
+                text_size: self.size
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Study" 
+                text_size: self.size
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: ""
+            Label:
+                text: ""
+            Label:
+                text: ""
+            ##################################################################      Row 8
+            Label:
+                text: ""
+            CheckBox:
+                id: cardSelectionCheckbox_room_library
+                text: "Library"
+                on_active: root.clickOnBox(self, self.active)
+            CheckBox:
+                id: cardSelectionCheckbox_room_lounge
+                text: "Lounge"
+                on_active: root.clickOnBox(self, self.active)
+            CheckBox:
+                id: cardSelectionCheckbox_room_study
+                text: "Study"
+                on_active: root.clickOnBox(self, self.active)
+            Label:
+                text: ""
+            Label:
+                text: ""
+            Label:
+                text: ""
+            ##################################################################      Row 9     
+            Label:
+                text: ""
+            Label:
+                text: ""
+            Label:
+                text: ""
+            Label:
+                text: ""
+            Label:
+                text: ""
+            Label:
+                text: ""
+    FloatLayout:
+        Button:
+            text: "Go Back"
+            background_color: 0, 1, 0.2, 1
+            font_size: '10sp'
+            size_hint: (0.0625, 0.0625)
+            pos_hint: {"x":0.0625 / 2, "y":1 - 1.5 * 0.0625}
+            on_release: 
+                root.pressBACKbutton()
+                app.root.current = "new"
+                root.manager.transition.direction = "right"
+                # need to clear out the cardList so it doesn't cause an error if the user changes characters
 
 
-
-
-
+        Button:     # when this button is pressed ...
+            text: "Next"
+            background_color: 0, 1, 0.2, 1
+            # font_size: '10sp'
+            size_hint: (0.125, 0.125)
+            pos_hint: {"x":1 - 2 * 0.125, "y":.125}
+            on_press: 
+                # check if exactly 3 cards have been selected
+                app.root.current = "PlayerOrderScreen"
+                root.manager.transition.direction = "left"                        
+        
+        
         # TextInput:
         #     id: enterTextHere_textInput
         #     multiline: False
@@ -266,7 +558,9 @@ WindowManager:
         #     id: textAppearsHere_label
         #     text: "blank for now"
 
-                            
+<PlayerOrderScreen>
+    name: "playerOrder"
+                                
 
 
 <LoadGameScreen>
