@@ -612,41 +612,47 @@ WindowManager:
                 text: "Green"
                 text_size: self.size    
                 id: green_label_turn_1
+                vrs: {'turnNumber': 1, 'player': 'Green', 'type': 'label'}
                 disabled: False
                 valign: 'bottom'    
                 halign: 'center'
             Label:
                 text: "Mustard"
                 text_size: self.size
-                id: mustard_1
+                id: mustard_label_turn_1
+                vrs: {'turnNumber': 1, 'player': 'Mustard', 'type': 'label'}
                 disabled: False
                 valign: 'bottom'
                 halign: 'center'
             Label:
                 text: "Peacock" 
                 text_size: self.size
-                id: peacock_1
+                id: peacock_label_turn_1
+                vrs: {'turnNumber': 1, 'player': 'Peacock', 'type': 'label'}
                 disabled: False
                 valign: 'bottom'
                 halign: 'center'
             Label:
                 text: "Plum"
                 text_size: self.size
-                id: plum_1
+                id: plum_label_turn_1
+                vrs: {'turnNumber': 1, 'player': 'Plum', 'type': 'label'}
                 disabled: False
                 valign: 'bottom'
                 halign: 'center'
             Label:
                 text: "Scarlett"
                 text_size: self.size
-                id: scarlett_1
+                id: scarlett_label_turn_1
+                vrs: {'turnNumber': 1, 'player': 'Scarlett', 'type': 'label'}
                 disabled: False
                 valign: 'bottom'
                 halign: 'center'
             Label:
                 text: "Orchid"
                 text_size: self.size
-                id: orchid_1
+                id: orchid_label_turn_1
+                vrs: {'turnNumber': 1, 'player': 'Orchid', 'type': 'label'}
                 disabled: False
                 valign: 'bottom'
                 halign: 'center'
@@ -654,50 +660,52 @@ WindowManager:
             Label:
                 text: "First turn:"
                 id: first_turn_label
+                vrs: {'turnNumber': 1, 'player': 'rowLabel', 'type': 'label'}
             CheckBox:
                 id: green_checkbox_turn_1
                 text: "Green"
-                group: "first turn"
-
-                memberOfTurn: 1         # these are custom values that can be referenced in python
-                player: "green"
-
+                group: "first turn"     # radio button group
+                vrs: {'turnNumber': 1, 'player': 'Green', 'type': 'checkbox'}
                 disabled: False
                 on_active: 
                     # root.clickOnPlayerOrderBox(self)
                     # green_label_turn_1.text: "ffs"
-                    root.testFunctionBaby(self)
+                    root.clickPlayerOrderCheckbox(self)
             CheckBox:
-                id: mustard_1
+                id: mustard_checkbox_turn_1
                 text: "Mustard"
                 group: "first turn"
+                vrs: {'turnNumber': 1, 'player': 'Mustard', 'type': 'checkbox'}
                 disabled: False
-                on_active: 
-                    root.clickOnPlayerOrderBox(self)
+                on_active: root.clickPlayerOrderCheckbox(self)
             CheckBox:
-                id: peacock_1
+                id: peacock_checkbox_turn_1
                 text: "Peacock"
                 group: "first turn"
+                vrs: {'turnNumber': 1, 'player': 'Peacock', 'type': 'checkbox'}
                 disabled: False
-                on_active: root.clickOnPlayerOrderBox(self)
+                on_active: root.clickPlayerOrderCheckbox(self)
             CheckBox:
-                id: plum_1
+                id: plum_checkbox_turn_1
                 text: "Plum"
                 group: "first turn"
+                vrs: {'turnNumber': 1, 'player': 'Plum', 'type': 'checkbox'}
                 disabled: False
-                on_active: root.clickOnPlayerOrderBox(self)
+                on_active: root.clickPlayerOrderCheckbox(self)
             CheckBox:
-                id: scarlett_1
+                id: scarlett_checkbox_turn_1
                 text: "Scarlett"
                 group: "first turn"
+                vrs: {'turnNumber': 1, 'player': 'Scarlett', 'type': 'checkbox'}
                 disabled: False
-                on_active: root.clickOnPlayerOrderBox(self)
+                on_active: root.clickPlayerOrderCheckbox(self)
             CheckBox:
-                id: orchid_1
+                id: orchid_checkbox_turn_1
                 text: "Orchid"
                 group: "first turn"
+                vrs: {'turnNumber': 1, 'player': 'Orchid', 'type': 'checkbox'}
                 disabled: False
-                on_active: root.clickOnPlayerOrderBox(self)                                                
+                on_active: root.clickPlayerOrderCheckbox(self)                                               
             ##################################################################      Row 3
             #   
             Label:
@@ -706,83 +714,97 @@ WindowManager:
                 text: "Green"
                 text_size: self.size    
                 id: green_label_turn_2
+                vrs: {'turnNumber': 2, 'player': 'Green', 'type': 'label'}
                 disabled: False
                 valign: 'bottom'    
                 halign: 'center'
             Label:
                 text: "Mustard"
                 text_size: self.size
-                id: mustard_2
+                id: mustard_label_turn_2
+                vrs: {'turnNumber': 2, 'player': 'Mustard', 'type': 'label'}
                 disabled: False
                 valign: 'bottom'
                 halign: 'center'
             Label:
                 text: "Peacock" 
                 text_size: self.size
-                id: peacock_2
+                id: peacock_label_turn_2
+                vrs: {'turnNumber': 2, 'player': 'Peacock', 'type': 'label'}
                 disabled: False
                 valign: 'bottom'
                 halign: 'center'
             Label:
                 text: "Plum"
                 text_size: self.size
-                id: plum_2
+                id: plum_label_turn_2
+                vrs: {'turnNumber': 2, 'player': 'Plum', 'type': 'label'}
                 disabled: False
                 valign: 'bottom'
                 halign: 'center'
             Label:
                 text: "Scarlett"
                 text_size: self.size
-                id: scarlett_2
+                id: scarlett_label_turn_2
+                vrs: {'turnNumber': 2, 'player': 'Scarlett', 'type': 'label'}
                 disabled: False
                 valign: 'bottom'
                 halign: 'center'
             Label:
                 text: "Orchid"
                 text_size: self.size
-                id: orchid_2
+                id: orchid_label_turn_2
+                vrs: {'turnNumber': 2, 'player': 'Orchid', 'type': 'label'}
                 disabled: False
                 valign: 'bottom'
                 halign: 'center'
             ##################################################################      Row 4
             Label:
                 text: "Second turn:"
+                id: second_turn_label
+                vrs: {'turnNumber': 2, 'player': 'rowLabel', 'type': 'label'}                
             CheckBox:
                 id: green_checkbox_turn_2
                 text: "Green"
                 group: "second turn"
+                vrs: {'turnNumber': 2, 'player': 'Green', 'type': 'checkbox'}
                 disabled: False
-                on_active: root.clickOnPlayerOrderBox(self)
+                on_active: root.clickPlayerOrderCheckbox(self)
             CheckBox:
-                id: mustard_2
+                id: mustard_checkbox_turn_2
                 text: "Mustard"
                 group: "second turn"
+                vrs: {'turnNumber': 2, 'player': 'Mustard', 'type': 'checkbox'}
                 disabled: False
-                on_active: root.clickOnPlayerOrderBox(self)
+                on_active: root.clickPlayerOrderCheckbox(self)
             CheckBox:
-                id: peacock_2
+                id: peacock_checkbox_turn_2
                 text: "Peacock"
                 group: "second turn"
+                vrs: {'turnNumber': 2, 'player': 'Peacock', 'type': 'checkbox'}
                 disabled: False
-                on_active: root.clickOnPlayerOrderBox(self)
+                on_active: root.clickPlayerOrderCheckbox(self)
             CheckBox:
-                id: plum_2
+                id: plum_checkbox_turn_2
                 text: "Plum"
                 group: "second turn"
+                vrs: {'turnNumber': 2, 'player': 'Plum', 'type': 'checkbox'}
                 disabled: False
-                on_active: root.clickOnPlayerOrderBox(self)
+                on_active: root.clickPlayerOrderCheckbox(self)
             CheckBox:
-                id: scarlett_2
+                id: scarlett_checkbox_turn_2
                 text: "Scarlett"
                 group: "second turn"
+                vrs: {'turnNumber': 2, 'player': 'Scarlett', 'type': 'checkbox'}
                 disabled: False
-                on_active: root.clickOnPlayerOrderBox(self)
+                on_active: root.clickPlayerOrderCheckbox(self)
             CheckBox:
-                id: orchid_2
+                id: orchid_checkbox_turn_2
                 text: "Orchid"
                 group: "second turn"
+                vrs: {'turnNumber': 2, 'player': 'Orchid', 'type': 'checkbox'}
                 disabled: False
-                on_active: root.clickOnPlayerOrderBox(self)  
+                on_active: root.clickPlayerOrderCheckbox(self)
 
 
             ##################################################################      Row 5
@@ -793,88 +815,406 @@ WindowManager:
                 text: "Green"
                 text_size: self.size    
                 id: green_label_turn_3
+                vrs: {'turnNumber': 3, 'player': 'Green', 'type': 'label'}
                 disabled: False
                 valign: 'bottom'    
                 halign: 'center'
             Label:
                 text: "Mustard"
                 text_size: self.size
-                id: mustard_3
+                id: mustard_label_turn_3
+                vrs: {'turnNumber': 3, 'player': 'Mustard', 'type': 'label'}
                 disabled: False
                 valign: 'bottom'
                 halign: 'center'
             Label:
                 text: "Peacock" 
                 text_size: self.size
-                id: peacock_3
+                id: peacock_label_turn_3
+                vrs: {'turnNumber': 3, 'player': 'Peacock', 'type': 'label'}
                 disabled: False
                 valign: 'bottom'
                 halign: 'center'
             Label:
                 text: "Plum"
                 text_size: self.size
-                id: plum_3
+                id: plum_label_turn_3
+                vrs: {'turnNumber': 3, 'player': 'Plum', 'type': 'label'}
                 disabled: False
                 valign: 'bottom'
                 halign: 'center'
             Label:
                 text: "Scarlett"
                 text_size: self.size
-                id: scarlett_3
+                id: scarlett_label_turn_3
+                vrs: {'turnNumber': 3, 'player': 'Scarlett', 'type': 'label'}
                 disabled: False
                 valign: 'bottom'
                 halign: 'center'
             Label:
                 text: "Orchid"
                 text_size: self.size
-                id: orchid_3
+                id: orchid_label_turn_3
+                vrs: {'turnNumber': 3, 'player': 'Orchid', 'type': 'label'}
                 disabled: False
                 valign: 'bottom'
                 halign: 'center'
             ##################################################################      Row 6
             Label:
                 text: "Third turn:"
+                id: third_turn_label
+                vrs: {'turnNumber': 3, 'player': 'rowLabel', 'type': 'label'}                
             CheckBox:
                 id: green_checkbox_turn_3
                 text: "Green"
                 group: "third turn"
+                vrs: {'turnNumber': 3, 'player': 'Green', 'type': 'checkbox'}
                 disabled: False
-                on_active: root.clickOnPlayerOrderBox(self)
+                on_active: root.clickPlayerOrderCheckbox(self)
             CheckBox:
-                id: mustard_3
+                id: mustard_checkbox_turn_3
                 text: "Mustard"
                 group: "third turn"
+                vrs: {'turnNumber': 3, 'player': 'Mustard', 'type': 'checkbox'}
                 disabled: False
-                on_active: root.clickOnPlayerOrderBox(self)
+                on_active: root.clickPlayerOrderCheckbox(self)
             CheckBox:
-                id: peacock_3
+                id: peacock_checkbox_turn_3
                 text: "Peacock"
                 group: "third turn"
+                vrs: {'turnNumber': 3, 'player': 'Peacock', 'type': 'checkbox'}
                 disabled: False
-                on_active: root.clickOnPlayerOrderBox(self)
+                on_active: root.clickPlayerOrderCheckbox(self)
             CheckBox:
-                id: plum_3
+                id: plum_checkbox_turn_3
                 text: "Plum"
                 group: "third turn"
+                vrs: {'turnNumber': 3, 'player': 'Plum', 'type': 'checkbox'}
                 disabled: False
-                on_active: root.clickOnPlayerOrderBox(self)
+                on_active: root.clickPlayerOrderCheckbox(self)
             CheckBox:
-                id: scarlett_3
+                id: scarlett_checkbox_turn_3
                 text: "Scarlett"
                 group: "third turn"
+                vrs: {'turnNumber': 3, 'player': 'Scarlett', 'type': 'checkbox'}
                 disabled: False
-                on_active: root.clickOnPlayerOrderBox(self)
+                on_active: root.clickPlayerOrderCheckbox(self)
             CheckBox:
-                id: orchid_3
+                id: orchid_checkbox_turn_3
                 text: "Orchid"
                 group: "third turn"
+                vrs: {'turnNumber': 3, 'player': 'Orchid', 'type': 'checkbox'}
                 disabled: False
-                on_active: root.clickOnPlayerOrderBox(self)  
+                on_active: root.clickPlayerOrderCheckbox(self)
+
+
+            ##################################################################      Row 7
+            #   
+            Label:
+                text: ""
+            Label:
+                text: "Green"
+                text_size: self.size    
+                id: green_label_turn_4
+                vrs: {'turnNumber': 4, 'player': 'Green', 'type': 'label'}
+                disabled: False
+                valign: 'bottom'    
+                halign: 'center'
+            Label:
+                text: "Mustard"
+                text_size: self.size
+                id: mustard_label_turn_4
+                vrs: {'turnNumber': 4, 'player': 'Mustard', 'type': 'label'}
+                disabled: False
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Peacock" 
+                text_size: self.size
+                id: peacock_label_turn_4
+                vrs: {'turnNumber': 4, 'player': 'Peacock', 'type': 'label'}
+                disabled: False
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Plum"
+                text_size: self.size
+                id: plum_label_turn_4
+                vrs: {'turnNumber': 4, 'player': 'Plum', 'type': 'label'}
+                disabled: False
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Scarlett"
+                text_size: self.size
+                id: scarlett_label_turn_4
+                vrs: {'turnNumber': 4, 'player': 'Scarlett', 'type': 'label'}
+                disabled: False
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Orchid"
+                text_size: self.size
+                id: orchid_label_turn_4
+                vrs: {'turnNumber': 4, 'player': 'Orchid', 'type': 'label'}
+                disabled: False
+                valign: 'bottom'
+                halign: 'center'
+            ##################################################################      Row 8
+            Label:
+                text: "Fourth turn:"
+                id: fourth_turn_label
+                vrs: {'turnNumber': 4, 'player': 'rowLabel', 'type': 'label'}                
+            CheckBox:
+                id: green_checkbox_turn_4
+                text: "Green"
+                group: "fourth turn"
+                vrs: {'turnNumber': 4, 'player': 'Green', 'type': 'checkbox'}
+                disabled: False
+                on_active: root.clickPlayerOrderCheckbox(self)
+            CheckBox:
+                id: mustard_checkbox_turn_4
+                text: "Mustard"
+                group: "fourth turn"
+                vrs: {'turnNumber': 4, 'player': 'Mustard', 'type': 'checkbox'}
+                disabled: False
+                on_active: root.clickPlayerOrderCheckbox(self)
+            CheckBox:
+                id: peacock_checkbox_turn_4
+                text: "Peacock"
+                group: "fourth turn"
+                vrs: {'turnNumber': 4, 'player': 'Peacock', 'type': 'checkbox'}
+                disabled: False
+                on_active: root.clickPlayerOrderCheckbox(self)
+            CheckBox:
+                id: plum_checkbox_turn_4
+                text: "Plum"
+                group: "fourth turn"
+                vrs: {'turnNumber': 4, 'player': 'Plum', 'type': 'checkbox'}
+                disabled: False
+                on_active: root.clickPlayerOrderCheckbox(self)
+            CheckBox:
+                id: scarlett_checkbox_turn_4
+                text: "Scarlett"
+                group: "fourth turn"
+                vrs: {'turnNumber': 4, 'player': 'Scarlett', 'type': 'checkbox'}
+                disabled: False
+                on_active: root.clickPlayerOrderCheckbox(self)
+            CheckBox:
+                id: orchid_checkbox_turn_4
+                text: "Orchid"
+                group: "fourth turn"
+                vrs: {'turnNumber': 4, 'player': 'Orchid', 'type': 'checkbox'}
+                disabled: False
+                on_active: root.clickPlayerOrderCheckbox(self)
+
+
+            ##################################################################      Row 9
+            #   
+            Label:
+                text: ""
+            Label:
+                text: "Green"
+                text_size: self.size    
+                id: green_label_turn_5
+                vrs: {'turnNumber': 5, 'player': 'Green', 'type': 'label'}
+                disabled: False
+                valign: 'bottom'    
+                halign: 'center'
+            Label:
+                text: "Mustard"
+                text_size: self.size
+                id: mustard_label_turn_5
+                vrs: {'turnNumber': 5, 'player': 'Mustard', 'type': 'label'}
+                disabled: False
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Peacock" 
+                text_size: self.size
+                id: peacock_label_turn_5
+                vrs: {'turnNumber': 5, 'player': 'Peacock', 'type': 'label'}
+                disabled: False
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Plum"
+                text_size: self.size
+                id: plum_label_turn_5
+                vrs: {'turnNumber': 5, 'player': 'Plum', 'type': 'label'}
+                disabled: False
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Scarlett"
+                text_size: self.size
+                id: scarlett_label_turn_5
+                vrs: {'turnNumber': 5, 'player': 'Scarlett', 'type': 'label'}
+                disabled: False
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Orchid"
+                text_size: self.size
+                id: orchid_label_turn_5
+                vrs: {'turnNumber': 5, 'player': 'Orchid', 'type': 'label'}
+                disabled: False
+                valign: 'bottom'
+                halign: 'center'
+            ##################################################################      Row 10
+            Label:
+                text: "Fifth turn:"
+                id: fifth_turn_label
+                vrs: {'turnNumber': 5, 'player': 'rowLabel', 'type': 'label'}                
+            CheckBox:
+                id: green_checkbox_turn_5
+                text: "Green"
+                group: "fifth turn"
+                vrs: {'turnNumber': 5, 'player': 'Green', 'type': 'checkbox'}
+                disabled: False
+                on_active: root.clickPlayerOrderCheckbox(self)
+            CheckBox:
+                id: mustard_checkbox_turn_5
+                text: "Mustard"
+                group: "fifth turn"
+                vrs: {'turnNumber': 5, 'player': 'Mustard', 'type': 'checkbox'}
+                disabled: False
+                on_active: root.clickPlayerOrderCheckbox(self)
+            CheckBox:
+                id: peacock_checkbox_turn_5
+                text: "Peacock"
+                group: "fifth turn"
+                vrs: {'turnNumber': 5, 'player': 'Peacock', 'type': 'checkbox'}
+                disabled: False
+                on_active: root.clickPlayerOrderCheckbox(self)
+            CheckBox:
+                id: plum_checkbox_turn_5
+                text: "Plum"
+                group: "fifth turn"
+                vrs: {'turnNumber': 5, 'player': 'Plum', 'type': 'checkbox'}
+                disabled: False
+                on_active: root.clickPlayerOrderCheckbox(self)
+            CheckBox:
+                id: scarlett_checkbox_turn_5
+                text: "Scarlett"
+                group: "fifth turn"
+                vrs: {'turnNumber': 5, 'player': 'Scarlett', 'type': 'checkbox'}
+                disabled: False
+                on_active: root.clickPlayerOrderCheckbox(self)
+            CheckBox:
+                id: orchid_checkbox_turn_5
+                text: "Orchid"
+                group: "fifth turn"
+                vrs: {'turnNumber': 5, 'player': 'Orchid', 'type': 'checkbox'}
+                disabled: False
+                on_active: root.clickPlayerOrderCheckbox(self)
+
+
+            ##################################################################      Row 11
+            #   
+            Label:
+                text: ""
+            Label:
+                text: "Green"
+                text_size: self.size    
+                id: green_label_turn_6
+                vrs: {'turnNumber': 6, 'player': 'Green', 'type': 'label'}
+                disabled: False
+                valign: 'bottom'    
+                halign: 'center'
+            Label:
+                text: "Mustard"
+                text_size: self.size
+                id: mustard_label_turn_6
+                vrs: {'turnNumber': 6, 'player': 'Mustard', 'type': 'label'}
+                disabled: False
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Peacock" 
+                text_size: self.size
+                id: peacock_label_turn_6
+                vrs: {'turnNumber': 6, 'player': 'Peacock', 'type': 'label'}
+                disabled: False
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Plum"
+                text_size: self.size
+                id: plum_label_turn_6
+                vrs: {'turnNumber': 6, 'player': 'Plum', 'type': 'label'}
+                disabled: False
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Scarlett"
+                text_size: self.size
+                id: scarlett_label_turn_6
+                vrs: {'turnNumber': 6, 'player': 'Scarlett', 'type': 'label'}
+                disabled: False
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Orchid"
+                text_size: self.size
+                id: orchid_label_turn_6
+                vrs: {'turnNumber': 6, 'player': 'Orchid', 'type': 'label'}
+                disabled: False
+                valign: 'bottom'
+                halign: 'center'
+            ##################################################################      Row 12
+            Label:
+                text: "Sixth turn:"
+                id: sixth_turn_label
+                vrs: {'turnNumber': 6, 'player': 'rowLabel', 'type': 'label'}                
+            CheckBox:
+                id: green_checkbox_turn_6
+                text: "Green"
+                group: "sixth turn"
+                vrs: {'turnNumber': 6, 'player': 'Green', 'type': 'checkbox'}
+                disabled: False
+                on_active: root.clickPlayerOrderCheckbox(self)
+            CheckBox:
+                id: mustard_checkbox_turn_6
+                text: "Mustard"
+                group: "sixth turn"
+                vrs: {'turnNumber': 6, 'player': 'Mustard', 'type': 'checkbox'}
+                disabled: False
+                on_active: root.clickPlayerOrderCheckbox(self)
+            CheckBox:
+                id: peacock_checkbox_turn_6
+                text: "Peacock"
+                group: "sixth turn"
+                vrs: {'turnNumber': 6, 'player': 'Peacock', 'type': 'checkbox'}
+                disabled: False
+                on_active: root.clickPlayerOrderCheckbox(self)
+            CheckBox:
+                id: plum_checkbox_turn_6
+                text: "Plum"
+                group: "sixth turn"
+                vrs: {'turnNumber': 6, 'player': 'Plum', 'type': 'checkbox'}
+                disabled: False
+                on_active: root.clickPlayerOrderCheckbox(self)
+            CheckBox:
+                id: scarlett_checkbox_turn_6
+                text: "Scarlett"
+                group: "sixth turn"
+                vrs: {'turnNumber': 6, 'player': 'Scarlett', 'type': 'checkbox'}
+                disabled: False
+                on_active: root.clickPlayerOrderCheckbox(self)
+            CheckBox:
+                id: orchid_checkbox_turn_6
+                text: "Orchid"
+                group: "sixth turn"
+                vrs: {'turnNumber': 6, 'player': 'Orchid', 'type': 'checkbox'}
+                disabled: False
+                on_active: root.clickPlayerOrderCheckbox(self)
 
 
     FloatLayout:
         Label:
             id: whatCards
+            vrs: {'turnNumber': -1, 'player': '', 'type': ''}            
             text: "What is the player order?"
             text_color: 1, 1, 0, 1
             canvas.before:
@@ -898,13 +1238,14 @@ WindowManager:
         Button:
             text: "Next"
             id: next_button
+            vrs: {'turnNumber': -1, 'player': '', 'type': ''}            
             background_color: 0, 1, 0.2, 1
             # font_size: '10sp'
             size_hint: (0.125, 0.125)
             pos_hint: {"x":1 - 2 * 0.125, "y":.125}
             disabled: True
             on_press: 
-                # check if exactly 3 cards have been selected.... we'll add this later
+                # process the selected player order and incporporate it
                 app.root.current = "**** next screen here ****"
                 root.manager.transition.direction = "left"    
 

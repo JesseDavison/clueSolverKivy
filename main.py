@@ -1,4 +1,5 @@
 
+from dis import dis
 from xml.etree.ElementPath import get_parent_map
 import kivy
 from kivy.app import App
@@ -140,6 +141,7 @@ userCharacter = Player
 
 class HomeScreen(Screen):
     pass
+
 class NewGameScreen(Screen):
     userNNNNname = StringProperty("")
 
@@ -172,7 +174,6 @@ class NewGameScreen(Screen):
             if player.getNameOnly() == userCharacterName:
                 userCharacter = player
         print("in the startGame function, the userCharacter is: " + str(userCharacter.getNameOnly()))
-
 
 numberOfCardsSelected = 0
 class CardDeclarationScreen(Screen):
@@ -210,98 +211,47 @@ class CardDeclarationScreen(Screen):
         else:
             pass
 
+playerOrder = []
 class PlayerOrderScreen(Screen):
-    def clickOnPlayerOrderBox(self, instance):  
-        # disable this character name from being able to be selected for another turn
+    def clickPlayerOrderCheckbox(self, instance):
+        # turn EVERY CELL to disabled = False
+        for key, val in self.ids.items():
+            val.disabled = False
+            # val.vrs['shouldBeDisabled'] = 'False'
+
+        # change the color of the clicked checkbox & its label, and also change the rowLabel color
         if instance.active == True:
             for key, val in self.ids.items():
-                print("key={0}, val={1}".format(key, val))          # so the id is the key, and the memory address is the value
-
-            print("test begins here:")
-
-            for key, val in self.ids.items():
-                if "green" in key:
-                    print("key: " + str(key))                   #### i think we're on to something here
-
-
-
-            for key, val in self.ids.items():
-                # print("val.text:      " + str(val.text))
-                # print("val:           " + str(val))
-                # print("val.ids:       " + str(val.ids))
-                if val.text == instance.text and val != instance:
-                    # print("val.text:      " + str(val.text))
-                    # print("val:           " + str(val))
-                    # print("instance.text: " + str(instance.text))
-                    # print("instance:      " + str(instance))
-                    # print("")
-                    val.disabled = True
+                #       "if it's the same turnNumber, the same player or if it's a rowLabel, then change the color"
+                if val.vrs['turnNumber'] == instance.vrs['turnNumber'] and (val.vrs['player'] == instance.vrs['player'] or val.vrs['player'] == 'rowLabel'):
+                    val.color = 0, 1, 0.2, 1
+        # change the color BACK if un-clicked   .... but for columns, only change if the row associated with that label&checkbox is NOT selected
         if instance.active == False:
             for key, val in self.ids.items():
-                if val.text == instance.text and val != instance:
-                    val.disabled = False
-    def testFunctionBaby(self, instance):
-        # print(str(theVeryID))
+                #       "if it's the same turnNumber, the same player or if it's a rowLabel, then change the color BACK"
+                if val.vrs['turnNumber'] == instance.vrs['turnNumber'] and (val.vrs['player'] == instance.vrs['player'] or val.vrs['player'] == 'rowLabel'):
+                    val.color = 1, 1, 1, 1
+        
+        # for reference:
+        # EXAMPLE from .kv file:      vrs: {'turnNumber': 1, 'player': 'Orchid', 'type': 'label', 'shouldBeDisabled': False}
 
-        if instance in self.ids.values():
-            print(list(self.ids.keys())[list(self.ids.values()).index(instance)])
-
-        whatTurnIsIt = instance.memberOfTurn
-        print("whatTurnIsIt: " + str(whatTurnIsIt))
-###BINGO BINGO
-        whatPlayerIsIt = instance.player
-        print("whatPlayerIsIt: " + str(whatPlayerIsIt))
-
-
-#   so we'll do something like:
-#           if instance.whatTurnIsIt == 1 and instance.whatPlayerIsIt == "green":
-#               for key, val in self.ids.items():
-#                   if val.whatTurnIsIt != 1 and val.whatPlayerIsIt == "green":
-#                       val.disabled = True
-#                       
-
-
-
-
-
-
-        if instance.active == True:
-            # self.ids.green_checkbox_turn_1.color = 1, 0, 0, 1
-            # self.ids.tempIDthing.color = 1, 0, 0, 1
-            self.ids.green_label_turn_1.color = 1, 0, 0, 1
-            self.ids.green_label_turn_2.disabled = True
-            self.ids.green_checkbox_turn_2.disabled = True
-            self.ids.green_label_turn_3.disabled = True
-            self.ids.green_checkbox_turn_3.disabled = True
-            self.ids.first_turn_label.color = 1, 0, 0, 1
-        if instance.active == False:
-            self.ids.green_checkbox_turn_1.color = 1, 1, 1, 1            
-            self.ids.green_label_turn_1.color = 1, 1, 1, 1
-            self.ids.green_label_turn_2.disabled = False
-            self.ids.green_checkbox_turn_2.disabled = False
-            self.ids.green_label_turn_3.disabled = False
-            self.ids.green_checkbox_turn_3.disabled = False
-            self.ids.first_turn_label.color = 1, 1, 1, 1
-
-
-
-
-
-
-
-
-
-
-
-
-
-        # change the color of the label immediately above the clicked box, and of the clicked box itself
-        # for key, val in self.ids.items():
-        # # for key, val in instance.root.ids.items():
-        #     if val.text == instance.text and instance.active == True:
-        #         val.color = 0, 1, 0.2, 1
-        #     elif val.text == instance.text and instance.active == False:
-        #         val.color = 1, 1, 1, 1
+        # now evaluate the entire grid and decide what should or should not be DISABLED
+        for key, val in self.ids.items():
+            # find a clicked checkbox
+            if val.vrs['type'] == 'checkbox' and val.active == True:
+                turnNumber = val.vrs['turnNumber']
+                player = val.vrs['player']
+                for a, b, in self.ids.items():
+                    # the checkboxes and labels in the same column should be DISABLED
+                    #       turnNumber is different...                           player is the same...                          type is checkbox and label, but not the rowLabel
+                    if b.vrs['turnNumber'] != turnNumber and b.vrs['player'] == player and b.vrs['player'] != 'rowLabel':
+                        # b.vrs['shouldBeDisabled'] = 'True'
+                        b.disabled = True
+                    # the other labels in the same row should be DISABLED
+                    #       turnNumber is the same...                           player is different...                          type is label ONLY, but not the rowLabel
+                    if b.vrs['turnNumber'] == turnNumber and b.vrs['player'] != player and b.vrs['type'] == 'label' and b.vrs['player'] != 'rowLabel':
+                        # b.vrs['shouldBeDisabled']= 'True'
+                        b.disabled = True
 
 class LoadGameScreen(Screen):
     pass
