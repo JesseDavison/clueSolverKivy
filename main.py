@@ -104,7 +104,7 @@ class Player:
     def addToCardList(self, card):
         if len(self.cardList) >= 3:
             self.cardList.append(card)
-            print("WARNING- there are already 3 cards held by the player")
+            print("                         !!! WARNING !!! - there are already 3 cards held by the player")
         else:
             self.cardList.append(card)
     def removeFromCardList(self, card):
@@ -152,10 +152,20 @@ class NewGameScreen(Screen):
         print(value)
         if value == True:
             pass
-    def setUserCharacter(self, name):
+    def setUserCharacter(self, instance, name):
         global userCharacterName
         userCharacterName = name
         print("userCharacterName set to: " + str(userCharacterName))
+        # for key, val in self.ids.items():
+        #     if val.text == "Next":
+        #         val.disabled = False
+        self.ids.next_button.disabled = False           # this line, and the for loop above it, will work to enable the NEXT button
+        # change text color of selected item
+        for key, val in self.ids.items():
+            if val.text == instance.text and instance.active == True:
+                val.color = 0, 1, 0.2, 1
+            if val.text == instance.text and instance.active == False:
+                val.color = 1, 1, 1, 1
     def confirmUserCharacter(self):                #   this function is run when the user clicks the "Next" button after selecting their character
         global userCharacter
         for player in playerList:
@@ -167,36 +177,131 @@ class NewGameScreen(Screen):
 numberOfCardsSelected = 0
 class CardDeclarationScreen(Screen):
     def clickOnBox(self, instance, value):
-        global numberOfCardsSelected
+        global numberOfCardsSelected            # this line allows us to write to the global variable
         # print(value)
         if value == True:
             numberOfCardsSelected += 1
             for card in cardList:
                 if card.getName() == instance.text:
                     # put card into user character's cardList
-                    userCharacter.addToCardList(card)            
+                    userCharacter.addToCardList(card)        
         if value == False:
             numberOfCardsSelected -= 1
             for card in cardList:
                 if card.getName() == instance.text:
                     userCharacter.removeFromCardList(card)
-        print("numberOfCardsSelected: " + str(numberOfCardsSelected))
-        # if numberOfCardsSelected > 3:
-        #     print("!!!!!!   more than 3 cards are selected!")
-        print("user's card list: " + str(userCharacter.getCardList()))
-    def pressBACKbutton(self):
-        userCharacter.resetCardList()
-        # also need to uncheck all the boxes.... but how???
-        # for child in reversed(self.ids.grid.children):
-        #     if isinstance(child, CheckBox):
-        #         child.active = False
+        # change the color of the Label & checkbox
+        for key, val in self.ids.items():
+            if val.text == instance.text and value == True:
+                val.color = 0, 1, 0.2, 1
+            elif val.text == instance.text and value == False:
+                val.color = 1, 1, 1, 1
+        print("numberOfCardsSelected: " + str(numberOfCardsSelected) + ". User's card list: " + str(userCharacter.getCardList()))
+        if numberOfCardsSelected == 3:
+            self.ids.next_button.disabled = False
+        if numberOfCardsSelected != 3:
+            self.ids.next_button.disabled = True
+    def uncheckAllCheckboxes(self):
+        for key, val in self.ids.items():
+            val.active = False      # it seems that setting the checkbox.active to False **counts as a click**    !!!!, so it automatically calls the clickOnBox function!
     def pressNEXTbutton(self):
         if numberOfCardsSelected == 3:
             pass
         else:
             pass
+
 class PlayerOrderScreen(Screen):
-    pass
+    def clickOnPlayerOrderBox(self, instance):  
+        # disable this character name from being able to be selected for another turn
+        if instance.active == True:
+            for key, val in self.ids.items():
+                print("key={0}, val={1}".format(key, val))          # so the id is the key, and the memory address is the value
+
+            print("test begins here:")
+
+            for key, val in self.ids.items():
+                if "green" in key:
+                    print("key: " + str(key))                   #### i think we're on to something here
+
+
+
+            for key, val in self.ids.items():
+                # print("val.text:      " + str(val.text))
+                # print("val:           " + str(val))
+                # print("val.ids:       " + str(val.ids))
+                if val.text == instance.text and val != instance:
+                    # print("val.text:      " + str(val.text))
+                    # print("val:           " + str(val))
+                    # print("instance.text: " + str(instance.text))
+                    # print("instance:      " + str(instance))
+                    # print("")
+                    val.disabled = True
+        if instance.active == False:
+            for key, val in self.ids.items():
+                if val.text == instance.text and val != instance:
+                    val.disabled = False
+    def testFunctionBaby(self, instance):
+        # print(str(theVeryID))
+
+        if instance in self.ids.values():
+            print(list(self.ids.keys())[list(self.ids.values()).index(instance)])
+
+        whatTurnIsIt = instance.memberOfTurn
+        print("whatTurnIsIt: " + str(whatTurnIsIt))
+###BINGO BINGO
+        whatPlayerIsIt = instance.player
+        print("whatPlayerIsIt: " + str(whatPlayerIsIt))
+
+
+#   so we'll do something like:
+#           if instance.whatTurnIsIt == 1 and instance.whatPlayerIsIt == "green":
+#               for key, val in self.ids.items():
+#                   if val.whatTurnIsIt != 1 and val.whatPlayerIsIt == "green":
+#                       val.disabled = True
+#                       
+
+
+
+
+
+
+        if instance.active == True:
+            # self.ids.green_checkbox_turn_1.color = 1, 0, 0, 1
+            # self.ids.tempIDthing.color = 1, 0, 0, 1
+            self.ids.green_label_turn_1.color = 1, 0, 0, 1
+            self.ids.green_label_turn_2.disabled = True
+            self.ids.green_checkbox_turn_2.disabled = True
+            self.ids.green_label_turn_3.disabled = True
+            self.ids.green_checkbox_turn_3.disabled = True
+            self.ids.first_turn_label.color = 1, 0, 0, 1
+        if instance.active == False:
+            self.ids.green_checkbox_turn_1.color = 1, 1, 1, 1            
+            self.ids.green_label_turn_1.color = 1, 1, 1, 1
+            self.ids.green_label_turn_2.disabled = False
+            self.ids.green_checkbox_turn_2.disabled = False
+            self.ids.green_label_turn_3.disabled = False
+            self.ids.green_checkbox_turn_3.disabled = False
+            self.ids.first_turn_label.color = 1, 1, 1, 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+        # change the color of the label immediately above the clicked box, and of the clicked box itself
+        # for key, val in self.ids.items():
+        # # for key, val in instance.root.ids.items():
+        #     if val.text == instance.text and instance.active == True:
+        #         val.color = 0, 1, 0.2, 1
+        #     elif val.text == instance.text and instance.active == False:
+        #         val.color = 1, 1, 1, 1
 
 class LoadGameScreen(Screen):
     pass

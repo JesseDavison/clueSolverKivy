@@ -33,12 +33,13 @@ WindowManager:
 
 <NewGameScreen>
     name: "new"
-    canvas.before:
-        Color: 
-            rgba: 0, 0.5, 0.5, 1
-        Rectangle:
-            pos: self.pos
-            size: self.size
+    # canvas.before:
+    #     Color: 
+    #         # rgba: 0, 0.5, 0.5, 1
+    #         rgba: 1, 1, 1, 1
+    #     Rectangle:
+    #         pos: self.pos
+    #         size: self.size
     FloatLayout:
         Button:
             text: "Go Back"
@@ -59,8 +60,8 @@ WindowManager:
                 Rectangle:
                     pos: self.pos
                     size: self.size
-            size_hint: (0.8, 0.2)
-            pos_hint: {"x": 0.1, "y": 0.7}
+            size_hint: (0.8, 0.1)
+            pos_hint: {"x": 0.1, "y": 0.9}
         
         ##############################################################    Character Selection    ##############################################################
 
@@ -80,25 +81,25 @@ WindowManager:
         Label:
             id: scarlett_label
             text: "Scarlett"
-            canvas.before:
-                Color:
-                    rgba: 0.3, 0.3, 0.3, 1
-                Rectangle:
-                    pos: self.pos
-                    size: self.size
+            # canvas.before:
+            #     Color:
+            #         rgba: 0.3, 0.3, 0.3, 1
+            #     Rectangle:
+            #         pos: self.pos
+            #         size: self.size
             size_hint: (nameLabelSizeX, nameLabelSizeY)
             pos_hint: {"x": pos_hint_x, "y": pos_hint_y - pos_hint_y_interval * 0}
         CheckBox:
             id: scarlett_checkBox
             group: "character_selection"
             text: "Scarlett"
-            canvas.before:
-                Color:
-                    rgba: 0.3, 0.3, 0.3, 1
-                Rectangle:
-                    pos: self.pos
-                    size: self.size            
-            on_active: root.setUserCharacter(self.text)
+            # canvas.before:
+            #     Color:
+            #         rgba: 0.3, 0.3, 0.3, 1
+            #     Rectangle:
+            #         pos: self.pos
+            #         size: self.size            
+            on_active: root.setUserCharacter(self, self.text)
             size_hint: (checkboxSizeX, checkboxSizeY)
             pos_hint: {"x": pos_hint_x_FORCHECKBOX, "y": pos_hint_y - pos_hint_y_interval * 0}
 
@@ -106,25 +107,25 @@ WindowManager:
         Label:
             id: green_label
             text: "Green"
-            canvas.before:
-                Color:
-                    rgba: 0.3, 0.3, 0.3, 1
-                Rectangle:
-                    pos: self.pos
-                    size: self.size
+            # canvas.before:
+            #     Color:
+            #         rgba: 0.3, 0.3, 0.3, 1
+            #     Rectangle:
+            #         pos: self.pos
+            #         size: self.size
             size_hint: (nameLabelSizeX, nameLabelSizeY)
             pos_hint: {"x": pos_hint_x, "y": pos_hint_y - pos_hint_y_interval * 1}
         CheckBox:
             id: green_checkBox
             group: "character_selection"
             text: "Green"
-            canvas.before:
-                Color:
-                    rgba: 0.3, 0.3, 0.3, 1
-                Rectangle:
-                    pos: self.pos
-                    size: self.size            
-            on_active: root.setUserCharacter(self.text)
+            # canvas.before:
+            #     Color:
+            #         rgba: 0.3, 0.3, 0.3, 1
+            #     Rectangle:
+            #         pos: self.pos
+            #         size: self.size            
+            on_active: root.setUserCharacter(self, self.text)
             size_hint: (checkboxSizeX, checkboxSizeY)
             pos_hint: {"x": pos_hint_x_FORCHECKBOX, "y": pos_hint_y - pos_hint_y_interval * 1}
 
@@ -132,25 +133,25 @@ WindowManager:
         Label:
             id: peacock_label
             text: "Peacock"
-            canvas.before:
-                Color:
-                    rgba: 0.3, 0.3, 0.3, 1
-                Rectangle:
-                    pos: self.pos
-                    size: self.size
+            # canvas.before:
+            #     Color:
+            #         rgba: 0.3, 0.3, 0.3, 1
+            #     Rectangle:
+            #         pos: self.pos
+            #         size: self.size
             size_hint: (nameLabelSizeX, nameLabelSizeY)
             pos_hint: {"x": pos_hint_x, "y": pos_hint_y - pos_hint_y_interval * 2}
         CheckBox:
             id: peacock_checkBox
             group: "character_selection"
             text: "Peacock"
-            canvas.before:
-                Color:
-                    rgba: 0.3, 0.3, 0.3, 1
-                Rectangle:
-                    pos: self.pos
-                    size: self.size            
-            on_active: root.setUserCharacter(self.text)
+            # canvas.before:
+            #     Color:
+            #         rgba: 0.3, 0.3, 0.3, 1
+            #     Rectangle:
+            #         pos: self.pos
+            #         size: self.size            
+            on_active: root.setUserCharacter(self, self.text)
             size_hint: (checkboxSizeX, checkboxSizeY)
             pos_hint: {"x": pos_hint_x_FORCHECKBOX, "y": pos_hint_y - pos_hint_y_interval * 2}
 
@@ -158,25 +159,25 @@ WindowManager:
         Label:
             id: plum_label
             text: "Plum"
-            canvas.before:
-                Color:
-                    rgba: 0.3, 0.3, 0.3, 1
-                Rectangle:
-                    pos: self.pos
-                    size: self.size
+            # canvas.before:
+            #     Color:
+            #         rgba: 0.3, 0.3, 0.3, 1
+            #     Rectangle:
+            #         pos: self.pos
+            #         size: self.size
             size_hint: (nameLabelSizeX, nameLabelSizeY)
             pos_hint: {"x": pos_hint_x, "y": pos_hint_y - pos_hint_y_interval * 3}
         CheckBox:
             id: plum_checkBox
             group: "character_selection"
             text: "Plum"
-            canvas.before:
-                Color:
-                    rgba: 0.3, 0.3, 0.3, 1
-                Rectangle:
-                    pos: self.pos
-                    size: self.size            
-            on_active: root.setUserCharacter(self.text)
+            # canvas.before:
+            #     Color:
+            #         rgba: 0.3, 0.3, 0.3, 1
+            #     Rectangle:
+            #         pos: self.pos
+            #         size: self.size            
+            on_active: root.setUserCharacter(self, self.text)
             size_hint: (checkboxSizeX, checkboxSizeY)
             pos_hint: {"x": pos_hint_x_FORCHECKBOX, "y": pos_hint_y - pos_hint_y_interval * 3}
 
@@ -184,25 +185,25 @@ WindowManager:
         Label:
             id: mustard_label
             text: "Mustard"
-            canvas.before:
-                Color:
-                    rgba: 0.3, 0.3, 0.3, 1
-                Rectangle:
-                    pos: self.pos
-                    size: self.size
+            # canvas.before:
+            #     Color:
+            #         rgba: 0.3, 0.3, 0.3, 1
+            #     Rectangle:
+            #         pos: self.pos
+            #         size: self.size
             size_hint: (nameLabelSizeX, nameLabelSizeY)
             pos_hint: {"x": pos_hint_x, "y": pos_hint_y - pos_hint_y_interval * 4}
         CheckBox:
             id: mustard_checkBox
             group: "character_selection"
             text: "Mustard"
-            canvas.before:
-                Color:
-                    rgba: 0.3, 0.3, 0.3, 1
-                Rectangle:
-                    pos: self.pos
-                    size: self.size            
-            on_active: root.setUserCharacter(self.text)
+            # canvas.before:
+            #     Color:
+            #         rgba: 0.3, 0.3, 0.3, 1
+            #     Rectangle:
+            #         pos: self.pos
+            #         size: self.size            
+            on_active: root.setUserCharacter(self, self.text)
             size_hint: (checkboxSizeX, checkboxSizeY)
             pos_hint: {"x": pos_hint_x_FORCHECKBOX, "y": pos_hint_y - pos_hint_y_interval * 4}
 
@@ -210,25 +211,25 @@ WindowManager:
         Label:
             id: orchid_label
             text: "Orchid"
-            canvas.before:
-                Color:
-                    rgba: 0.3, 0.3, 0.3, 1
-                Rectangle:
-                    pos: self.pos
-                    size: self.size
+            # canvas.before:
+            #     Color:
+            #         rgba: 0.3, 0.3, 0.3, 1
+            #     Rectangle:
+            #         pos: self.pos
+            #         size: self.size
             size_hint: (nameLabelSizeX, nameLabelSizeY)
             pos_hint: {"x": pos_hint_x, "y": pos_hint_y - pos_hint_y_interval * 5}
         CheckBox:
             id: orchid_checkBox
             group: "character_selection"
             text: "Orchid"
-            canvas.before:
-                Color:
-                    rgba: 0.3, 0.3, 0.3, 1
-                Rectangle:
-                    pos: self.pos
-                    size: self.size            
-            on_active: root.setUserCharacter(self.text)
+            # canvas.before:
+            #     Color:
+            #         rgba: 0.3, 0.3, 0.3, 1
+            #     Rectangle:
+            #         pos: self.pos
+            #         size: self.size            
+            on_active: root.setUserCharacter(self, self.text)
             size_hint: (checkboxSizeX, checkboxSizeY)
             pos_hint: {"x": pos_hint_x_FORCHECKBOX, "y": pos_hint_y - pos_hint_y_interval * 5}
 
@@ -236,10 +237,12 @@ WindowManager:
         
         Button:     # when this button is pressed the startGame() function will be run
             text: "Next"
+            id: next_button
             background_color: 0, 1, 0.2, 1
             # font_size: '10sp'
             size_hint: (0.125, 0.125)
             pos_hint: {"x":1 - 2 * 0.125, "y":.125}
+            disabled: True
             on_press: 
                 root.confirmUserCharacter()
                 app.root.current = "cardDeclaration"
@@ -253,24 +256,22 @@ WindowManager:
 
 <CardDeclarationScreen>
     name: "cardDeclaration"
-    
     # on_leave: root.reset_checkbox()
-    
     GridLayout:
         cols: 1
         rows: 2
 
         Label:
-            id: whatCards
-            text: "What cards do you have?"
-            text_color: 1, 1, 0, 1
-            canvas.before:
-                Color:
-                    rgba: 0.3, 0.3, 0.3, 1
-                Rectangle:
-                    pos: self.pos
-                    size: self.size
-            size_hint: (0.9, 0.1)
+            text: ""
+            # canvas.before:
+            #     Color:
+            #         rgba: 0.3, 0.3, 0.3, 1
+            #     Rectangle:
+            #         pos: self.pos
+            #         size: self.size
+            size_hint: (0.8, 0.1)   
+            # pos_hint: {"x": 0.1, "y": 0.9}
+
         GridLayout:
             cols: 7
             
@@ -280,32 +281,38 @@ WindowManager:
                 text: ""
             Label:
                 text: "Green"
-                text_size: self.size
-                valign: 'bottom'
+                text_size: self.size    
+                id: label_card_green
+                valign: 'bottom'    
                 halign: 'center'
             Label:
                 text: "Mustard"
                 text_size: self.size
+                id: label_card_mustard
                 valign: 'bottom'
                 halign: 'center'
             Label:
                 text: "Peacock" 
                 text_size: self.size
+                id: label_card_peacock
                 valign: 'bottom'
                 halign: 'center'
             Label:
                 text: "Plum"
                 text_size: self.size
+                id: label_card_plum
                 valign: 'bottom'
                 halign: 'center'
             Label:
                 text: "Scarlett"
                 text_size: self.size
+                id: label_card_scarlett
                 valign: 'bottom'
                 halign: 'center'
             Label:
                 text: "Orchid"
                 text_size: self.size
+                id: label_card_orchid
                 valign: 'bottom'
                 halign: 'center'
             ##################################################################      Row 2            
@@ -343,31 +350,37 @@ WindowManager:
             Label:
                 text: "Candlestick"
                 text_size: self.size
+                id: label_card_candlestick
                 valign: 'bottom'
                 halign: 'center'
             Label:
                 text: "Dagger"
                 text_size: self.size
+                id: label_card_dagger
                 valign: 'bottom'
                 halign: 'center'
             Label:
                 text: "Pipe" 
                 text_size: self.size
+                id: label_card_pipe
                 valign: 'bottom'
                 halign: 'center'
             Label:
                 text: "Revolver"
                 text_size: self.size
+                id: label_card_revolver
                 valign: 'bottom'
                 halign: 'center'
             Label:
                 text: "Rope"
                 text_size: self.size
+                id: label_card_rope
                 valign: 'bottom'
                 halign: 'center'
             Label:
                 text: "Wrench"
                 text_size: self.size
+                id: label_card_wrench
                 valign: 'bottom'
                 halign: 'center'
             ##################################################################      Row 4
@@ -405,31 +418,37 @@ WindowManager:
             Label:
                 text: "Ballroom"
                 text_size: self.size
+                id: label_card_ballroom
                 valign: 'bottom'
                 halign: 'center'
             Label:
                 text: "Billiard Room"
                 text_size: self.size
+                id: label_card_billiard
                 valign: 'bottom'
                 halign: 'center'
             Label:
                 text: "Conservatory" 
                 text_size: self.size
+                id: label_card_conservatory
                 valign: 'bottom'
                 halign: 'center'
             Label:
                 text: "Dining Room"
                 text_size: self.size
+                id: label_card_dining
                 valign: 'bottom'
                 halign: 'center'
             Label:
                 text: "Hall"
                 text_size: self.size
+                id: label_card_hall
                 valign: 'bottom'
                 halign: 'center'
             Label:
                 text: "Kitchen"
                 text_size: self.size
+                id: label_card_kitchen
                 valign: 'bottom'
                 halign: 'center'
             ##################################################################      Row 6
@@ -465,16 +484,19 @@ WindowManager:
             Label:
                 text: "Library"
                 text_size: self.size
+                id: label_card_library
                 valign: 'bottom'
                 halign: 'center'
             Label:
                 text: "Lounge"
                 text_size: self.size
+                id: label_card_lounge
                 valign: 'bottom'
                 halign: 'center'
             Label:
                 text: "Study" 
                 text_size: self.size
+                id: label_card_study
                 valign: 'bottom'
                 halign: 'center'
             Label:
@@ -518,6 +540,19 @@ WindowManager:
             Label:
                 text: ""
     FloatLayout:
+        Label:
+            id: whatCards
+            text: "What cards do you have?"
+            text_color: 1, 1, 0, 1
+            # by default a label doesn't have a backgroundColor property... this code gives it that property:
+            canvas.before:
+                Color:
+                    rgba: 0.3, 0.3, 0.3, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            size_hint: (0.8, 0.1)   
+            pos_hint: {"x": 0.1, "y": 0.9}
         Button:
             text: "Go Back"
             background_color: 0, 1, 0.2, 1
@@ -525,21 +560,20 @@ WindowManager:
             size_hint: (0.0625, 0.0625)
             pos_hint: {"x":0.0625 / 2, "y":1 - 1.5 * 0.0625}
             on_release: 
-                root.pressBACKbutton()
+                root.uncheckAllCheckboxes()      # this function resets all checkboxes to unchecked
                 app.root.current = "new"
                 root.manager.transition.direction = "right"
-                # need to clear out the cardList so it doesn't cause an error if the user changes characters
-
-
-        Button:     # when this button is pressed ...
+        Button:
             text: "Next"
+            id: next_button
             background_color: 0, 1, 0.2, 1
             # font_size: '10sp'
             size_hint: (0.125, 0.125)
             pos_hint: {"x":1 - 2 * 0.125, "y":.125}
+            disabled: True
             on_press: 
-                # check if exactly 3 cards have been selected
-                app.root.current = "PlayerOrderScreen"
+                # check if exactly 3 cards have been selected.... we'll add this later
+                app.root.current = "playerOrderScreen"
                 root.manager.transition.direction = "left"                        
         
         
@@ -559,8 +593,320 @@ WindowManager:
         #     text: "blank for now"
 
 <PlayerOrderScreen>
-    name: "playerOrder"
-                                
+    name: "playerOrderScreen"
+    GridLayout:
+        cols: 1
+        rows: 2
+        Label:
+            #   this label exists as a space filler to keep spacing consistent between screens
+            text: ""
+            size_hint: (0.8, 0.1)   
+        GridLayout:
+            cols: 7
+            
+            ##################################################################      Row 1
+            #   
+            Label:
+                text: ""
+            Label:
+                text: "Green"
+                text_size: self.size    
+                id: green_label_turn_1
+                disabled: False
+                valign: 'bottom'    
+                halign: 'center'
+            Label:
+                text: "Mustard"
+                text_size: self.size
+                id: mustard_1
+                disabled: False
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Peacock" 
+                text_size: self.size
+                id: peacock_1
+                disabled: False
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Plum"
+                text_size: self.size
+                id: plum_1
+                disabled: False
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Scarlett"
+                text_size: self.size
+                id: scarlett_1
+                disabled: False
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Orchid"
+                text_size: self.size
+                id: orchid_1
+                disabled: False
+                valign: 'bottom'
+                halign: 'center'
+            ##################################################################      Row 2
+            Label:
+                text: "First turn:"
+                id: first_turn_label
+            CheckBox:
+                id: green_checkbox_turn_1
+                text: "Green"
+                group: "first turn"
+
+                memberOfTurn: 1         # these are custom values that can be referenced in python
+                player: "green"
+
+                disabled: False
+                on_active: 
+                    # root.clickOnPlayerOrderBox(self)
+                    # green_label_turn_1.text: "ffs"
+                    root.testFunctionBaby(self)
+            CheckBox:
+                id: mustard_1
+                text: "Mustard"
+                group: "first turn"
+                disabled: False
+                on_active: 
+                    root.clickOnPlayerOrderBox(self)
+            CheckBox:
+                id: peacock_1
+                text: "Peacock"
+                group: "first turn"
+                disabled: False
+                on_active: root.clickOnPlayerOrderBox(self)
+            CheckBox:
+                id: plum_1
+                text: "Plum"
+                group: "first turn"
+                disabled: False
+                on_active: root.clickOnPlayerOrderBox(self)
+            CheckBox:
+                id: scarlett_1
+                text: "Scarlett"
+                group: "first turn"
+                disabled: False
+                on_active: root.clickOnPlayerOrderBox(self)
+            CheckBox:
+                id: orchid_1
+                text: "Orchid"
+                group: "first turn"
+                disabled: False
+                on_active: root.clickOnPlayerOrderBox(self)                                                
+            ##################################################################      Row 3
+            #   
+            Label:
+                text: ""
+            Label:
+                text: "Green"
+                text_size: self.size    
+                id: green_label_turn_2
+                disabled: False
+                valign: 'bottom'    
+                halign: 'center'
+            Label:
+                text: "Mustard"
+                text_size: self.size
+                id: mustard_2
+                disabled: False
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Peacock" 
+                text_size: self.size
+                id: peacock_2
+                disabled: False
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Plum"
+                text_size: self.size
+                id: plum_2
+                disabled: False
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Scarlett"
+                text_size: self.size
+                id: scarlett_2
+                disabled: False
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Orchid"
+                text_size: self.size
+                id: orchid_2
+                disabled: False
+                valign: 'bottom'
+                halign: 'center'
+            ##################################################################      Row 4
+            Label:
+                text: "Second turn:"
+            CheckBox:
+                id: green_checkbox_turn_2
+                text: "Green"
+                group: "second turn"
+                disabled: False
+                on_active: root.clickOnPlayerOrderBox(self)
+            CheckBox:
+                id: mustard_2
+                text: "Mustard"
+                group: "second turn"
+                disabled: False
+                on_active: root.clickOnPlayerOrderBox(self)
+            CheckBox:
+                id: peacock_2
+                text: "Peacock"
+                group: "second turn"
+                disabled: False
+                on_active: root.clickOnPlayerOrderBox(self)
+            CheckBox:
+                id: plum_2
+                text: "Plum"
+                group: "second turn"
+                disabled: False
+                on_active: root.clickOnPlayerOrderBox(self)
+            CheckBox:
+                id: scarlett_2
+                text: "Scarlett"
+                group: "second turn"
+                disabled: False
+                on_active: root.clickOnPlayerOrderBox(self)
+            CheckBox:
+                id: orchid_2
+                text: "Orchid"
+                group: "second turn"
+                disabled: False
+                on_active: root.clickOnPlayerOrderBox(self)  
+
+
+            ##################################################################      Row 5
+            #   
+            Label:
+                text: ""
+            Label:
+                text: "Green"
+                text_size: self.size    
+                id: green_label_turn_3
+                disabled: False
+                valign: 'bottom'    
+                halign: 'center'
+            Label:
+                text: "Mustard"
+                text_size: self.size
+                id: mustard_3
+                disabled: False
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Peacock" 
+                text_size: self.size
+                id: peacock_3
+                disabled: False
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Plum"
+                text_size: self.size
+                id: plum_3
+                disabled: False
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Scarlett"
+                text_size: self.size
+                id: scarlett_3
+                disabled: False
+                valign: 'bottom'
+                halign: 'center'
+            Label:
+                text: "Orchid"
+                text_size: self.size
+                id: orchid_3
+                disabled: False
+                valign: 'bottom'
+                halign: 'center'
+            ##################################################################      Row 6
+            Label:
+                text: "Third turn:"
+            CheckBox:
+                id: green_checkbox_turn_3
+                text: "Green"
+                group: "third turn"
+                disabled: False
+                on_active: root.clickOnPlayerOrderBox(self)
+            CheckBox:
+                id: mustard_3
+                text: "Mustard"
+                group: "third turn"
+                disabled: False
+                on_active: root.clickOnPlayerOrderBox(self)
+            CheckBox:
+                id: peacock_3
+                text: "Peacock"
+                group: "third turn"
+                disabled: False
+                on_active: root.clickOnPlayerOrderBox(self)
+            CheckBox:
+                id: plum_3
+                text: "Plum"
+                group: "third turn"
+                disabled: False
+                on_active: root.clickOnPlayerOrderBox(self)
+            CheckBox:
+                id: scarlett_3
+                text: "Scarlett"
+                group: "third turn"
+                disabled: False
+                on_active: root.clickOnPlayerOrderBox(self)
+            CheckBox:
+                id: orchid_3
+                text: "Orchid"
+                group: "third turn"
+                disabled: False
+                on_active: root.clickOnPlayerOrderBox(self)  
+
+
+    FloatLayout:
+        Label:
+            id: whatCards
+            text: "What is the player order?"
+            text_color: 1, 1, 0, 1
+            canvas.before:
+                Color:
+                    rgba: 0.3, 0.3, 0.3, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            size_hint: (0.8, 0.1)   
+            pos_hint: {"x": 0.1, "y": 0.9}
+        Button:
+            text: "Go Back"
+            background_color: 0, 1, 0.2, 1
+            font_size: '10sp'
+            size_hint: (0.0625, 0.0625)
+            pos_hint: {"x":0.0625 / 2, "y":1 - 1.5 * 0.0625}
+            on_release: 
+                # root.uncheckAllCheckboxes()      # this function resets all checkboxes to unchecked
+                app.root.current = "cardDeclaration"
+                root.manager.transition.direction = "right"
+        Button:
+            text: "Next"
+            id: next_button
+            background_color: 0, 1, 0.2, 1
+            # font_size: '10sp'
+            size_hint: (0.125, 0.125)
+            pos_hint: {"x":1 - 2 * 0.125, "y":.125}
+            disabled: True
+            on_press: 
+                # check if exactly 3 cards have been selected.... we'll add this later
+                app.root.current = "**** next screen here ****"
+                root.manager.transition.direction = "left"    
 
 
 <LoadGameScreen>
@@ -579,21 +925,6 @@ WindowManager:
 
 
 
-
-# <FloatLayout>:
-#     Label:
-#         text: "Clue Solver"  
-#         font_size: '50sp'
-#         size_hint: (1, 0.5)
-#         pos_hint: {"x": 0.0, "y": 0.5} #, "top":1, "bottom":0.7} #, "left", "right"}
-#     Button:
-#         text: "Start New Game"
-#         size_hint: (0.25, 0.25)
-#         pos_hint: {"x":0.125, "y":0.25}
-#     Button:
-#         text: "Load Previous Game"      
-#         size_hint: (0.25, 0.25)
-#         pos_hint: {"x":0.625, "y":0.25}
 
 
 
