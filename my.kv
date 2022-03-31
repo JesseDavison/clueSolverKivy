@@ -2,10 +2,11 @@
 
 WindowManager:
     HomeScreen:
-    NewGameScreen:
+    PlayerSelectScreen:
     LoadGameScreen:
     CardDeclarationScreen:
     PlayerOrderScreen:
+    ConfirmationScreen:
 
 <HomeScreen>
     name: "home"
@@ -20,7 +21,7 @@ WindowManager:
             size_hint: (0.25, 0.25)
             pos_hint: {"x":0.125, "y":0.25}
             on_release: 
-                app.root.current = "new"
+                app.root.current = "PlayerSelectScreen"
                 root.manager.transition.direction = "left"
         Button:
             text: "Load Previous Game"      
@@ -31,8 +32,8 @@ WindowManager:
                 root.manager.transition.direction = "left"
 
 
-<NewGameScreen>
-    name: "new"
+<PlayerSelectScreen>
+    name: "PlayerSelectScreen"
     # canvas.before:
     #     Color: 
     #         # rgba: 0, 0.5, 0.5, 1
@@ -42,9 +43,9 @@ WindowManager:
     #         size: self.size
     FloatLayout:
         Button:
-            text: "Go Back"
+            text: "Back"
             background_color: 0, 1, 0.2, 1
-            font_size: '10sp'
+            # font_size: '10sp'
             size_hint: (0.0625, 0.0625)
             pos_hint: {"x":0.0625 / 2, "y":1 - 1.5 * 0.0625}
             on_release: 
@@ -240,8 +241,11 @@ WindowManager:
             id: next_button
             background_color: 0, 1, 0.2, 1
             # font_size: '10sp'
-            size_hint: (0.125, 0.125)
-            pos_hint: {"x":1 - 2 * 0.125, "y":.125}
+            # size_hint: (0.125, 0.125)
+            size_hint: (0.0625, 0.0625)
+            # pos_hint: {"x":1 - 2 * 0.125, "y":.125}
+            # pos_hint: {"x":1 - 1.5 * 0.125, "y":0.5 * 0.125}            
+            pos_hint: {"x":1 - 1.5 * 0.0625, "y":1 - 1.5 * 0.0625}
             disabled: True
             on_press: 
                 root.confirmUserCharacter()
@@ -554,22 +558,24 @@ WindowManager:
             size_hint: (0.8, 0.1)   
             pos_hint: {"x": 0.1, "y": 0.9}
         Button:
-            text: "Go Back"
+            text: "Back"
             background_color: 0, 1, 0.2, 1
-            font_size: '10sp'
+            # font_size: '10sp'
             size_hint: (0.0625, 0.0625)
             pos_hint: {"x":0.0625 / 2, "y":1 - 1.5 * 0.0625}
             on_release: 
                 root.uncheckAllCheckboxes()      # this function resets all checkboxes to unchecked
-                app.root.current = "new"
+                app.root.current = "PlayerSelectScreen"
                 root.manager.transition.direction = "right"
         Button:
             text: "Next"
             id: next_button
             background_color: 0, 1, 0.2, 1
             # font_size: '10sp'
-            size_hint: (0.125, 0.125)
-            pos_hint: {"x":1 - 2 * 0.125, "y":.125}
+            size_hint: (0.0625, 0.0625)
+            # pos_hint: {"x":1 - 2 * 0.125, "y":.125}
+            # pos_hint: {"x":1 - 1.5 * 0.125, "y":0.5 * 0.125}            
+            pos_hint: {"x":1 - 1.5 * 0.0625, "y":1 - 1.5 * 0.0625}
             disabled: True
             on_press: 
                 # check if exactly 3 cards have been selected.... we'll add this later
@@ -659,6 +665,7 @@ WindowManager:
             ##################################################################      Row 2
             Label:
                 text: "First turn:"
+                # text_size: self.size
                 id: first_turn_label
                 vrs: {'turnNumber': 1, 'player': 'rowLabel', 'type': 'label'}
             CheckBox:
@@ -1209,12 +1216,27 @@ WindowManager:
                 vrs: {'turnNumber': 6, 'player': 'Orchid', 'type': 'checkbox'}
                 disabled: False
                 on_active: root.clickPlayerOrderCheckbox(self)
-
+            ##################################################################      Row 13
+            #   
+            Label:
+                text: ""
+            Label:
+                text: ""
+            Label:
+                text: ""
+            Label:
+                text: ""
+            Label:
+                text: ""
+            Label:
+                text: ""
+            Label:
+                text: ""                                                                                
 
     FloatLayout:
         Label:
-            id: whatCards
-            vrs: {'turnNumber': -1, 'player': '', 'type': ''}            
+            # id: whatCards
+            # vrs: {'turnNumber': -1, 'player': '', 'type': ''}            
             text: "What is the player order?"
             text_color: 1, 1, 0, 1
             canvas.before:
@@ -1226,9 +1248,9 @@ WindowManager:
             size_hint: (0.8, 0.1)   
             pos_hint: {"x": 0.1, "y": 0.9}
         Button:
-            text: "Go Back"
+            text: "Back"
             background_color: 0, 1, 0.2, 1
-            font_size: '10sp'
+            # font_size: '10sp'
             size_hint: (0.0625, 0.0625)
             pos_hint: {"x":0.0625 / 2, "y":1 - 1.5 * 0.0625}
             on_release: 
@@ -1238,16 +1260,65 @@ WindowManager:
         Button:
             text: "Next"
             id: next_button
-            vrs: {'turnNumber': -1, 'player': '', 'type': ''}            
+            vrs: {'turnNumber': -1, 'player': '', 'type': 'next_button'}            
             background_color: 0, 1, 0.2, 1
-            # font_size: '10sp'
-            size_hint: (0.125, 0.125)
-            pos_hint: {"x":1 - 2 * 0.125, "y":.125}
+            size_hint: (0.0625, 0.0625)
+            pos_hint: {"x":1 - 1.5 * 0.0625, "y":1 - 1.5 * 0.0625}
             disabled: True
             on_press: 
                 # process the selected player order and incporporate it
-                app.root.current = "**** next screen here ****"
+                app.root.current = "ConfirmationScreen"
                 root.manager.transition.direction = "left"    
+
+<ConfirmationScreen>
+    name: "ConfirmationScreen"
+    GridLayout:
+        cols: 1
+        rows: 2
+        Label:
+            #   this label exists as a space filler to keep spacing consistent between screens
+            text: ""
+            size_hint: (0.8, 0.1)   
+        GridLayout:
+            cols: 7
+
+
+
+    FloatLayout:
+        Label:
+            # id: 
+            # vrs: {'turnNumber': -1, 'player': '', 'type': ''}            
+            text: "Start New Game? Please Confirm Details:"
+            text_color: 1, 1, 0, 1
+            canvas.before:
+                Color:
+                    rgba: 0.3, 0.3, 0.3, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            size_hint: (0.8, 0.1)   
+            pos_hint: {"x": 0.1, "y": 0.9}
+        Button:
+            text: "Back"
+            background_color: 0, 1, 0.2, 1
+            # font_size: '10sp'
+            size_hint: (0.0625, 0.0625)
+            pos_hint: {"x":0.0625 / 2, "y":1 - 1.5 * 0.0625}
+            on_release: 
+                app.root.current = "playerOrderScreen"
+                root.manager.transition.direction = "right"
+        Button:
+            text: "Start Game"
+            id: next_button
+            vrs: {'turnNumber': -1, 'player': '', 'type': 'next_button'}            
+            background_color: 0, 1, 0.2, 1
+            size_hint: (0.0625, 0.0625)
+            pos_hint: {"x":1 - 1.5 * 0.0625, "y":1 - 1.5 * 0.0625}
+            disabled: False
+            on_press: 
+                # process the selected player order and incporporate it
+                app.root.current = "*** new screen here ***"
+                root.manager.transition.direction = "left"  
 
 
 <LoadGameScreen>
@@ -1269,50 +1340,3 @@ WindowManager:
 
 
 
-
-
-
-
-# <MyGrid>
-    
-#     name: name
-#     email: emaill
-
-    
-#     GridLayout:
-#         cols: 1
-#         size: root.width, root.height
-
-#         GridLayout:
-#             cols: 2
-            
-#             Label: 
-#                 text: "Name: "
-
-#             TextInput: 
-#                 id: name
-#                 multiline: False
-
-#             Label: 
-#                 text: "Email: "
-
-#             TextInput: 
-#                 id: emaill
-#                 multiline: False
-
-#         Button:
-#             text: "Submit"
-#             on_press:root.btn()
-        
-
-
-    # Button:
-    #     # pos_hint: {"x", "y", "top", "bottom", "left", "right"}
-    #     pos_hint: {"x":0.5, "top":1}               # values go from 0 to 1, coordinate system starts at bottom-left
-    #     text: "Tech with "
-    
-    # Button:
-    #     id: btn
-    #     pos_hint: {"x":0.1, "top": 0.5, "y": 0.3}
-    #     text: "Tim" if btn.state == "normal" else "Down"
-    #     background_color: 0.3, .4, .5, 1 

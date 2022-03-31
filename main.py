@@ -8,6 +8,8 @@ from kivy.uix.label import Label
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import StringProperty
+from kivy.properties import NumericProperty
+from kivy.properties import ListProperty
 import datetime
 from kivy.uix.widget import Widget
 from kivy.uix.checkbox import CheckBox
@@ -104,10 +106,8 @@ class Player:
         return self.cardList
     def addToCardList(self, card):
         if len(self.cardList) >= 3:
-            self.cardList.append(card)
-            print("                         !!! WARNING !!! - there are already 3 cards held by the player")
-        else:
-            self.cardList.append(card)
+            print("                         !!! WARNING !!! - there are more than 3 cards held by the player")
+        self.cardList.append(card)
     def removeFromCardList(self, card):
         self.cardList.remove(card)
     def resetCardList(self):
@@ -136,13 +136,22 @@ mustardPlayer =   Player("Mustard", 5, 4)
 plumPlayer =      Player("Plum", 4, 3)
 peacockPlayer =   Player("Peacock", 3, 2)
 playerList = [scarlettPlayer, greenPlayer, orchidPlayer, mustardPlayer, plumPlayer, peacockPlayer]
+
 userCharacter = Player
+playerOrder = ['Scarlett', 'Green', 'Peacock', 'Plum', 'Mustard', 'Orchid']     # this contents is not final... it will be changed by the clickPlayerOrderCheckbox function
+analysisTable = [[ ["?"] for i in range(6)] for j in range(21)]
+actualKillerWeaponRoom = ["?", "?", "?"]
+announcementsHaveBeenMadeForKillerWeaponRoom = [False, False, False]   # this regulates when, in the terminal, the discovery of the killer/weapon/room is announced
+fileName = ""
+
+
+
 
 
 class HomeScreen(Screen):
     pass
 
-class NewGameScreen(Screen):
+class PlayerSelectScreen(Screen):
     userNNNNname = StringProperty("")
 
     # def update(self):
@@ -161,7 +170,10 @@ class NewGameScreen(Screen):
         # for key, val in self.ids.items():
         #     if val.text == "Next":
         #         val.disabled = False
-        self.ids.next_button.disabled = False           # this line, and the for loop above it, will work to enable the NEXT button
+        if instance.active == True:
+            self.ids.next_button.disabled = False           # this line, and the for loop above it, will work to enable the NEXT button
+        else:
+            self.ids.next_button.disabled = True
         # change text color of selected item
         for key, val in self.ids.items():
             if val.text == instance.text and instance.active == True:
@@ -173,64 +185,78 @@ class NewGameScreen(Screen):
         for player in playerList:
             if player.getNameOnly() == userCharacterName:
                 userCharacter = player
-        print("in the startGame function, the userCharacter is: " + str(userCharacter.getNameOnly()))
+        print("in the startGame function, the userCharacter is set to: " + str(userCharacter.getNameOnly()))
 
-numberOfCardsSelected = 0
 class CardDeclarationScreen(Screen):
+    numberOfCardsSelected = NumericProperty(0)
     def clickOnBox(self, instance, value):
-        global numberOfCardsSelected            # this line allows us to write to the global variable
         # print(value)
         if value == True:
-            numberOfCardsSelected += 1
+            self.numberOfCardsSelected += 1
             for card in cardList:
                 if card.getName() == instance.text:
                     # put card into user character's cardList
                     userCharacter.addToCardList(card)        
+                    print(str(card.getName() + " added to " + str(userCharacter.getNameOnly() + " cardList.")))
         if value == False:
-            numberOfCardsSelected -= 1
+            self.numberOfCardsSelected -= 1
             for card in cardList:
                 if card.getName() == instance.text:
                     userCharacter.removeFromCardList(card)
+                    print(str(card.getName() + " removed from " + str(userCharacter.getNameOnly() + " cardList.")))                    
         # change the color of the Label & checkbox
         for key, val in self.ids.items():
             if val.text == instance.text and value == True:
                 val.color = 0, 1, 0.2, 1
             elif val.text == instance.text and value == False:
                 val.color = 1, 1, 1, 1
-        print("numberOfCardsSelected: " + str(numberOfCardsSelected) + ". User's card list: " + str(userCharacter.getCardList()))
-        if numberOfCardsSelected == 3:
+        print("numberOfCardsSelected: " + str(self.numberOfCardsSelected) + "        " + str(userCharacter.getNameOnly()) + "'s card list: " + str(userCharacter.getCardList()))
+        if self.numberOfCardsSelected == 3:
             self.ids.next_button.disabled = False
-        if numberOfCardsSelected != 3:
+        else:
             self.ids.next_button.disabled = True
     def uncheckAllCheckboxes(self):
         for key, val in self.ids.items():
             val.active = False      # it seems that setting the checkbox.active to False **counts as a click**    !!!!, so it automatically calls the clickOnBox function!
     def pressNEXTbutton(self):
-        if numberOfCardsSelected == 3:
+        if self.numberOfCardsSelected == 3:
             pass
         else:
             pass
 
-playerOrder = []
 class PlayerOrderScreen(Screen):
+    playerOrdersSelected = NumericProperty(0)
     def clickPlayerOrderCheckbox(self, instance):
+        # CHANGE THE CONTENTS OF THE playerOrder GLOBAL VARIABLE
+        turnNumber = instance.vrs['turnNumber']
+        player = instance.vrs['player']
+        global playerOrder 
+        playerOrder[turnNumber - 1] = player
+        print("player order: " + str(playerOrder))
+        if instance.active == True:
+            self.playerOrdersSelected += 1
+        else:
+            self.playerOrdersSelected -= 1            
+        if self.playerOrdersSelected == 6:
+            self.ids.next_button.disabled = False
+        else:
+            self.ids.next_button.disabled = True
+
+
+        # CHANGE THE APPEARANCE OF THE SCREEN
         # turn EVERY CELL to disabled = False
         for key, val in self.ids.items():
-            val.disabled = False
-            # val.vrs['shouldBeDisabled'] = 'False'
+            if val.vrs['type'] != 'next_button':        # gotta make sure we don't enable the next_button until 6 playerOrders are selected
+                val.disabled = False
 
         # change the color of the clicked checkbox & its label, and also change the rowLabel color
-        if instance.active == True:
-            for key, val in self.ids.items():
-                #       "if it's the same turnNumber, the same player or if it's a rowLabel, then change the color"
-                if val.vrs['turnNumber'] == instance.vrs['turnNumber'] and (val.vrs['player'] == instance.vrs['player'] or val.vrs['player'] == 'rowLabel'):
+        for key, val in self.ids.items():
+            #       "if it's the same turnNumber, the same player or if it's a rowLabel, then change the color"
+            if val.vrs['turnNumber'] == instance.vrs['turnNumber'] and (val.vrs['player'] == instance.vrs['player'] or val.vrs['player'] == 'rowLabel'):
+                if instance.active == True:
                     val.color = 0, 1, 0.2, 1
-        # change the color BACK if un-clicked   .... but for columns, only change if the row associated with that label&checkbox is NOT selected
-        if instance.active == False:
-            for key, val in self.ids.items():
-                #       "if it's the same turnNumber, the same player or if it's a rowLabel, then change the color BACK"
-                if val.vrs['turnNumber'] == instance.vrs['turnNumber'] and (val.vrs['player'] == instance.vrs['player'] or val.vrs['player'] == 'rowLabel'):
-                    val.color = 1, 1, 1, 1
+                if instance.active == False:
+                    val.color = 1, 1, 1, 1                        
         
         # for reference:
         # EXAMPLE from .kv file:      vrs: {'turnNumber': 1, 'player': 'Orchid', 'type': 'label', 'shouldBeDisabled': False}
@@ -239,19 +265,20 @@ class PlayerOrderScreen(Screen):
         for key, val in self.ids.items():
             # find a clicked checkbox
             if val.vrs['type'] == 'checkbox' and val.active == True:
-                turnNumber = val.vrs['turnNumber']
-                player = val.vrs['player']
                 for a, b, in self.ids.items():
                     # the checkboxes and labels in the same column should be DISABLED
-                    #       turnNumber is different...                           player is the same...                          type is checkbox and label, but not the rowLabel
-                    if b.vrs['turnNumber'] != turnNumber and b.vrs['player'] == player and b.vrs['player'] != 'rowLabel':
+                    #  if turnNumber is different...                and player is the same...                and type is checkbox and label, but not the rowLabel
+                    if b.vrs['turnNumber'] != val.vrs['turnNumber'] and b.vrs['player'] == val.vrs['player'] and b.vrs['player'] != 'rowLabel':
                         # b.vrs['shouldBeDisabled'] = 'True'
                         b.disabled = True
                     # the other labels in the same row should be DISABLED
-                    #       turnNumber is the same...                           player is different...                          type is label ONLY, but not the rowLabel
-                    if b.vrs['turnNumber'] == turnNumber and b.vrs['player'] != player and b.vrs['type'] == 'label' and b.vrs['player'] != 'rowLabel':
+                    #  if turnNumber is the same...                 and player is different...               and type is label ONLY,      but not the rowLabel
+                    if b.vrs['turnNumber'] == val.vrs['turnNumber'] and b.vrs['player'] != val.vrs['player'] and b.vrs['type'] == 'label' and b.vrs['player'] != 'rowLabel':
                         # b.vrs['shouldBeDisabled']= 'True'
                         b.disabled = True
+
+class ConfirmationScreen(Screen):
+    pass
 
 class LoadGameScreen(Screen):
     pass
