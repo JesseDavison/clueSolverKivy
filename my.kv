@@ -1,14 +1,18 @@
 #:kivy 1.0.9
+#: import NoTransition kivy.uix.screenmanager.NoTransition
 
 WindowManager:
+    transition: NoTransition()
     HomeScreen:
     PlayerSelectScreen:
     LoadGameScreen:
     CardDeclarationScreen:
     PlayerOrderScreen:
     ConfirmationScreen:
+    ExecuteTurnScreen:
 
 <HomeScreen>
+    transition: NoTransition()
     name: "home"
     FloatLayout:
         Label: 
@@ -1267,8 +1271,10 @@ WindowManager:
             disabled: True
             on_press: 
                 # process the selected player order and incporporate it
+                root.confirmPlayerOrder()
                 app.root.current = "ConfirmationScreen"
-                root.manager.transition.direction = "left"    
+                # root.manager.transition.direction = "left"    
+
 
 <ConfirmationScreen>
     name: "ConfirmationScreen"
@@ -1280,10 +1286,17 @@ WindowManager:
             text: ""
             size_hint: (0.8, 0.1)   
         GridLayout:
-            cols: 7
-
-
-
+            cols: 1
+            Label:
+                id: you_are_playing_as
+                text: 'placeholder text'
+            Label:
+                id: your_cards
+                text: 'placeholder text'
+            Label:
+                id: your_player_order
+                text: 'placeholder text'
+            
     FloatLayout:
         Label:
             # id: 
@@ -1316,9 +1329,77 @@ WindowManager:
             pos_hint: {"x":1 - 1.5 * 0.0625, "y":1 - 1.5 * 0.0625}
             disabled: False
             on_press: 
-                # process the selected player order and incporporate it
-                app.root.current = "*** new screen here ***"
-                root.manager.transition.direction = "left"  
+                root.createGameSaveFile()
+                app.root.current = "ExecuteTurnScreen"
+                # root.manager.transition.direction = "left"  
+
+<ExecuteTurnScreen>
+    name: "ExecuteTurnScreen"
+    FloatLayout:
+        Label:
+            id: title_label
+            # vrs: {'turnNumber': -1, 'player': '', 'type': ''}            
+            text: "Turn X, (player) suggests:"
+            text_color: 1, 1, 0, 1
+            canvas.before:
+                Color:
+                    rgba: 0.3, 0.3, 0.3, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            size_hint: (0.8, 0.1)   
+            pos_hint: {"x": 0.1, "y": 0.9}
+        Button:
+            text: "to where"
+            background_color: 0, 1, 0.2, 1
+            # font_size: '10sp'
+            size_hint: (0.0625, 0.0625)
+            pos_hint: {"x":0.0625 / 2, "y":1 - 1.5 * 0.0625}
+            on_release: 
+                # app.root.current = "playerOrderScreen"
+                # root.manager.transition.direction = "right"
+        Button:
+            text: "to where"
+            # id: next_button
+            vrs: {'turnNumber': -1, 'player': '', 'type': 'next_button'}            
+            background_color: 0, 1, 0.2, 1
+            size_hint: (0.0625, 0.0625)
+            pos_hint: {"x":1 - 1.5 * 0.0625, "y":1 - 1.5 * 0.0625}
+            disabled: False
+            on_press: 
+                # root.createGameSaveFile()
+                # app.root.current = "ExecuteTurnScreen"
+                # root.manager.transition.direction = "left"  
+        Spinner:
+            id: killer_spinner
+            text: "choose the killer"
+            values: ['Green', 'Mustard', 'Peacock', 'Plum', 'Scarlett', 'Orchid']
+            on_text: root.spinnerClicked(killer_spinner, killer_spinner.text)
+            size_hint: (0.2, 0.08)
+            pos_hint: {"x": 0.1, "y": 0.7}
+        Spinner:
+            id: weapon_spinner
+            text: "choose the weapon"
+            values: ['Candlestick', 'Dagger', 'Pipe', 'Revolver', 'Rope', 'Wrench']
+            on_text: root.spinnerClicked(weapon_spinner, weapon_spinner.text)
+            size_hint: (0.2, 0.08)
+            pos_hint: {"x": 0.1 + 0.2 + 0.1, "y": 0.7}
+        Spinner:
+            id: room_spinner
+            text: "choose the room"
+            values: ['Ballroom', 'Billiard Room', 'Conservatory', 'Dining Room', 'Hall', 'Kitchen', 'Library', 'Lounge', 'Study']
+            on_text: root.spinnerClicked(room_spinner, room_spinner.text)
+            size_hint: (0.2, 0.08)
+            pos_hint: {"x": 0.1 + 0.2 + 0.1 + 0.2 + 0.1, "y": 0.7}
+
+        Spinner:
+            id: player1_response_spinner
+            text: "player1 response"
+            values: ['null', 'declined', 'showed card']
+            on_text: root.spinnerClicked(player1_response_spinner, player1_response_spinner.text)
+            size_hint: (0.2, 0.08)
+            pos_hint: {"x": 0.1 + 0.2 + 0.1, "y": 0.5}                    
+
 
 
 <LoadGameScreen>

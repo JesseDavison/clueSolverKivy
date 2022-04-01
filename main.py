@@ -1,4 +1,4 @@
-
+import datetime
 from dis import dis
 from xml.etree.ElementPath import get_parent_map
 import kivy
@@ -15,11 +15,10 @@ from kivy.uix.widget import Widget
 from kivy.uix.checkbox import CheckBox
 
 
-
 print("CLUE SOLVER")
 
 
-userCharacterName = ""          #   this will be defined by the checkboxes on the new game screen
+
 
 numberOfFunctionCalls = 0       # keeping track of how much processing is being done, for the sake of becoming more efficient
 
@@ -112,23 +111,26 @@ class Player:
         self.cardList.remove(card)
     def resetCardList(self):
         self.cardList = []
+    def getCardFromCardList(self, integer):
+        return self.cardList[integer]
     
-    def addCard1(self, card):
-        self.card1 = card
-    def addCard2(self, card):
-        self.card2 = card
-    def addCard3(self, card):
-        self.card3 = card
-    def getCard1(self):
-        return self.card1
-    def getCard2(self):
-        return self.card2
-    def getCard3(self):
-        return self.card3
+    # def addCard1(self, card):
+    #     self.card1 = card
+    # def addCard2(self, card):
+    #     self.card2 = card
+    # def addCard3(self, card):
+    #     self.card3 = card
+    # def getCard1(self):
+    #     return self.card1
+    # def getCard2(self):
+    #     return self.card2
+    # def getCard3(self):
+    #     return self.card3
 
     def getColumnNumber(self):
         return self.columnNumber
 
+# tempPlayer = Player("temp", -1, -1)
 scarlettPlayer =  Player("Scarlett", 1, 0)
 greenPlayer =     Player("Green", 2, 1)
 orchidPlayer =    Player("Orchid", 6, 5)
@@ -137,13 +139,15 @@ plumPlayer =      Player("Plum", 4, 3)
 peacockPlayer =   Player("Peacock", 3, 2)
 playerList = [scarlettPlayer, greenPlayer, orchidPlayer, mustardPlayer, plumPlayer, peacockPlayer]
 
+userCharacterName = ""          #   this will be defined by the checkboxes on the new game screen
 userCharacter = Player
-playerOrder = ['Scarlett', 'Green', 'Peacock', 'Plum', 'Mustard', 'Orchid']     # this contents is not final... it will be changed by the clickPlayerOrderCheckbox function
+playerOrder = ['', '', '', '', '', '']     # to be changed by the clickPlayerOrderCheckbox function
 analysisTable = [[ ["?"] for i in range(6)] for j in range(21)]
 actualKillerWeaponRoom = ["?", "?", "?"]
 announcementsHaveBeenMadeForKillerWeaponRoom = [False, False, False]   # this regulates when, in the terminal, the discovery of the killer/weapon/room is announced
 fileName = ""
-
+currentTurnNumber = -1
+turnLog = {}
 
 
 
@@ -231,17 +235,20 @@ class PlayerOrderScreen(Screen):
         turnNumber = instance.vrs['turnNumber']
         player = instance.vrs['player']
         global playerOrder 
-        playerOrder[turnNumber - 1] = player
-        print("player order: " + str(playerOrder))
+        
         if instance.active == True:
+            playerOrder[turnNumber - 1] = player
             self.playerOrdersSelected += 1
+            print("active")
         else:
+            playerOrder[turnNumber - 1] = ''
             self.playerOrdersSelected -= 1            
+            print("not active")
         if self.playerOrdersSelected == 6:
             self.ids.next_button.disabled = False
         else:
             self.ids.next_button.disabled = True
-
+        print("player order: " + str(playerOrder))
 
         # CHANGE THE APPEARANCE OF THE SCREEN
         # turn EVERY CELL to disabled = False
@@ -276,9 +283,89 @@ class PlayerOrderScreen(Screen):
                     if b.vrs['turnNumber'] == val.vrs['turnNumber'] and b.vrs['player'] != val.vrs['player'] and b.vrs['type'] == 'label' and b.vrs['player'] != 'rowLabel':
                         # b.vrs['shouldBeDisabled']= 'True'
                         b.disabled = True
+        print("Just to confirm, the user's character is: " + str(userCharacter.getNameOnly()))
+    
+    @staticmethod
+    def confirmPlayerOrder():
+        # SET THE .turnOrder PROPERTY OF EACH PLAYER OBJECT
+        x = 1
+        for name in playerOrder:
+            for player in playerList:
+                if name == player.getNameOnly():
+                    player.setTurnOrder(x)
+            x += 1
 
 class ConfirmationScreen(Screen):
-    pass
+    def on_enter(self, *args):
+        self.ids.you_are_playing_as.text = "You are playing as " + userCharacter.getNameOnly()   
+        self.ids.your_cards.text = "Your cards are " + str(userCharacter.getCardList())
+        self.ids.your_player_order.text = "The player turn order is: " + str(playerOrder)     
+        return super().on_enter(*args)
+    def createGameSaveFile(self):
+        x = datetime.datetime.now()     # create a timestamp, for the purpose of making a unique filename
+        timeStamp = str(x.year) + "-" + str(x.month) + "-" + str(x.day) + " " + str(x.hour) + "h-" + str(x.minute) + "m-" + str(x.second) + "s"
+        global fileName
+        fileName = "ClueSolverGameSave " + str(timeStamp) + ".txt"        
+        fileObject = open(fileName, 'w')        # use 'w' because we're creating a new file
+        fileObject.write(str(userCharacter.getNameOnly()) + "\n")       # line 0
+        fileObject.close()
+        # add in the player's 3 cards
+        fileObject = open(fileName, 'a')      # 'a' for append
+        for x in range(len(userCharacter.getCardList())):
+            fileObject.write(str(userCharacter.getCardFromCardList(x).getPlaceInCardList()) + "\n")     # lines 1, 2, 3
+        # include the playerOrder
+        fileObject.write(str(playerOrder) + "\n")       # line 4
+        fileObject.write("{}\n")
+        fileObject.write("0")
+        fileObject.close()
+
+        global currentTurnNumber
+        currentTurnNumber = 1
+
+class ExecuteTurnScreen(Screen):
+    @staticmethod
+    def convertTurnToPlayerTurn(turnNum):
+        return ((turnNum - 1) % 6) + 1
+
+    def on_enter(self, *args):
+        global currentTurnNumber
+        activePlayer = Player
+        for player in playerList:
+            if player.getTurnOrder() == self.convertTurnToPlayerTurn(int(currentTurnNumber)):
+                activePlayer = player
+        activePlayerName = activePlayer.getNameOnly()       
+        print("active player is: " + str(activePlayerName)) 
+        self.ids.title_label.text = "Turn " + str(currentTurnNumber) + ", " + str(activePlayerName) + " suggests:"
+        return super().on_enter(*args)
+
+    def killerSpinnerClicked(self, value):
+        self.ids.killer_spinner.text = value
+    def weaponSpinnerClicked(self, value):
+        self.ids.weapon_spinner.text = value
+    def roomSpinnerClicked(self, value):
+        self.ids.room_spinner.text = value
+
+
+    def spinnerClicked(self, id, value):
+        id.text = value
+    # IS THERE A WAY TO HAVE A SINGLE "spinnerClicked" FUNCTION TO HANDLE ALL SPINNERS?
+
+
+
+
+
+    def enterInfoIntoFile(self):            # not used yet... attach it to a button
+        global turnLog
+        turnLog[currentTurnNumber] = {}
+        
+        
+        
+
+
+
+
+
+
 
 class LoadGameScreen(Screen):
     pass
@@ -289,9 +376,8 @@ class WindowManager(ScreenManager):
 kv = Builder.load_file("my.kv")
 
 class MyMainApp(App):
-    def build(self):
+    def build(self):        
         return kv
-
 
 if __name__ == "__main__":
     MyMainApp().run()
