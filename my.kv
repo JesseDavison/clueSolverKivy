@@ -1336,9 +1336,12 @@ WindowManager:
 <ExecuteTurnScreen>
     name: "ExecuteTurnScreen"
     FloatLayout:
+        # SECTION HEADER                                HEADERHEADERHEADERHEADERHEADERHEADERHEADERHEADERHEADERHEADERHEADERHEADERHEADERHEADERHEADERHEADERHEADERHEADER
         Label:
             id: title_label
-            # vrs: {'turnNumber': -1, 'player': '', 'type': ''}            
+            section: "header"
+            # vrs: {'turnNumber': -1, 'player': '', 'type': ''}           
+            defaultText: "Turn X, (player) suggests:" 
             text: "Turn X, (player) suggests:"
             text_color: 1, 1, 0, 1
             canvas.before:
@@ -1347,58 +1350,280 @@ WindowManager:
                 Rectangle:
                     pos: self.pos
                     size: self.size
-            size_hint: (0.8, 0.1)   
-            pos_hint: {"x": 0.1, "y": 0.9}
+            size_hint: (0.6, 0.1)   
+            pos_hint: {"x": 0.2, "y": 0.9}
         Button:
-            text: "to where"
+            id: notes_button
+            section: "header"
+            type: "notesButton"
+            defaultText: "Notes"
+            text: "Notes"
             background_color: 0, 1, 0.2, 1
             # font_size: '10sp'
-            size_hint: (0.0625, 0.0625)
-            pos_hint: {"x":0.0625 / 2, "y":1 - 1.5 * 0.0625}
+            size_hint: (0.2, 0.075)
+            pos_hint: {"x":0, "y":1 - 0.075}
             on_release: 
+                #       goes to ANALYSIS TABLE
                 # app.root.current = "playerOrderScreen"
                 # root.manager.transition.direction = "right"
         Button:
-            text: "to where"
+            id: past_turns_button
+            section: "header"
+            type: "pastTurnsButton"
+            defaultText: "Past turns"
+            text: "Past turns"
             # id: next_button
-            vrs: {'turnNumber': -1, 'player': '', 'type': 'next_button'}            
+            # vrs: {'turnNumber': -1, 'player': '', 'type': 'next_button'}            
             background_color: 0, 1, 0.2, 1
-            size_hint: (0.0625, 0.0625)
-            pos_hint: {"x":1 - 1.5 * 0.0625, "y":1 - 1.5 * 0.0625}
+            size_hint: (0.2, 0.075)
+            pos_hint: {"x": 0, "y":1 - 2 * 0.075}
             disabled: False
             on_press: 
+                #       goes to TURN HISTORY
                 # root.createGameSaveFile()
                 # app.root.current = "ExecuteTurnScreen"
                 # root.manager.transition.direction = "left"  
+        # SECION ABLETOGUESS                    ABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESS
+        Spinner:
+            id: able_to_guess
+            type: 'ableToGuess'
+            section: "ableToGuess"
+            defaultText: 'Able to suggest'
+            text: 'Able to suggest'
+            values: ['Able to suggest', 'NOT able']
+            on_text: root.spinnerClicked(self)
+            size_hint: (0.2, 0.08)
+            pos_hint: {"x": 0.05, "y": 0.7}
+
+        # SECTION A                             AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         Spinner:
             id: killer_spinner
-            text: "choose the killer"
+            type: "killer"
+            section: 'A'
+            defaultText: 'suggested killer'
+            text: "suggested killer"
             values: ['Green', 'Mustard', 'Peacock', 'Plum', 'Scarlett', 'Orchid']
-            on_text: root.spinnerClicked(killer_spinner, killer_spinner.text)
+            on_text: root.spinnerClicked(self)
+            disabled: False
             size_hint: (0.2, 0.08)
-            pos_hint: {"x": 0.1, "y": 0.7}
+            pos_hint: {"x": 0.05 + 0.2 + 0.1 / 3, "y": 0.7}
         Spinner:
             id: weapon_spinner
-            text: "choose the weapon"
+            type: "weapon"
+            section: 'A'
+            defaultText: 'suggested weapon'
+            text: "suggested weapon"
             values: ['Candlestick', 'Dagger', 'Pipe', 'Revolver', 'Rope', 'Wrench']
-            on_text: root.spinnerClicked(weapon_spinner, weapon_spinner.text)
+            on_text: root.spinnerClicked(self)
             size_hint: (0.2, 0.08)
-            pos_hint: {"x": 0.1 + 0.2 + 0.1, "y": 0.7}
+            pos_hint: {"x": 0.05 + 0.2 * 2 + 2 * (0.1 / 3), "y": 0.7}
         Spinner:
             id: room_spinner
-            text: "choose the room"
+            type: "room"
+            section: 'A'
+            defaultText: 'suggested room'
+            text: "suggested room"
             values: ['Ballroom', 'Billiard Room', 'Conservatory', 'Dining Room', 'Hall', 'Kitchen', 'Library', 'Lounge', 'Study']
-            on_text: root.spinnerClicked(room_spinner, room_spinner.text)
+            on_text: root.spinnerClicked(self)
             size_hint: (0.2, 0.08)
-            pos_hint: {"x": 0.1 + 0.2 + 0.1 + 0.2 + 0.1, "y": 0.7}
+            pos_hint: {"x": 0.05 + 0.2 * 3 + 3 * (0.1 / 3), "y": 0.7}
 
+        #:set spinnerMargin 0.05
+        #:set numberOfResponses 6 - 1
+        #:set spinnerWidth 0.8 / numberOfResponses
+        #:set spinnerGap 0.1 / (numberOfResponses - 1)
+        #:set spinnerHeight 0.08
+        #:set spinnerYvalue 0.4
+        # SECTION B                         BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+        Label:
+            id: player1_response_label
+            type: "playerResponseLabel"
+            section: 'B'
+            defaultText: "player1 response"
+            text: "player1 response"
+            disabled: True
+            size_hint: (spinnerWidth, spinnerHeight)
+            pos_hint: {"x": spinnerMargin + spinnerWidth * 0 + spinnerGap * 0, "y": spinnerYvalue + 0.1}
         Spinner:
             id: player1_response_spinner
-            text: "player1 response"
-            values: ['null', 'declined', 'showed card']
-            on_text: root.spinnerClicked(player1_response_spinner, player1_response_spinner.text)
+            # type: "player1Response"
+            type: "playerResponseSpinner"
+            section: 'B'
+            player: 1
+            disabled: True
+            defaultText: "null"
+            text: "null"
+            values: ['declined', 'showed card', 'null']
+            on_text: root.spinnerClicked(self)
+            size_hint: (spinnerWidth, spinnerHeight)
+            pos_hint: {"x": spinnerMargin, "y": spinnerYvalue}
+
+        Label:
+            id: player2_response_label
+            type: "playerResponseLabel"
+            section: 'B'
+            defaultText: "player2 response"
+            text: "player2 response"
+            disabled: True
+            size_hint: (spinnerWidth, spinnerHeight)
+            pos_hint: {"x": spinnerMargin + spinnerWidth * 1 + spinnerGap * 1, "y": spinnerYvalue + 0.1}
+        Spinner:
+            id: player2_response_spinner
+            # type: "player2Response"
+            type: "playerResponseSpinner"
+            section: 'B'
+            player: 2
+            disabled: True
+            defaultText: "null"
+            text: "null"
+            values: ['declined', 'showed card', 'null']
+            on_text: root.spinnerClicked(self)
+            size_hint: (spinnerWidth, spinnerHeight)
+            pos_hint: {"x": spinnerMargin + spinnerWidth * 1 + spinnerGap * 1, "y": spinnerYvalue}
+
+        Label:
+            id: player3_response_label
+            type: "playerResponseLabel"
+            section: 'B'
+            defaultText: "player3 response"
+            text: "player3 response"
+            disabled: True
+            size_hint: (spinnerWidth, spinnerHeight)
+            pos_hint: {"x": spinnerMargin + spinnerWidth * 2 + spinnerGap * 2, "y": spinnerYvalue + 0.1}
+        Spinner:
+            id: player3_response_spinner
+            # type: "player3Response"
+            type: "playerResponseSpinner"
+            section: 'B'
+            player: 3
+            disabled: True
+            defaultText: "null"
+            text: "null"
+            values: ['declined', 'showed card', 'null']
+            on_text: root.spinnerClicked(self)
+            size_hint: (spinnerWidth, spinnerHeight)
+            pos_hint: {"x": spinnerMargin + spinnerWidth * 2 + spinnerGap * 2, "y": spinnerYvalue}
+
+        Label:
+            id: player4_response_label
+            type: "playerResponseLabel"
+            section: 'B'
+            defaultText: "player4 response"
+            text: "player4 response"
+            disabled: True
+            size_hint: (spinnerWidth, spinnerHeight)
+            pos_hint: {"x": spinnerMargin + spinnerWidth * 3 + spinnerGap * 3, "y": spinnerYvalue + 0.1}
+        Spinner:
+            id: player4_response_spinner
+            # type: "player4Response"
+            type: "playerResponseSpinner"
+            section: 'B'
+            player: 4
+            disabled: True
+            defaultText: "null"
+            text: "null"
+            values: ['declined', 'showed card', 'null']
+            on_text: root.spinnerClicked(self)
+            size_hint: (spinnerWidth, spinnerHeight)
+            pos_hint: {"x": spinnerMargin + spinnerWidth * 3 + spinnerGap * 3, "y": spinnerYvalue}
+
+        Label:
+            id: player5_response_label
+            type: "playerResponseLabel"
+            section: 'B'
+            defaultText: "player5 response"
+            text: "player5 response"
+            disabled: True
+            size_hint: (spinnerWidth, spinnerHeight)
+            pos_hint: {"x": spinnerMargin + spinnerWidth * 4 + spinnerGap * 4, "y": spinnerYvalue + 0.1}
+        Spinner:
+            id: player5_response_spinner
+            # type: "player5Response"
+            type: "playerResponseSpinner"
+            section: 'B'
+            player: 5
+            disabled: True
+            defaultText: "null"
+            text: "null"
+            values: ['declined', 'showed card', 'null']
+            on_text: root.spinnerClicked(self)
+            size_hint: (spinnerWidth, spinnerHeight)
+            pos_hint: {"x": spinnerMargin + spinnerWidth * 4 + spinnerGap * 4, "y": spinnerYvalue}
+
+        # SECTION C                                                     CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+        Label:
+            id: card_known_label
+            type: "cardKnownLabel"
+            section: 'C'
+            defaultText: "Do you know what card was shown?"
+            text: "Do you know what card was shown?"
+            disabled: True
             size_hint: (0.2, 0.08)
-            pos_hint: {"x": 0.1 + 0.2 + 0.1, "y": 0.5}                    
+            pos_hint: {"x": 0.1, "y": 0.2}
+        Label:
+            id: textNO
+            type: "cardKnownLabel"
+            section: 'C'
+            defaultText: "No"
+            text: "No"
+            disabled: True
+            size_hint: (0.2, 0.08)
+            pos_hint: {"x": 0.3, "y": 0.2}
+        Label:
+            id: textYES
+            type: "cardKnownLabel"
+            section: 'C'
+            defaultText: "Yes"
+            text: "Yes"
+            disabled: True
+            size_hint: (0.2, 0.08)
+            pos_hint: {"x": 0.3, "y": 0.1}            
+        CheckBox:
+            id: card_known_checkbox_NO
+            type: "checkboxNO"
+            section: 'C'
+            group: "cardKnown"
+            defaultText: ""
+            active: True
+            disabled: True
+            size_hint: (0.2, 0.08)
+            pos_hint: {"x": 0.35, "y": 0.2}
+        CheckBox:
+            id: card_known_checkbox_YES
+            type: "checkboxYES"
+            section: 'C'     
+            group: "cardKnown"
+            defaultText: ""
+            on_active: root.cardKnown(self)
+            disabled: True
+            size_hint: (0.2, 0.08)
+            pos_hint: {"x": 0.35, "y": 0.1}
+        Spinner:
+            id: card_known_spinner
+            type: "cardKnownSpinner"
+            section: 'C'
+            disabled: True
+            defaultText: ""
+            values: ['', '', '']
+            on_text: root.spinnerClicked(self)
+            size_hint: (0.2, (0.08 - 0.02))
+            sync_height: True       # this makes the dropdown items have the same height as the origin
+            pos_hint: {"x": 0.55, "y": 0.1 + (0.02 / 2)}
+        # SECTION COMPLETETURNBUTTON                    COMPLETETURNBUTTONCOMPLETETURNBUTTONCOMPLETETURNBUTTONCOMPLETETURNBUTTONCOMPLETETURNBUTTONCOMPLETETURNBUTTON
+        Button:
+            id: complete_turn_button
+            type: "completeTurnButton"
+            section: "completeTurnButton"
+            defaultText: "Complete Turn"
+            text: "Complete Turn"
+            disabled: True
+            background_color: 0, 1, 0.2, 1
+            size_hint: (0.2, 0.075)
+            pos_hint: {"x": 0.8, "y": 0}
+            on_release: 
+
+
+
 
 
 
