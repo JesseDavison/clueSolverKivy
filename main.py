@@ -352,34 +352,72 @@ class ExecuteTurnScreen(Screen):
     def cardKnownSpinner(self, instance):
         pass
 
-    def setScreenToDefault(self):
-        print("setting screen to default")
+
+    def reset_sectionAbleToGuess(self):
         for key, val in self.ids.items():
-        # section header... do nothing
-        # section ableToGuess
             if val.section == 'ableToGuess':
                 val.disabled = False
                 val.color = 1, 1, 1, 1
-                val.text = val.defaultText
-        # section A
+                val.text = val.defaultText            
+    def reset_sectionA(self):
+        for key, val in self.ids.items():
             if val.section == 'A':
                 val.disabled = False
                 val.color = 1, 1, 1, 1
                 val.text = val.defaultText
-        # section B
+    def reset_sectionB(self):
+        for key, val in self.ids.items():
             if val.section == 'B':
                 val.disabled = True
                 val.color = 1, 1, 1, 1
                 val.text = val.defaultText
-        # section C
+    def reset_sectionC(self):
+        for key, val in self.ids.items():
             if val.section == 'C':
                 val.disabled = True
+                val.color = 1, 1, 1, 1
                 val.text = val.defaultText
                 if val.type == 'checkboxNO':
                     val.active = True
-        # complete Turn button
-            if val.section == 'completeTurnButton':
+    def reset_sectionCompleteTurnButton(self):
+        for key, val in self.ids.items():
+            if val.section == "completeTurnButton":
                 val.disabled = True
+    def disable_sectionA(self):
+        for key, val in self.ids.items():
+            if val.section == 'A':
+                val.disabled = True
+    def disable_sectionB(self):
+        for key, val in self.ids.items():
+            if val.section == 'B':
+                val.disabled = True
+    def enable_sectionB(self):
+        for key, val in self.ids.items():
+            if val.section == 'B':
+                val.disabled = False
+    def disable_sectionC(self):
+        for key, val in self.ids.items():
+            if val.section == 'C':
+                val.disabled = True
+    def enable_sectionC(self):
+        for key, val in self.ids.items():
+            if val.section == 'C':
+                val.disabled = False                
+    def disable_completeTurnButton(self):
+        self.ids.complete_turn_button.disabled = True
+    def enable_completeTurnButton(self):
+        self.ids.complete_turn_button.disabled = False                     
+    def greenText_sectionA(self):
+        for key, val in self.ids.items():
+            if val.section == 'A':
+                val.color = 0, 1, 0.2, 1
+    def greenText_sectionB(self):
+        for key, val in self.ids.items():
+            if val.section == 'B':
+                val.color = 0, 1, 0.2, 1                
+
+
+
 
 
     suggestedKiller = StringProperty('')
@@ -396,36 +434,55 @@ class ExecuteTurnScreen(Screen):
     textOfCardShown = StringProperty('')
 
     def spinnerClicked(self, spinner):
-        # print("----------------------------------------------")
-        # print("id: " + str(spinner))
-        # print("id.text: " + str(spinner.text))
-        # print("id.type: " + str(spinner.type))
-        # print("id.disabled: " + str(spinner.disabled))
         spinner.text = spinner.text                 # this function can handle all the spinners
         
         # Set the killer / weapon / room
         if spinner.type == "killer":
-            self.suggestedKiller = spinner.text
-            self.killerSuggested = True
+            if 'suggested' in spinner.text:
+                self.suggestedKiller = ''
+                self.killerSuggested = False
+            else:
+                self.suggestedKiller = spinner.text
+                self.killerSuggested = True
             self.ids.card_known_spinner.values[0] = self.suggestedKiller
             # get the cardNum
+            inCardList = False
             for card in cardList:
                 if self.suggestedKiller == card.getName():
                     self.suggestedKillerCardNum = card.getPlaceInCardList()
+                    inCardList = True
+            if inCardList == False:
+                self.suggestedKillerCardNum = -1
         if spinner.type == "weapon":
-            self.suggestedWeapon = spinner.text
-            self.weaponSuggested = True
+            if 'suggested' in spinner.text:
+                self.suggestedWeapon = ''
+                self.weaponSuggested = False
+            else:
+                self.suggestedWeapon = spinner.text
+                self.weaponSuggested = True
             self.ids.card_known_spinner.values[1] = self.suggestedWeapon
+            inCardList = False
             for card in cardList:
                 if self.suggestedWeapon == card.getName():
-                    self.suggestedWeaponCardNum = card.getPlaceInCardList()            
+                    self.suggestedWeaponCardNum = card.getPlaceInCardList()  
+                    inCardList = True
+            if inCardList == False:
+                self.suggestedWeaponCardNum = -1         
         if spinner.type == "room":
-            self.suggestedRoom = spinner.text
-            self.roomSuggested = True
+            if 'suggested' in spinner.text:
+                self.suggestedRoom = ''
+                self.roomSuggested = False
+            else:
+                self.suggestedRoom = spinner.text
+                self.roomSuggested = True
             self.ids.card_known_spinner.values[2] = self.suggestedRoom            
+            inCardList = False
             for card in cardList:
                 if self.suggestedRoom == card.getName():
                     self.suggestedRoomCardNum = card.getPlaceInCardList()            
+                    inCardList = True
+            if inCardList == False:
+                self.suggestedRoomCardNum = -1
                 
         # record players who declined to show a card
         if spinner.type == 'playerResponseSpinner' and spinner.text == 'declined':
@@ -449,37 +506,76 @@ class ExecuteTurnScreen(Screen):
         print("playerResponses: " + str(self.playerResponses))
         print("shown card: " + str(self.cardShown) + ": " + str(self.textOfCardShown))
         print("*** end")
-
-
-
-                
-
-
+        print("")
 
         # DECIDE WHAT IS / IS NOT DISABLED, and change text colors, and change entered data to default/null
 
         # if player not able to make suggestion:
         #   default state 
-        #       + NOT able to guess 
+        #       + NOT able to guess
         #       + section A is disabled
         #       + completeTurnButton is NOT disabled
         if spinner.type == 'ableToGuess' and spinner.text == 'NOT able':
-            self.setScreenToDefault()
-            for key, val in self.ids.items():
-                if val.section == 'ableToGuess':
-                    val.text = 'NOT able'
-                if val.section == 'A':
-                    val.disabled = True
-                if val.section == 'completeTurnButton':
-                    val.disabled = False
-        if spinner.type == 'ableToGuess' and spinner.text == 'ableToSuggest':
-            self.setScreenToDefault()
+            self.reset_sectionA()
+            self.disable_sectionA()
+            self.reset_sectionB()
+            self.reset_sectionC()
+            self.enable_completeTurnButton()
+        if spinner.type == 'ableToGuess' and spinner.text == 'Able to suggest':
+            self.reset_sectionA()
+            self.reset_sectionB()
+            self.reset_sectionC()
+            self.disable_completeTurnButton()
+
+        # if the 3 k/w/r have been selected: turn section A text green, enable section B
+        if self.killerSuggested == True and self.weaponSuggested == True and self.roomSuggested == True:
+            if self.ids.able_to_guess.text == 'NOT able':
+                pass
+            else:
+                # self.greenText_sectionA()
+                self.enable_sectionB()
+                self.reset_sectionC()
+                self.enable_completeTurnButton()
+
+        # if the 3 k/w/r have been selected AND one player showed a card, but that card is NOT KNOWN
+        if spinner.type == 'playerResponseSpinner' and spinner.text == 'showed card' and self.cardShown == -1:
+            if self.killerSuggested == True and self.weaponSuggested == True and self.roomSuggested == True:
+                self.disable_sectionA()
+                # self.greenText_sectionA()
+                self.enable_sectionB()
+                # selectively disable in section B
+                playerNumWhoShowedCard = spinner.player
+                for x in range(5):
+                    for key, val in self.ids.items():
+                        if val.type == 'playerResponseSpinner' and val.player > playerNumWhoShowedCard:
+                            val.disabled = True
+                            val.text = 'null'
+                        if val.type == 'playerResponseSpinner' and val.player < playerNumWhoShowedCard:
+                            val.disabled = False
+                            val.text = 'declined'
+                            # val.color = 0, 1, 0.2, 1
+                        if val.type == 'playerResponseSpinner' and val.player == playerNumWhoShowedCard:
+                            pass
+                            # val.color = 0, 1, 0.2, 1
+                self.reset_sectionC()
+                self.enable_sectionC()
+                self.disable_completeTurnButton()
+
+        if spinner.type == 'playerResponseSpinner' and spinner.text == 'showed card' and self.cardShown != -1:
+            self.disable_sectionA()
+            self.disable_sectionB()
+            self.enable_sectionC()
+            self.enable_completeTurnButton()
 
 
 
 
-
-
+                # self.playerResponses[id.player - 1] = 'showed card'
+                # for key, val in self.ids.items():
+                #     if val.type == 'cardKnownLabel' or val.type == 'checkboxNO' or val.type == 'checkboxYES':
+                #         val.disabled = False
+                # if someone shows a card, then every player afterwards CANNOT show a card, so DISABLE those spinners, and RESET THEM IF NECESSARY
+    
 
 
 
