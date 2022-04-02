@@ -1404,7 +1404,6 @@ WindowManager:
             text: "suggested killer"
             values: ['Green', 'Mustard', 'Peacock', 'Plum', 'Scarlett', 'Orchid']
             on_text: root.spinnerClicked(self)
-            disabled: False
             size_hint: (0.2, 0.08)
             pos_hint: {"x": 0.05 + 0.2 + 0.1 / 3, "y": 0.7}
         Spinner:
@@ -1441,7 +1440,8 @@ WindowManager:
             section: 'B'
             defaultText: "player1 response"
             text: "player1 response"
-            disabled: True
+            playerName: ''
+            disabled: False
             size_hint: (spinnerWidth, spinnerHeight)
             pos_hint: {"x": spinnerMargin + spinnerWidth * 0 + spinnerGap * 0, "y": spinnerYvalue + 0.1}
         Spinner:
@@ -1450,7 +1450,8 @@ WindowManager:
             type: "playerResponseSpinner"
             section: 'B'
             player: 1
-            disabled: True
+            playerName: ''
+            disabled: False
             defaultText: "null"
             text: "null"
             values: ['declined', 'showed card', 'null']
@@ -1464,7 +1465,8 @@ WindowManager:
             section: 'B'
             defaultText: "player2 response"
             text: "player2 response"
-            disabled: True
+            playerName: ''
+            disabled: False
             size_hint: (spinnerWidth, spinnerHeight)
             pos_hint: {"x": spinnerMargin + spinnerWidth * 1 + spinnerGap * 1, "y": spinnerYvalue + 0.1}
         Spinner:
@@ -1473,7 +1475,8 @@ WindowManager:
             type: "playerResponseSpinner"
             section: 'B'
             player: 2
-            disabled: True
+            playerName: ''
+            disabled: False
             defaultText: "null"
             text: "null"
             values: ['declined', 'showed card', 'null']
@@ -1487,7 +1490,8 @@ WindowManager:
             section: 'B'
             defaultText: "player3 response"
             text: "player3 response"
-            disabled: True
+            playerName: ''
+            disabled: False
             size_hint: (spinnerWidth, spinnerHeight)
             pos_hint: {"x": spinnerMargin + spinnerWidth * 2 + spinnerGap * 2, "y": spinnerYvalue + 0.1}
         Spinner:
@@ -1496,7 +1500,8 @@ WindowManager:
             type: "playerResponseSpinner"
             section: 'B'
             player: 3
-            disabled: True
+            playerName: ''
+            disabled: False
             defaultText: "null"
             text: "null"
             values: ['declined', 'showed card', 'null']
@@ -1510,7 +1515,8 @@ WindowManager:
             section: 'B'
             defaultText: "player4 response"
             text: "player4 response"
-            disabled: True
+            playerName: ''
+            disabled: False
             size_hint: (spinnerWidth, spinnerHeight)
             pos_hint: {"x": spinnerMargin + spinnerWidth * 3 + spinnerGap * 3, "y": spinnerYvalue + 0.1}
         Spinner:
@@ -1519,7 +1525,8 @@ WindowManager:
             type: "playerResponseSpinner"
             section: 'B'
             player: 4
-            disabled: True
+            playerName: ''
+            disabled: False
             defaultText: "null"
             text: "null"
             values: ['declined', 'showed card', 'null']
@@ -1533,7 +1540,8 @@ WindowManager:
             section: 'B'
             defaultText: "player5 response"
             text: "player5 response"
-            disabled: True
+            playerName: ''
+            disabled: False
             size_hint: (spinnerWidth, spinnerHeight)
             pos_hint: {"x": spinnerMargin + spinnerWidth * 4 + spinnerGap * 4, "y": spinnerYvalue + 0.1}
         Spinner:
@@ -1542,7 +1550,8 @@ WindowManager:
             type: "playerResponseSpinner"
             section: 'B'
             player: 5
-            disabled: True
+            playerName: ''
+            disabled: False
             defaultText: "null"
             text: "null"
             values: ['declined', 'showed card', 'null']
@@ -1557,7 +1566,7 @@ WindowManager:
             section: 'C'
             defaultText: "Do you know what card was shown?"
             text: "Do you know what card was shown?"
-            disabled: True
+            disabled: False
             size_hint: (0.2, 0.08)
             pos_hint: {"x": 0.1, "y": 0.2}
         Label:
@@ -1566,7 +1575,7 @@ WindowManager:
             section: 'C'
             defaultText: "No"
             text: "No"
-            disabled: True
+            disabled: False
             size_hint: (0.2, 0.08)
             pos_hint: {"x": 0.3, "y": 0.2}
         Label:
@@ -1575,7 +1584,7 @@ WindowManager:
             section: 'C'
             defaultText: "Yes"
             text: "Yes"
-            disabled: True
+            disabled: False
             size_hint: (0.2, 0.08)
             pos_hint: {"x": 0.3, "y": 0.1}            
         CheckBox:
@@ -1584,8 +1593,9 @@ WindowManager:
             section: 'C'
             group: "cardKnown"
             defaultText: ""
+            on_active: root.checkboxNOclicked(self)
             active: True
-            disabled: True
+            disabled: False
             size_hint: (0.2, 0.08)
             pos_hint: {"x": 0.35, "y": 0.2}
         CheckBox:
@@ -1594,8 +1604,8 @@ WindowManager:
             section: 'C'     
             group: "cardKnown"
             defaultText: ""
-            on_active: root.cardKnown(self)
-            disabled: True
+            on_active: root.checkboxYESclicked(self)
+            disabled: False
             size_hint: (0.2, 0.08)
             pos_hint: {"x": 0.35, "y": 0.1}
         Spinner:
@@ -1604,6 +1614,7 @@ WindowManager:
             section: 'C'
             disabled: True
             defaultText: ""
+            text: ""
             values: ['', '', '']
             on_text: root.spinnerClicked(self)
             size_hint: (0.2, (0.08 - 0.02))
@@ -1616,7 +1627,7 @@ WindowManager:
             section: "completeTurnButton"
             defaultText: "Complete Turn"
             text: "Complete Turn"
-            disabled: True
+            disabled: False
             background_color: 0, 1, 0.2, 1
             size_hint: (0.2, 0.075)
             pos_hint: {"x": 0.8, "y": 0}

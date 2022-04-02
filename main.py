@@ -1,5 +1,6 @@
 import datetime
 from dis import dis
+from fileinput import filename
 from tkinter import BooleanVar
 from xml.etree.ElementPath import get_parent_map
 import kivy
@@ -325,19 +326,54 @@ class ExecuteTurnScreen(Screen):
     def convertTurnToPlayerTurn(turnNum):
         return ((turnNum - 1) % 6) + 1
 
+    respondentList = ['', '', '', '', '', '']
+
     def on_enter(self, *args):
         global currentTurnNumber
         activePlayer = Player
         for player in playerList:
             if player.getTurnOrder() == self.convertTurnToPlayerTurn(int(currentTurnNumber)):
                 activePlayer = player
-        activePlayerName = activePlayer.getNameOnly()       
+        activePlayerName = activePlayer.getNameOnly()      
+        self.respondentList[0] = str(activePlayerName) 
+
+        # now identify who 'player1 response' is, who 'player2 response' is, etc
+        incrementalVariable = 1
+        while incrementalVariable < 6:
+            respondentTurnOrder = self.convertTurnToPlayerTurn(currentTurnNumber + incrementalVariable)
+            for player in playerList:
+                if player.getTurnOrder() == respondentTurnOrder:
+                    self.respondentList[incrementalVariable] = str(player.getNameOnly())
+            incrementalVariable += 1
+        # now put those players' names onto the screen
+        self.ids.player1_response_label.text = str(self.respondentList[1])
+        self.ids.player2_response_label.text = str(self.respondentList[2])
+        self.ids.player3_response_label.text = str(self.respondentList[3])
+        self.ids.player4_response_label.text = str(self.respondentList[4])
+        self.ids.player5_response_label.text = str(self.respondentList[5])
+        # prepare the spinners so they can easily tell us which player they represent
+        self.ids.player1_response_spinner.playerName = str(self.respondentList[1])
+        self.ids.player2_response_spinner.playerName = str(self.respondentList[2])
+        self.ids.player3_response_spinner.playerName = str(self.respondentList[3])
+        self.ids.player4_response_spinner.playerName = str(self.respondentList[4])
+        self.ids.player5_response_spinner.playerName = str(self.respondentList[5])
+
         print("active player is: " + str(activePlayerName)) 
         self.ids.title_label.text = "Turn " + str(currentTurnNumber) + ", " + str(activePlayerName) + " suggests:"
         self.ids.title_label.defaultText = "Turn " + str(currentTurnNumber) + ", " + str(activePlayerName) + " suggests:"
-        
-        #TODO: UPDATE PLAYER ORDER, and set labels & spinners accordingly, i.e., who is player1, player2, etc
 
+        # initialize this turn's entry in turnLog
+        global turnLog
+        turnLog[currentTurnNumber] = {}
+        turnLog[currentTurnNumber]['guesser'] = activePlayerName
+        turnLog[currentTurnNumber]['killerGuessed'] = -1
+        turnLog[currentTurnNumber]['weaponGuessed'] = -1
+        turnLog[currentTurnNumber]['roomGuessed'] = -1
+        for x in range(6):
+            for player in playerList:               
+                if x+1 == player.getTurnOrder():
+                    turnLog[currentTurnNumber][str(player.getNameOnly()).lower() + "Response"] = "n"        
+        turnLog[currentTurnNumber]['card'] = -1
 
         return super().on_enter(*args)
 
@@ -348,9 +384,6 @@ class ExecuteTurnScreen(Screen):
             self.ids.card_known_spinner.disabled = False
         else: 
             self.ids.card_known_spinner.disabled = True            
-
-    def cardKnownSpinner(self, instance):
-        pass
 
 
     def reset_sectionAbleToGuess(self):
@@ -433,9 +466,10 @@ class ExecuteTurnScreen(Screen):
     cardShown = NumericProperty(-1)
     textOfCardShown = StringProperty('')
 
+
     def spinnerClicked(self, spinner):
         spinner.text = spinner.text                 # this function can handle all the spinners
-        
+        global turnLog
         # Set the killer / weapon / room
         if spinner.type == "killer":
             if 'suggested' in spinner.text:
@@ -453,6 +487,7 @@ class ExecuteTurnScreen(Screen):
                     inCardList = True
             if inCardList == False:
                 self.suggestedKillerCardNum = -1
+            turnLog[currentTurnNumber]['killerGuessed'] = self.suggestedKillerCardNum
         if spinner.type == "weapon":
             if 'suggested' in spinner.text:
                 self.suggestedWeapon = ''
@@ -467,7 +502,8 @@ class ExecuteTurnScreen(Screen):
                     self.suggestedWeaponCardNum = card.getPlaceInCardList()  
                     inCardList = True
             if inCardList == False:
-                self.suggestedWeaponCardNum = -1         
+                self.suggestedWeaponCardNum = -1    
+            turnLog[currentTurnNumber]['weaponGuessed'] = self.suggestedWeaponCardNum     
         if spinner.type == "room":
             if 'suggested' in spinner.text:
                 self.suggestedRoom = ''
@@ -483,186 +519,90 @@ class ExecuteTurnScreen(Screen):
                     inCardList = True
             if inCardList == False:
                 self.suggestedRoomCardNum = -1
-                
-        # record players who declined to show a card
-        if spinner.type == 'playerResponseSpinner' and spinner.text == 'declined':
-            self.playerResponses[spinner.player - 1] = 'declined'
-        # if the player's response is changed back to 'null'...
-        if spinner.type == 'playerResponseSpinner' and spinner.text == 'null':
-            self.playerResponses[spinner.player - 1] = 'null'
-        if spinner.type == 'playerResponseSpinner' and spinner.text == 'showed card':
-            self.playerResponses[spinner.player - 1] = 'showed card'        
+            turnLog[currentTurnNumber]['roomGuessed'] = self.suggestedRoomCardNum
 
-        if spinner.type == 'cardKnownSpinner' and spinner.text != '':
-            self.textOfCardShown = spinner.text
-            # now find the cardNum of that card
-            for card in cardList:
-                if self.textOfCardShown == card.getName():
-                    self.cardShown = card.getPlaceInCardList()
+
+        # record players who declined to show a card
+        if spinner.type == 'playerResponseSpinner':
+            playerName = str(spinner.playerName)
+            tempString = str(playerName).lower() + "Response"
+            response = ''
+            if spinner.text == 'declined':
+                self.playerResponses[spinner.player - 1] = 'declined'           # might not need this
+                response = 'd'
+            elif spinner.text == 'null':
+                self.playerResponses[spinner.player - 1] = 'null'
+                response = 'n'
+            elif spinner.text == 'showed card':
+                self.playerResponses[spinner.player - 1] = 'showed card'
+                response = 'r'  # 'r' means responded, as in, they showed a card
+            turnLog[currentTurnNumber][tempString] = response
+
+
+        if spinner.type == 'cardKnownSpinner':
+            if spinner.text != '':
+                self.textOfCardShown = spinner.text
+                # now find the cardNum of that card
+                for card in cardList:
+                    if self.textOfCardShown == card.getName():
+                        self.cardShown = card.getPlaceInCardList()
+                        turnLog[currentTurnNumber]['card'] = card.getPlaceInCardList()
+            elif spinner.text == '':
+                turnLog[currentTurnNumber]['card'] = -1
+
 
         print("***")
         print("killer/weapon/room: " + str(self.suggestedKillerCardNum) + "/" + str(self.suggestedWeaponCardNum) + "/" + str(self.suggestedRoomCardNum))
         print("killer/weapon/room: " + str(self.suggestedKiller) + " / " + str(self.suggestedWeapon) + " / " + str(self.suggestedRoom))            
         print("playerResponses: " + str(self.playerResponses))
-        print("shown card: " + str(self.cardShown) + ": " + str(self.textOfCardShown))
+        print("shown card: " + str(turnLog[currentTurnNumber]['card']))
+        print("turnLog: " + str(turnLog[currentTurnNumber]))
         print("*** end")
         print("")
 
-        # DECIDE WHAT IS / IS NOT DISABLED, and change text colors, and change entered data to default/null
+    def checkboxNOclicked(self, checkbox):
+        self.ids.card_known_spinner.text = ""
+        self.ids.card_known_spinner.disabled = True
+        self.cardShown = -1
+        self.textOfCardShown = ''
+    def checkboxYESclicked(self, checkbox):
+        self.ids.card_known_spinner.disabled = False
 
-        # if player not able to make suggestion:
-        #   default state 
-        #       + NOT able to guess
-        #       + section A is disabled
-        #       + completeTurnButton is NOT disabled
-        if spinner.type == 'ableToGuess' and spinner.text == 'NOT able':
-            self.reset_sectionA()
-            self.disable_sectionA()
-            self.reset_sectionB()
-            self.reset_sectionC()
-            self.enable_completeTurnButton()
-        if spinner.type == 'ableToGuess' and spinner.text == 'Able to suggest':
-            self.reset_sectionA()
-            self.reset_sectionB()
-            self.reset_sectionC()
-            self.disable_completeTurnButton()
+    def printTurnsPretty(turnNumber, turnDataDictionary):
+        print("")
+        print("TURN SUMMARY:")
+        print("                      -------GUESSED------       ------------------RESPONSES-----------------             ")
+        print("turnNum  Guesser      killer   wep    room       scar    green   orchid  must    plum    peac    cardShown")
 
-        # if the 3 k/w/r have been selected: turn section A text green, enable section B
-        if self.killerSuggested == True and self.weaponSuggested == True and self.roomSuggested == True:
-            if self.ids.able_to_guess.text == 'NOT able':
-                pass
-            else:
-                # self.greenText_sectionA()
-                self.enable_sectionB()
-                self.reset_sectionC()
-                self.enable_completeTurnButton()
+        for x in range(turnNumber):
+            turnNum = x + 1
+            print(str(turnNum).ljust(2, " ") + "".center(7, " ") + str(turnDataDictionary[turnNum]['guesser']).ljust(13, " "), end="")
+            print(str(turnDataDictionary[turnNum]['killerGuessed']).ljust(9, " "), end="")
+            print(str(turnDataDictionary[turnNum]['weaponGuessed']).ljust(7, " ") + str(turnDataDictionary[turnNum]['roomGuessed']).ljust(11, " "), end="")
+            print(str(turnDataDictionary[turnNum]['scarlettResponse']).ljust(8, " ") + str(turnDataDictionary[turnNum]['greenResponse']).ljust(8, " "), end="")
+            print(str(turnDataDictionary[turnNum]['orchidResponse']).ljust(8, " ") + str(turnDataDictionary[turnNum]['mustardResponse']).ljust(8, " "), end="")
+            print(str(turnDataDictionary[turnNum]['plumResponse']).ljust(8, " ") + str(turnDataDictionary[turnNum]['peacockResponse']).ljust(8, " "), end="")
+            print(str(turnDataDictionary[turnNum]['card']).ljust(8, " "))
+        print("")
 
-        # if the 3 k/w/r have been selected AND one player showed a card, but that card is NOT KNOWN
-        if spinner.type == 'playerResponseSpinner' and spinner.text == 'showed card' and self.cardShown == -1:
-            if self.killerSuggested == True and self.weaponSuggested == True and self.roomSuggested == True:
-                self.disable_sectionA()
-                # self.greenText_sectionA()
-                self.enable_sectionB()
-                # selectively disable in section B
-                playerNumWhoShowedCard = spinner.player
-                for x in range(5):
-                    for key, val in self.ids.items():
-                        if val.type == 'playerResponseSpinner' and val.player > playerNumWhoShowedCard:
-                            val.disabled = True
-                            val.text = 'null'
-                        if val.type == 'playerResponseSpinner' and val.player < playerNumWhoShowedCard:
-                            val.disabled = False
-                            val.text = 'declined'
-                            # val.color = 0, 1, 0.2, 1
-                        if val.type == 'playerResponseSpinner' and val.player == playerNumWhoShowedCard:
-                            pass
-                            # val.color = 0, 1, 0.2, 1
-                self.reset_sectionC()
-                self.enable_sectionC()
-                self.disable_completeTurnButton()
+    def completeTurn(self, button):
+        # print out the turns to the terminal
+        self.printTurnsPretty(currentTurnNumber, turnLog)
 
-        if spinner.type == 'playerResponseSpinner' and spinner.text == 'showed card' and self.cardShown != -1:
-            self.disable_sectionA()
-            self.disable_sectionB()
-            self.enable_sectionC()
-            self.enable_completeTurnButton()
-
-
-
-
-                # self.playerResponses[id.player - 1] = 'showed card'
-                # for key, val in self.ids.items():
-                #     if val.type == 'cardKnownLabel' or val.type == 'checkboxNO' or val.type == 'checkboxYES':
-                #         val.disabled = False
-                # if someone shows a card, then every player afterwards CANNOT show a card, so DISABLE those spinners, and RESET THEM IF NECESSARY
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        # # Enable the screen once the killer/weapon/room are set
-        # if self.killerSuggested == True and self.weaponSuggested == True and self.roomSuggested == True:
-        #     # enable the rest of the screen BUT NOT the card_known stuff
-        #     for key, val in self.ids.items():
-        #         if val.disabled == True and val.type != 'knownCard' and val.type != "cardKnownLabel" and val.type != "checkboxNO" and val.type != "checkboxYES":
-        #             val.disabled = False
-        #     # enable the complete_turn_button
-        #     self.ids.complete_turn_button.disabled = False
-
-
-
-        # # if any player SHOWS A CARD, then enable the card_shown stuff
-        # if type == 'playerResponseSpinner' and id.text == 'showed card':
-        #     self.playerResponses[id.player - 1] = 'showed card'
-        #     for key, val in self.ids.items():
-        #         if val.type == 'cardKnownLabel' or val.type == 'checkboxNO' or val.type == 'checkboxYES':
-        #             val.disabled = False
-        #     # if someone shows a card, then every player afterwards CANNOT show a card, so DISABLE those spinners, and RESET THEM IF NECESSARY
-        #     playerNumWhoShowedCard = id.player
-        #     for x in range(5):
-        #         for key, val in self.ids.items():
-        #             if val.type == 'playerResponseSpinner' and val.player > playerNumWhoShowedCard:
-        #                 val.disabled = True
-        #                 val.text = 'null'
-
-
-
-
-        # # if the user retracts the SHOWS A CARD, then disable all the card_shown stuff
-        # x = 0
-        # for key, val in self.ids.items():
-        #     if val.type == 'playerResponseSpinner' and val.text == 'showed card':
-        #         x += 1
-        # if x == 0:  # then disable the stuff
-        #     for key, val in self.ids.items():
-        #         if val.type == 'cardKnownLabel' or val.type == 'checkboxNO' or val.type == 'checkboxYES':
-        #             val.disabled = True          
-        #     # also, change the checkboxNO to active, and reset the card_known_spinner
-        #         if val.type == 'checkboxNO'  :
-        #             val.active = True
-        #         if val.type == 'knownCard':
-        #             val.text = ''
-        # if type == "checkboxYES" and id.active == True:             ### what is this for?????????????????????????????????
-        #     self.ids.card_known_spinner.disabled == False
-        # if type == "checkboxNO" and id.active == True:
-        #     self.ids.card_known_spinner.text = ''
-        #     self.ids.card_known_spinner.disabled = True
-
-
-
-
-
-
-
-
-
-
-
-
-    def enterInfoIntoFile(self):            # not used yet... attach it to a button
-        global turnLog
-        turnLog[currentTurnNumber] = {}
+        # copy the current contents of the turnInfo file, and then replace the turnLog line with the newest turnLog
+        with open(fileName, 'r') as fileObject:
+            currentContents = fileObject.readlines()
         
-        
-        
+        currentContents[5] = str(turnLog) + "\n"         # replace turnDataDictionary with the newest version
+        currentContents[6] = str(currentTurnNumber)                        # records the most recent completed turn (for the purpose of loading an old game)
+
+        with open(fileName, 'w') as fileObject:
+            fileObject.writelines(currentContents)
+
+        analyzeData(turnNumber, turnLog, analysisTable, userCharacter, actualKillerWeaponRoom, announcementsHaveBeenMadeForKillerWeaponRoom)
+        printAnalysisTable(analysisTable, actualKillerWeaponRoom)
+        # print(turnLog)
+        turnNumber += 1
 
 
 
