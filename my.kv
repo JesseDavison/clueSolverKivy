@@ -10,6 +10,7 @@ WindowManager:
     PlayerOrderScreen:
     ConfirmationScreen:
     ExecuteTurnScreen:
+    AnalyzeDataScreen:
 
 <HomeScreen>
     transition: NoTransition()
@@ -1632,8 +1633,30 @@ WindowManager:
             size_hint: (0.2, 0.075)
             pos_hint: {"x": 0.8, "y": 0}
             on_release: 
+                root.completeTurn(self)
+                app.root.current = "AnalyzeDataScreen"
+                
 
-
+<AnalyzeDataScreen>
+    name: "AnalyzeDataScreen"
+    GridLayout:
+        cols: 4
+        Label:
+            id: turn_just_finished
+            text: "turn just finished"
+        Button:
+            id: analyze_data_button
+            text: "click to analyzeData"
+            on_press: 
+                root.analyzeTheData()
+                root.printTheAnalysisTable()
+        Button:
+            id: next_turn_button
+            text: 'placeholder text'
+            on_press: 
+                root.incrementTurnNumber(self)
+                root.startNextTurn()
+                app.root.current = "ExecuteTurnScreen"
 
 
 
