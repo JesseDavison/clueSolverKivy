@@ -1,6 +1,8 @@
 import datetime
 from dis import dis
 from fileinput import filename
+import os
+import ast
 from os import stat
 from tkinter import BooleanVar
 from xml.etree.ElementPath import get_parent_map
@@ -14,9 +16,11 @@ from kivy.properties import StringProperty
 from kivy.properties import NumericProperty
 from kivy.properties import BooleanProperty
 from kivy.properties import ListProperty
+from kivy.properties import ObjectProperty
 import datetime
 from kivy.uix.widget import Widget
 from kivy.uix.checkbox import CheckBox
+from kivy.uix.filechooser import FileChooserListView
 
 
 print("CLUE SOLVER")
@@ -113,6 +117,7 @@ class Player:
         self.cardList.remove(card)
     def resetCardList(self):
         self.cardList = []
+    # @staticmethod
     def getCardFromCardList(self, integer):
         return self.cardList[integer]
     
@@ -450,9 +455,6 @@ class ExecuteTurnScreen(Screen):
                 val.color = 0, 1, 0.2, 1                
 
 
-
-
-
     suggestedKiller = StringProperty('')
     suggestedKillerCardNum = NumericProperty(-1)
     suggestedWeapon = StringProperty('')
@@ -600,29 +602,12 @@ class ExecuteTurnScreen(Screen):
         with open(fileName, 'w') as fileObject:
             fileObject.writelines(currentContents)
 
-        # analyzeData(turnNumber, turnLog, analysisTable, userCharacter, actualKillerWeaponRoom, announcementsHaveBeenMadeForKillerWeaponRoom)
-        # printAnalysisTable(analysisTable, actualKillerWeaponRoom)
-        # # print(turnLog)
-        # turnNumber += 1
-
-
-class AnalyzeDataScreen(Screen):
-    def on_enter(self, *args):
-        self.ids.turn_just_finished.text = 'turn ' + str(currentTurnNumber) + ' just finished'
-        self.ids.next_turn_button.text = 'click to start turn ' + str(currentTurnNumber + 1)
-        return super().on_enter(*args)
-    @staticmethod
-    def incrementTurnNumber(self):
-        global currentTurnNumber
-        currentTurnNumber += 1
-    def startNextTurn(self):
-        pass
-        
     @staticmethod
     def analyzeData(turnNumber, turnData, analyTable, user, killerWeaponRoom, announces):
 
         # if turnNumber == 1:
         #       turning this off so we can paste in old games and start at turnNumber > 1
+        print("ffs user is: " + str(user.getNameOnly()))
         card1 = user.getCardFromCardList(0)
         card2 = user.getCardFromCardList(1)
         card3 = user.getCardFromCardList(2)
@@ -1135,6 +1120,62 @@ class AnalyzeDataScreen(Screen):
     def analyzeTheData(self):
         self.analyzeData(currentTurnNumber, turnLog, analysisTable, userCharacter, actualKillerWeaponRoom, announcementsHaveBeenMadeForKillerWeaponRoom)
 
+class AnalysisTableScreen(Screen):
+
+    @staticmethod
+    def convertTurnToPlayerTurn(turnNum):
+        return ((turnNum - 1) % 6) + 1
+
+    def on_enter(self, *args):
+        # self.ids.turn_just_finished.text = 'turn ' + str(currentTurnNumber) + ' just finished'
+        # self.ids.next_turn_button.text = 'click to start turn ' + str(currentTurnNumber + 1)
+
+        # update all the labels to be current with the analysis table
+        
+
+        respondentList = ['', '', '', '', '', '']
+        respondentList[0] = str(userCharacter.getNameOnly()) 
+        # now identify who 'player1 response' is, who 'player2 response' is, etc
+        userTurnNumber = userCharacter.getTurnOrder()
+        incrementalVariable = 1
+        while incrementalVariable < 6:
+            respondentTurnOrder = self.convertTurnToPlayerTurn(userTurnNumber + incrementalVariable)
+            for player in playerList:
+                if player.getTurnOrder() == respondentTurnOrder:
+                    respondentList[incrementalVariable] = str(player.getNameOnly())
+            incrementalVariable += 1
+        # now put those players' names onto the screen
+        self.ids.player_name.text = str(respondentList[0])
+        self.ids.respondent1_name.text = str(respondentList[1])
+        self.ids.respondent2_name.text = str(respondentList[2])
+        self.ids.respondent3_name.text = str(respondentList[3])
+        self.ids.respondent4_name.text = str(respondentList[4])
+        self.ids.respondent5_name.text = str(respondentList[5])
+
+        for row in range(21):
+            for column in range(6):
+                # print("row: " + str(row) + " colum: " + str(column))
+                for key, val in self.ids.items():
+                    # print("asdfasdfasdfasfd " + str(val.text))
+
+                    # print("val.row: " + str(val.row) + "     val.column: " + str(val.column))
+
+                    if val.position[0] == row and val.position[1] == column:            # position[0] is the row number, position[1] is the column number
+                        print("********* the row: " + str(val.position[0]) + "   the column: " + str(val.position[1]) + "rowrow: " + str(row) + " colcol: " + str(column))
+                        val.text = str(analysisTable[row][column])
+                        # val.text = "TTTTT"
+
+
+        return super().on_enter(*args)
+
+
+    @staticmethod
+    def incrementTurnNumber(self):
+        global currentTurnNumber
+        currentTurnNumber += 1
+
+    def startNextTurn(self):
+        pass
 
     # def analyzeData(turnNumber, turnData, analyTable, user, killerWeaponRoom, announces):
     @staticmethod
@@ -1169,9 +1210,69 @@ class AnalyzeDataScreen(Screen):
         global numberOfFunctionCalls
         numberOfFunctionCalls = 0
 
-
 class LoadGameScreen(Screen):
-    pass
+    # filename = StringProperty('')
+    global fileName                         #### we need to set fileName so we can continue saving to the same file
+    filename = ObjectProperty()
+    
+    def on_enter(self, *args):
+        path = os.getcwd()
+        self.ids.fileChooser.rootpath = path
+        return super().on_enter(*args)
+
+    def selected(self, file):
+        self.filename = file
+        print("file selected: " + str(self.filename))
+        self.ids.next_button.disabled = False
+
+    def confirmLoadGame(self):
+        with open(self.filename[0]) as fileObject:
+            fileContents = fileObject.readlines()
+        playerName = str(fileContents[0]).strip()        # .strip() will remove the /n newline character     # line 0 is the player name
+        print("Game loaded.... playerName: " + str(playerName))
+        global userCharacter
+        for player in playerList:
+            if playerName == player.getNameOnly():
+                userCharacter = player
+        playerCard1 = int(fileContents[1].strip())       #   line 1 2 3 are the player's 3 cards
+        playerCard2 = int(fileContents[2].strip())
+        playerCard3 = int(fileContents[3].strip())
+
+        # identify the card objects, and then .add them to the player character... they will then be processed in the first part of the analyzeData() function
+        userCharacter.resetCardList()
+        for card in cardList:
+            cardNum = card.getPlaceInCardList()
+            if playerCard1 == cardNum:
+                userCharacter.addToCardList(card)
+            if playerCard2 == cardNum:
+                userCharacter.addToCardList(card)
+            if playerCard3 == cardNum:
+                userCharacter.addToCardList(card)
+
+        # next we set the player order 
+        playerOrderList = fileContents[4].strip()       # line 4 is the player order... need to ensure that this is saved as an actual list, because right now it's a string
+        newPlayerOrderList = playerOrderList.replace('[', '')       # get rid of the extra characters before we convert it into a list with " " as delimiter
+        newPlayerOrderList = newPlayerOrderList.replace(']', '')    # get rid of the extra characters before we convert it into a list with " " as delimiter
+        newPlayerOrderList = newPlayerOrderList.replace('\'', '')   # get rid of the extra characters before we convert it into a list with " " as delimiter
+        newPlayerOrderList = newPlayerOrderList.replace(',', '')    # get rid of the extra characters before we convert it into a list with " " as delimiter
+        playerOrderList = list(newPlayerOrderList.split(" "))       # finally, convert the stripped string into a list
+        x = 1
+        for element in playerOrderList:
+            for player in playerList:
+                if player.getNameOnly() == element:
+                    player.setTurnOrder(x)
+                    player.turnOrderConfirmedSetTrue()
+                    x += 1
+
+        global turnLog
+        turnLog = ast.literal_eval(fileContents[5].strip())     # line 5 is the turnDataDictionary
+        # turnLog = fileContents[5].strip()     # this line doesn't work on a dictionary object
+
+        global currentTurnNumber
+        currentTurnNumber = int(fileContents[6].strip())       # line 6 is the last completed turn number
+        currentTurnNumber += 1
+
+
 
 class WindowManager(ScreenManager):
     pass
