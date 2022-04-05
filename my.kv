@@ -1358,14 +1358,16 @@ WindowManager:
             section: "header"
             type: "notesButton"
             defaultText: "Notes"
-            text: "Notes"
+            text: "Analysis Table"
             background_color: 0, 1, 0.2, 1
             # font_size: '10sp'
             size_hint: (0.2, 0.075)
             pos_hint: {"x":0, "y":1 - 0.075}
             on_release: 
+                # ANALYZE THE DATA BABY!
+                root.analyzeTheData()
                 #       goes to ANALYSIS TABLE
-                # app.root.current = "playerOrderScreen"
+                app.root.current = "AnalysisTableScreen"
                 # root.manager.transition.direction = "right"
         Button:
             id: past_turns_button
@@ -1384,6 +1386,20 @@ WindowManager:
                 # root.createGameSaveFile()
                 # app.root.current = "ExecuteTurnScreen"
                 # root.manager.transition.direction = "left"  
+        Button:
+            id: homescreen_button
+            # section: "header"
+            # type: "notesButton"
+            # defaultText: "Home Screen"
+            text: "Home Screen"
+            background_color: 0, 1, 0.2, 1
+            # font_size: '10sp'
+            size_hint: (0.2, 0.075)
+            pos_hint: {"x": 0.8, "y":1 - 0.075}
+            on_release: 
+                app.root.current = "home"
+                # root.manager.transition.direction = "right"
+
         # SECTION ABLETOGUESS                    ABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESS
         Spinner:
             id: able_to_guess
@@ -1633,79 +1649,826 @@ WindowManager:
             size_hint: (0.2, 0.075)
             pos_hint: {"x": 0.8, "y": 0}
             on_release: 
-                root.completeTurn(self)
+                root.completeTurn(self)     # completeTurn saves the turn info to the file
                 # analyze the data here
                 root.analyzeTheData()
+                root.incrementTurnNumber()
                 app.root.current = "AnalysisTableScreen"
                 
 
 <AnalysisTableScreen>   
     name: "AnalysisTableScreen"       # this screen should merely display the analysis table
-    GridLayout:
-        cols: 7
-        # names row
+    rgba: (0.3, .3, .3, 1)      # establish the default gray background color, to be changed later
+    # NORMALrgba: .3, .3, .3, 1
+    # REDrgba: 1, 0.2, 0.2, 1
+    FloatLayout:
+        # SECTION HEADER                                HEADERHEADERHEADERHEADERHEADERHEADERHEADERHEADERHEADERHEADERHEADERHEADERHEADERHEADERHEADERHEADERHEADERHEADER
+
+        Button:
+            id: goto_turn_button
+            # section: "header"
+            # type: "notesButton"
+            # defaultText: "Notes"
+            text: "Go to current turn... placeholder text"
+            position: [-1, -1]
+            pythonFileColumnNumber: -1
+            background_color: 0, 1, 0.2, 1
+            # font_size: '10sp'
+            size_hint: (0.2, 0.075)
+            pos_hint: {"x":0, "y":1 - 0.075}
+            on_release: 
+                app.root.current = "ExecuteTurnScreen"
+                # root.manager.transition.direction = "right"            
+        
+        Label:
+            id: title_label
+            # section: "header"
+            # vrs: {'turnNumber': -1, 'player': '', 'type': ''}           
+            # defaultText: "Turn X, (player) suggests:" 
+            text: "Analysis Table"
+            text_color: 1, 1, 0, 1
+            canvas.before:
+                Color:
+                    rgba: 0.3, 0.3, 0.3, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            position: [-1, -1]
+            pythonFileColumnNumber: -1
+            size_hint: (0.6, 0.075)   
+            pos_hint: {"x": 0.2, "y": 1 - 0.075}      
+        Label:
+            id: killer_label
+            text: "KILLER: ? placeholder text"
+            position: [-1, -1]
+            pythonFileColumnNumber: -1
+            background_color: 0.3, 0.3, 0.3, 1
+            canvas.before:
+                Color:
+                    # rgba: 0.3, 0.3, 0.3, 1
+                    rgba: self.background_color
+                Rectangle:
+                    pos: self.pos
+                    size: self.size            
+            size_hint: (0.25, 0.05)
+            pos_hint: {"x": 1* (0.25 / 4) + 0 * 0.25, "y": 0}
+        Label:
+            id: weapon_label
+            text: "WEAPON: ? placeholder text"
+            position: [-1, -1]
+            pythonFileColumnNumber: -1
+            background_color: 0.3, 0.3, 0.3, 1
+            # red_color: 1, 0, 0, 1
+            canvas.before:
+                Color:
+                    # rgba: 0.3, 0.3, 0.3, 1
+                    rgba: self.background_color
+                Rectangle:
+                    pos: self.pos
+                    size: self.size            
+            size_hint: (0.25, 0.05)
+            pos_hint: {"x": 2* (0.25 / 4) + 1 * 0.25, "y": 0}            
+        Label:
+            id: room_label
+            text: "ROOM: ? placeholder text"
+            position: [-1, -1]
+            pythonFileColumnNumber: -1
+            background_color: 0.3, 0.3, 0.3, 1            
+            canvas.before:
+                Color:
+                    # rgba: 0.3, 0.3, 0.3, 1
+                    rgba: self.background_color
+                Rectangle:
+                    pos: self.pos
+                    size: self.size            
+            size_hint: (0.25, 0.05)
+            pos_hint: {"x": 3* (0.25 / 4) + 2 * 0.25, "y": 0}            
+
+
+
+    BoxLayout:
+        orientation: 'vertical'
         Label:
             text: ''
-        Label:
-            id: player_name
-            # text: 'player character placeholder text'
-            position: [-1, 0]
-            text: '1'
-        Label:
-            id: respondent1_name
-            # text: 'first respondent placeholder text'
-            position: [-1, 1]
-            text: "2"
-        Label:
-            id: respondent2_name
-            # text: 'second respondent placeholder text'
-            position: [-1, 2]
-            text: '3'
-        Label:
-            id: respondent3_name
-            # text: 'third respondent placeholder text'
-            position: [-1, 3]
-            text: '4'
-        Label:
-            id: respondent4_name
-            # text: 'fourth respondent placeholder text'
-            position: [-1, 4]            
-            text: '5'
-        Label:
-            id: respondent5_name
-            # text: 'fifth respondent placeholder text'
-            position: [-1, 5]            
-            text: '6'
-        # 0. Green      card row
-        Label:
-            text: '0. Green'
-        Label:
-            id: 0_0
-            position: [0, 0]
-            text: '?'
-        Label:
-            id: 0_1
-            position: [0, 1]
-            text: '?'
-        Label:
-            id: 0_2
-            position: [0, 2]
-            text: '?'
-        Label:
-            id: 0_3
-            position: [0, 3]
-            text: '?'
-        Label:
-            id: 0_4
-            position: [0, 4]
-            text: '?'
-        Label:
-            id: 0_5
-            position: [0, 5]
-            text: '?'
-
-
-
+            size_hint: (1, 0.1)             # this label exists to create a space buffer
+        GridLayout:
+            cols: 7
+            # names row
+            Label:
+                text: ''
+            Label:
+                id: player_name
+                # text: 'player character placeholder text'
+                position: [-1, 0]
+                pythonFileColumnNumber: -11
+                text: '1'
+            Label:
+                id: respondent1_name
+                # text: 'first respondent placeholder text'
+                position: [-1, 1]
+                pythonFileColumnNumber: -11
+                text: "2"
+            Label:
+                id: respondent2_name
+                # text: 'second respondent placeholder text'
+                position: [-1, 2]
+                pythonFileColumnNumber: -11
+                text: '3'
+            Label:
+                id: respondent3_name
+                # text: 'third respondent placeholder text'
+                position: [-1, 3]
+                pythonFileColumnNumber: -11
+                text: '4'
+            Label:
+                id: respondent4_name
+                # text: 'fourth respondent placeholder text'
+                position: [-1, 4]
+                pythonFileColumnNumber: -11
+                text: '5'
+            Label:
+                id: respondent5_name
+                # text: 'fifth respondent placeholder text'
+                position: [-1, 5]
+                pythonFileColumnNumber: -11
+                text: '6'
+            ############################################################################################## 0. Green      card row
+            Label:
+                text: '0. Green'
+                text_size: self.size
+                halign: 'left'
+            Label:
+                id: 0_0               # THIS column is where PEACOCK'S info goes, column 0... so when column == 2 in the FOR loop, we want that info put into THIS ONE
+                position: [0, 0]           
+                pythonFileColumnNumber: -11          # because this is where peacock info goes, the "pythonFileColumnNumber" should be peacock's column from the python file, which is 2
+                text: '?'
+            Label:
+                id: 0_1
+                position: [0, 1]
+                pythonFileColumnNumber: -11
+                text: '?'
+            Label:
+                id: 0_2     #superPLUS
+                position: [0, 2]            # this is column 2 in the python file, which is ALWAYS peacock, but NOW it should be in column 0
+                pythonFileColumnNumber: -11
+                text: '?'
+            Label:
+                id: 0_3
+                position: [0, 3]
+                pythonFileColumnNumber: -11
+                text: '?'
+            Label:
+                id: 0_4
+                position: [0, 4]                # this is column 4 in the python file, which, in the python file is ALWAYS associated with mustard, but now mustard is in column 2
+                pythonFileColumnNumber: -11
+                text: '?'
+            Label:
+                id: 0_5
+                position: [0, 5]
+                pythonFileColumnNumber: -11
+                text: '?'
+            ############################################################################################## 1. Mustard      card row
+            Label:
+                text: '1. Mustard'
+                text_size: self.size
+                halign: 'left'            
+            Label:
+                id: 1_0
+                position: [1, 0]
+                pythonFileColumnNumber: -11
+                text: '?'
+            Label:
+                id: 1_1
+                position: [1, 1]
+                pythonFileColumnNumber: -11
+                text: '?'
+            Label:
+                id: 1_2
+                position: [1, 2]
+                pythonFileColumnNumber: -11
+                text: '?'
+            Label:
+                id: 1_3
+                position: [1, 3]
+                pythonFileColumnNumber: -11
+                text: '?'
+            Label:
+                id: 1_4
+                position: [1, 4]
+                pythonFileColumnNumber: -11
+                text: '?'
+            Label:
+                id: 1_5
+                position: [1, 5]
+                pythonFileColumnNumber: -11
+                text: '?'
+            ############################################################################################## 2. Peacock      card row
+            Label:
+                text: '2. Peacock'
+                text_size: self.size
+                halign: 'left'                
+            Label:
+                id: 2_0
+                position: [2, 0]
+                pythonFileColumnNumber: -11
+                text: '?'
+            Label:
+                id: 2_1
+                position: [2, 1]
+                pythonFileColumnNumber: -11
+                text: '?'
+            Label:
+                id: 2_2
+                position: [2, 2]
+                pythonFileColumnNumber: -11
+                text: '?'
+            Label:
+                id: 2_3
+                position: [2, 3]
+                pythonFileColumnNumber: -11
+                text: '?'
+            Label:
+                id: 2_4
+                position: [2, 4]
+                pythonFileColumnNumber: -11
+                text: '?'
+            Label:
+                id: 2_5
+                position: [2, 5]
+                pythonFileColumnNumber: -11
+                text: '?'
+            ############################################################################################## 3. Plum      card row
+            Label:
+                text: '3. Plum'
+                text_size: self.size
+                halign: 'left'                
+            Label:
+                id: 3_0
+                position: [3, 0]
+                pythonFileColumnNumber: -11
+                text: '?'
+            Label:
+                id: 3_1
+                position: [3, 1]
+                pythonFileColumnNumber: -11
+                text: '?'
+            Label:
+                id: 3_2
+                position: [3, 2]
+                pythonFileColumnNumber: -11
+                text: '?'
+            Label:
+                id: 3_3
+                position: [3, 3]
+                pythonFileColumnNumber: -11
+                text: '?'
+            Label:
+                id: 3_4
+                position: [3, 4]
+                pythonFileColumnNumber: -11
+                text: '?'
+            Label:
+                id: 3_5
+                position: [3, 5]
+                pythonFileColumnNumber: -11
+                text: '?'            
+            ############################################################################################## 4. Scarlett     card row
+            Label:
+                text: '4. Scarlett'
+                text_size: self.size
+                halign: 'left'                
+            Label:
+                id: 4_0
+                position: [4, 0]
+                pythonFileColumnNumber: -11
+                text: '?'
+            Label:
+                id: 4_1
+                position: [4, 1]
+                pythonFileColumnNumber: -11
+                text: '?'
+            Label:
+                id: 4_2
+                position: [4, 2]
+                pythonFileColumnNumber: -11
+                text: '?'
+            Label:
+                id: 4_3
+                position: [4, 3]
+                pythonFileColumnNumber: -11
+                text: '?'
+            Label:
+                id: 4_4
+                position: [4, 4]
+                pythonFileColumnNumber: -11
+                text: '?'
+            Label:
+                id: 4_5
+                position: [4, 5]
+                pythonFileColumnNumber: -11
+                text: '?'
+            ############################################################################################## 5. Orchid      card row
+            Label:
+                text: '5. Orchid'
+                text_size: self.size
+                halign: 'left'                
+            Label:
+                id: 5_0
+                position: [5, 0]
+                pythonFileColumnNumber: -11
+                text: '?'
+            Label:
+                id: 5_1
+                position: [5, 1]
+                pythonFileColumnNumber: -11
+                text: '?'
+            Label:
+                id: 5_2
+                position: [5, 2]
+                pythonFileColumnNumber: -11
+                text: '?'
+            Label:
+                id: 5_3
+                position: [5, 3]
+                pythonFileColumnNumber: -11
+                text: '?'
+            Label:
+                id: 5_4
+                position: [5, 4]
+                pythonFileColumnNumber: -11
+                text: '?'
+            Label:
+                id: 5_5
+                position: [5, 5]
+                pythonFileColumnNumber: -11
+                text: '?'
+            ############################################################################################## BLANK ROW
+            Label:
+                text: ''    
+            Label:
+                text: ''
+            Label:
+                text: ''
+            Label:
+                text: ''
+            Label:
+                text: ''
+            Label:
+                text: ''
+            Label:
+                text: ''
+            ############################################################################################## 6. Candlestick    card row
+            Label:
+                text: '6. Candlestick'
+                text_size: self.size
+                halign: 'left'                
+            Label:
+                id: 6_0
+                position: [6, 0]
+                text: '?'
+            Label:
+                id: 6_1
+                position: [6, 1]
+                text: '?'
+            Label:
+                id: 6_2
+                position: [6, 2]
+                text: '?'
+            Label:
+                id: 6_3
+                position: [6, 3]
+                text: '?'
+            Label:
+                id: 6_4
+                position: [6, 4]
+                text: '?'
+            Label:
+                id: 6_5
+                position: [6, 5]
+                text: '?'
+            ############################################################################################## 7. Dagger      card row
+            Label:
+                text: '7. Dagger'
+                text_size: self.size
+                halign: 'left'                
+            Label:
+                id: 7_0
+                position: [7, 0]
+                text: '?'
+            Label:
+                id: 7_1
+                position: [7, 1]
+                text: '?'
+            Label:
+                id: 7_2
+                position: [7, 2]
+                text: '?'
+            Label:
+                id: 7_3
+                position: [7, 3]
+                text: '?'
+            Label:
+                id: 7_4
+                position: [7, 4]
+                text: '?'
+            Label:
+                id: 7_5
+                position: [7, 5]
+                text: '?'
+            ############################################################################################## 8. Pipe      card row
+            Label:
+                text: '8. Pipe'
+                text_size: self.size
+                halign: 'left'                
+            Label:
+                id: 8_0
+                position: [8, 0]
+                text: '?'
+            Label:
+                id: 8_1
+                position: [8, 1]
+                text: '?'
+            Label:
+                id: 8_2
+                position: [8, 2]
+                text: '?'
+            Label:
+                id: 8_3
+                position: [8, 3]
+                text: '?'
+            Label:
+                id: 8_4
+                position: [8, 4]
+                text: '?'
+            Label:
+                id: 8_5
+                position: [8, 5]
+                text: '?'
+            ############################################################################################## 9. Revolver      card row
+            Label:
+                text: '9. Revolver'
+                text_size: self.size
+                halign: 'left'                
+            Label:
+                id: 9_0
+                position: [9, 0]
+                text: '?'
+            Label:
+                id: 9_1
+                position: [9, 1]
+                text: '?'
+            Label:
+                id: 9_2
+                position: [9, 2]
+                text: '?'
+            Label:
+                id: 9_3
+                position: [9, 3]
+                text: '?'
+            Label:
+                id: 9_4
+                position: [9, 4]
+                text: '?'
+            Label:
+                id: 9_5
+                position: [9, 5]
+                text: '?'
+            ############################################################################################## 10. Rope      card row
+            Label:
+                text: '10. Rope'
+                text_size: self.size
+                halign: 'left'                
+            Label:
+                id: 10_0
+                position: [10, 0]
+                text: '?'
+            Label:
+                id: 10_1
+                position: [10, 1]
+                text: '?'
+            Label:
+                id: 10_2
+                position: [10, 2]
+                text: '?'
+            Label:
+                id: 10_3
+                position: [10, 3]
+                text: '?'
+            Label:
+                id: 10_4
+                position: [10, 4]
+                text: '?'
+            Label:
+                id: 10_5
+                position: [10, 5]
+                text: '?'
+            ############################################################################################## 11. Wrench      card row
+            Label:
+                text: '11. Wrench'
+                text_size: self.size
+                halign: 'left'                
+            Label:
+                id: 11_0
+                position: [11, 0]
+                text: '?'
+            Label:
+                id: 11_1
+                position: [11, 1]
+                text: '?'
+            Label:
+                id: 11_2
+                position: [11, 2]
+                text: '?'
+            Label:
+                id: 11_3
+                position: [11, 3]
+                text: '?'
+            Label:
+                id: 11_4
+                position: [11, 4]
+                text: '?'
+            Label:
+                id: 11_5
+                position: [11, 5]
+                text: '?'
+            ############################################################################################## BLANK ROW
+            Label:
+                text: ''    
+            Label:
+                text: ''
+            Label:
+                text: ''
+            Label:
+                text: ''
+            Label:
+                text: ''
+            Label:
+                text: ''
+            Label:
+                text: ''
+            ############################################################################################## 12. Ballroom      card row
+            Label:
+                text: '12. Ballroom'
+                text_size: self.size
+                halign: 'left'                
+            Label:
+                id: 12_0
+                position: [12, 0]
+                text: '?'
+            Label:
+                id: 12_1
+                position: [12, 1]
+                text: '?'
+            Label:
+                id: 12_2
+                position: [12, 2]
+                text: '?'
+            Label:
+                id: 12_3
+                position: [12, 3]
+                text: '?'
+            Label:
+                id: 12_4
+                position: [12, 4]
+                text: '?'
+            Label:
+                id: 12_5
+                position: [12, 5]
+                text: '?'
+            ############################################################################################## 13. Billiard Room      card row
+            Label:
+                text: '13. Billiard Room'
+                text_size: self.size
+                halign: 'left'                
+            Label:
+                id: 13_0
+                position: [13, 0]
+                text: '?'
+            Label:
+                id: 13_1
+                position: [13, 1]
+                text: '?'
+            Label:
+                id: 13_2
+                position: [13, 2]
+                text: '?'
+            Label:
+                id: 13_3
+                position: [13, 3]
+                text: '?'
+            Label:
+                id: 13_4
+                position: [13, 4]
+                text: '?'
+            Label:
+                id: 13_5
+                position: [13, 5]
+                text: '?'
+            ############################################################################################## 14. Conservatory      card row
+            Label:
+                text: '14. Conservatory'
+                text_size: self.size
+                halign: 'left'                
+            Label:
+                id: 14_0
+                position: [14, 0]
+                text: '?'
+            Label:
+                id: 14_1
+                position: [14, 1]
+                text: '?'
+            Label:
+                id: 14_2
+                position: [14, 2]
+                text: '?'
+            Label:
+                id: 14_3
+                position: [14, 3]
+                text: '?'
+            Label:
+                id: 14_4
+                position: [14, 4]
+                text: '?'
+            Label:
+                id: 14_5
+                position: [14, 5]
+                text: '?'
+            ############################################################################################## 15. Dining Room      card row
+            Label:
+                text: '15. Dining Room'
+                text_size: self.size
+                halign: 'left'                
+            Label:
+                id: 15_0
+                position: [15, 0]
+                text: '?'
+            Label:
+                id: 15_1
+                position: [15, 1]
+                text: '?'
+            Label:
+                id: 15_2
+                position: [15, 2]
+                text: '?'
+            Label:
+                id: 15_3
+                position: [15, 3]
+                text: '?'
+            Label:
+                id: 15_4
+                position: [15, 4]
+                text: '?'
+            Label:
+                id: 15_5
+                position: [15, 5]
+                text: '?'
+            ############################################################################################## 16. Hall      card row
+            Label:
+                text: '16. Hall'
+                text_size: self.size
+                halign: 'left'                
+            Label:
+                id: 16_0
+                position: [16, 0]
+                text: '?'
+            Label:
+                id: 16_1
+                position: [16, 1]
+                text: '?'
+            Label:
+                id: 16_2
+                position: [16, 2]
+                text: '?'
+            Label:
+                id: 16_3
+                position: [16, 3]
+                text: '?'
+            Label:
+                id: 16_4
+                position: [16, 4]
+                text: '?'
+            Label:
+                id: 16_5
+                position: [16, 5]
+                text: '?'
+            ############################################################################################## 17. Kitchen      card row
+            Label:
+                text: '17. Kitchen'
+                text_size: self.size
+                halign: 'left'                
+            Label:
+                id: 17_0
+                position: [17, 0]
+                text: '?'
+            Label:
+                id: 17_1
+                position: [17, 1]
+                text: '?'
+            Label:
+                id: 17_2
+                position: [17, 2]
+                text: '?'
+            Label:
+                id: 17_3
+                position: [17, 3]
+                text: '?'
+            Label:
+                id: 17_4
+                position: [17, 4]
+                text: '?'
+            Label:
+                id: 17_5
+                position: [17, 5]
+                text: '?'
+            ############################################################################################## 18. Library      card row
+            Label:
+                text: '18. Library'
+                text_size: self.size
+                halign: 'left'                
+            Label:
+                id: 18_0
+                position: [18, 0]
+                text: '?'
+            Label:
+                id: 18_1
+                position: [18, 1]
+                text: '?'
+            Label:
+                id: 18_2
+                position: [18, 2]
+                text: '?'
+            Label:
+                id: 18_3
+                position: [18, 3]
+                text: '?'
+            Label:
+                id: 18_4
+                position: [18, 4]
+                text: '?'
+            Label:
+                id: 18_5
+                position: [18, 5]
+                text: '?'
+            ############################################################################################## 19. Lounge      card row
+            Label:
+                text: '19. Lounge'
+                text_size: self.size
+                halign: 'left'                
+            Label:
+                id: 19_0
+                position: [19, 0]
+                text: '?'
+            Label:
+                id: 19_1
+                position: [19, 1]
+                text: '?'
+            Label:
+                id: 19_2
+                position: [19, 2]
+                text: '?'
+            Label:
+                id: 19_3
+                position: [19, 3]
+                text: '?'
+            Label:
+                id: 19_4
+                position: [19, 4]
+                text: '?'
+            Label:
+                id: 19_5
+                position: [19, 5]
+                text: '?'
+            ############################################################################################## 20. Study      card row
+            Label:
+                text: '20. Study'
+                text_size: self.size
+                halign: 'left'                
+            Label:
+                id: 20_0
+                position: [20, 0]
+                text: '?'
+            Label:
+                id: 20_1
+                position: [20, 1]
+                text: '?'
+            Label:
+                id: 20_2
+                position: [20, 2]
+                text: '?'
+            Label:
+                id: 20_3
+                position: [20, 3]
+                text: '?'
+            Label:
+                id: 20_4
+                position: [20, 4]
+                text: '?'
+            Label:
+                id: 20_5
+                position: [20, 5]
+                text: '?'
+        BoxLayout:
+            size_hint: (1, 0.1)
 
 
         # Button:
@@ -1742,13 +2505,21 @@ WindowManager:
                 root.confirmLoadGame()
                 app.root.current = "ExecuteTurnScreen"
                 # root.manager.transition.direction = "left"     
-        FileChooserListView:
-            id: fileChooser
-            path: ''
-            on_selection: root.selected(fileChooser.selection)
-            size_hint: (0.8, 1)
-            pos_hint: {"x": 0.1, "y": 0}
-            filters: ['*ClueSolverGameSave', '*.txt']           # how do i filter so that only files with 'ClueSolverGameSave' appear??
+        Spinner:
+            id: fileChooserSpinner
+            text: 'Click here to choose a file to load:'
+            values: []
+            on_text: root.spinnerSelect()
+            size_hint: (0.8, 0.1)
+            pos_hint: {"x": 0.1, "y": 0.7}
+
+        # FileChooserListView:
+        #     id: fileChooser
+        #     path: ''
+        #     on_selection: root.selected(fileChooser.selection)
+        #     size_hint: (0.8, 0.3)
+        #     pos_hint: {"x": 0.1, "y": 0}
+        #     filters: ['*ClueSolverGameSave', '*.txt']           # how do i filter so that only files with 'ClueSolverGameSave' appear??
 
 
 

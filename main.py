@@ -21,6 +21,7 @@ import datetime
 from kivy.uix.widget import Widget
 from kivy.uix.checkbox import CheckBox
 from kivy.uix.filechooser import FileChooserListView
+from kivy.graphics import Color
 
 
 print("CLUE SOLVER")
@@ -382,14 +383,11 @@ class ExecuteTurnScreen(Screen):
 
         return super().on_enter(*args)
 
-
-
     def cardKnown(self, instance):
         if instance.active == True:
             self.ids.card_known_spinner.disabled = False
         else: 
             self.ids.card_known_spinner.disabled = True            
-
 
     def reset_sectionAbleToGuess(self):
         for key, val in self.ids.items():
@@ -607,7 +605,6 @@ class ExecuteTurnScreen(Screen):
 
         # if turnNumber == 1:
         #       turning this off so we can paste in old games and start at turnNumber > 1
-        print("ffs user is: " + str(user.getNameOnly()))
         card1 = user.getCardFromCardList(0)
         card2 = user.getCardFromCardList(1)
         card3 = user.getCardFromCardList(2)
@@ -1115,71 +1112,23 @@ class ExecuteTurnScreen(Screen):
             processDecline()
             processRespond()            # there will always be 1 response, and possibly some declines, so always run these
 
-        #add "cleanup" functionality here, in case the previous processes have revealed some important info ... because we want to show this info to the user before the next turn starts
-
     def analyzeTheData(self):
         self.analyzeData(currentTurnNumber, turnLog, analysisTable, userCharacter, actualKillerWeaponRoom, announcementsHaveBeenMadeForKillerWeaponRoom)
 
+    @staticmethod
+    def incrementTurnNumber():
+        global currentTurnNumber
+        currentTurnNumber += 1        
+
 class AnalysisTableScreen(Screen):
 
-    @staticmethod
-    def convertTurnToPlayerTurn(turnNum):
-        return ((turnNum - 1) % 6) + 1
-
-    def on_enter(self, *args):
-        # self.ids.turn_just_finished.text = 'turn ' + str(currentTurnNumber) + ' just finished'
-        # self.ids.next_turn_button.text = 'click to start turn ' + str(currentTurnNumber + 1)
-
-        # update all the labels to be current with the analysis table
-        
-
-        respondentList = ['', '', '', '', '', '']
-        respondentList[0] = str(userCharacter.getNameOnly()) 
-        # now identify who 'player1 response' is, who 'player2 response' is, etc
-        userTurnNumber = userCharacter.getTurnOrder()
-        incrementalVariable = 1
-        while incrementalVariable < 6:
-            respondentTurnOrder = self.convertTurnToPlayerTurn(userTurnNumber + incrementalVariable)
-            for player in playerList:
-                if player.getTurnOrder() == respondentTurnOrder:
-                    respondentList[incrementalVariable] = str(player.getNameOnly())
-            incrementalVariable += 1
-        # now put those players' names onto the screen
-        self.ids.player_name.text = str(respondentList[0])
-        self.ids.respondent1_name.text = str(respondentList[1])
-        self.ids.respondent2_name.text = str(respondentList[2])
-        self.ids.respondent3_name.text = str(respondentList[3])
-        self.ids.respondent4_name.text = str(respondentList[4])
-        self.ids.respondent5_name.text = str(respondentList[5])
-
-        for row in range(21):
-            for column in range(6):
-                # print("row: " + str(row) + " colum: " + str(column))
-                for key, val in self.ids.items():
-                    # print("asdfasdfasdfasfd " + str(val.text))
-
-                    # print("val.row: " + str(val.row) + "     val.column: " + str(val.column))
-
-                    if val.position[0] == row and val.position[1] == column:            # position[0] is the row number, position[1] is the column number
-                        print("********* the row: " + str(val.position[0]) + "   the column: " + str(val.position[1]) + "rowrow: " + str(row) + " colcol: " + str(column))
-                        val.text = str(analysisTable[row][column])
-                        # val.text = "TTTTT"
-
-
-        return super().on_enter(*args)
-
+    def setLabelBackgroundColor(self, r, g, b, o):
+        self.canvas.after.clear()
+        with self.canvas.after:
+            Color(r, g, b, o)
 
     @staticmethod
-    def incrementTurnNumber(self):
-        global currentTurnNumber
-        currentTurnNumber += 1
-
-    def startNextTurn(self):
-        pass
-
-    # def analyzeData(turnNumber, turnData, analyTable, user, killerWeaponRoom, announces):
-    @staticmethod
-    def printAnalysisTable(table, actualKillerWeaponRoom):
+    def printAnalysisTable(table, actualKillerWeaponRoom):          # print the table in the terminal, so we can see whether our kivy-table is correct
         print("ANALYSIS TABLE:")
         print("# of function calls: " + str(numberOfFunctionCalls))
         print("                             Killer is: " + str(actualKillerWeaponRoom[0]))
@@ -1210,6 +1159,145 @@ class AnalysisTableScreen(Screen):
         global numberOfFunctionCalls
         numberOfFunctionCalls = 0
 
+    @staticmethod
+    def convertTurnToPlayerTurn(turnNum):
+        return ((turnNum - 1) % 6) + 1
+
+    def on_enter(self, *args):
+        # self.ids.turn_just_finished.text = 'turn ' + str(currentTurnNumber) + ' just finished'
+        # self.ids.next_turn_button.text = 'click to start turn ' + str(currentTurnNumber + 1)
+
+        # update all the labels to be current with the analysis table
+        
+
+        respondentList = ['', '', '', '', '', '']
+        respondentList[0] = str(userCharacter.getNameOnly())            # set up the table so the user is always in column 0
+        # now identify who 'player1 response' is, who 'player2 response' is, etc
+        userTurnNumber = userCharacter.getTurnOrder()
+        incrementalVariable = 1
+        while incrementalVariable < 6:
+            respondentTurnOrder = self.convertTurnToPlayerTurn(userTurnNumber + incrementalVariable)
+            for player in playerList:
+                if player.getTurnOrder() == respondentTurnOrder:
+                    respondentList[incrementalVariable] = str(player.getNameOnly())
+            incrementalVariable += 1
+        # now put those players' names onto the screen
+        self.ids.player_name.text = str(respondentList[0]) + " (USER)"
+        self.ids.respondent1_name.text = str(respondentList[1])
+        self.ids.respondent2_name.text = str(respondentList[2])
+        self.ids.respondent3_name.text = str(respondentList[3])
+        self.ids.respondent4_name.text = str(respondentList[4])
+        self.ids.respondent5_name.text = str(respondentList[5])
+
+        # populate the analysis table
+        # but first, need to adjust position[1] for each character, because the analysisTable in python probably won't match up with the table in kivy
+        #       (because in kivy we ALWAYS put the user in the first column, column 0... and in the python analysis table scarlett is always column 0, green is always column 1, etc)
+        # for example, let's look at Scarlett
+        #   in the python table, she is always in column 0 .... let's find out where she is in kivy and save that column number to a variable we can use later
+        scarlettColumnNum = -1
+        greenColumnNum = -1
+        peacockColumnNum = -1
+        plumColumnNum = -1
+        mustardColumnNum = -1
+        orchidColumnNum = -1
+
+        x = 0
+        for name in respondentList:
+            if name == "Scarlett":
+                scarlettColumnNum = x           
+                # print("scarlett in column " + str(scarlettColumnNum))
+            if name == "Green":
+                greenColumnNum = x
+                # print("green in column " + str(greenColumnNum))
+            if name == "Peacock":
+                peacockColumnNum = x                # if x = 0, then in other words, for this game with this turn order, Peacock is the first player to go
+                # print("peacock in column " + str(peacockColumnNum))
+            if name == "Plum":
+                plumColumnNum = x
+                # print("plum in column " + str(plumColumnNum))
+            if name == "Mustard":
+                mustardColumnNum = x
+                # print("mustard in column " + str(mustardColumnNum))
+            if name == "Orchid":
+                orchidColumnNum = x
+                # print("orchid in column " + str(orchidColumnNum))
+            x += 1
+
+        for key, val in self.ids.items():
+            if val.position[1] == scarlettColumnNum:            
+                val.pythonFileColumnNumber = 0                        # this is where scarlett's info can be found in the python file, which is column 0
+                # print("scarlett's column set to " + str(val.pythonFileColumnNumber) + " .... looking at position: " + str(val.position))
+            if val.position[1] == greenColumnNum:
+                val.pythonFileColumnNumber = 1
+                # print("green's column set to " + str(val.pythonFileColumnNumber) + " .... looking at position: " + str(val.position))
+            if val.position[1] == peacockColumnNum:
+                val.pythonFileColumnNumber = 2
+                # print("peacock's column set to " + str(val.pythonFileColumnNumber) + " .... looking at position: " + str(val.position))
+            if val.position[1] == plumColumnNum:
+                val.pythonFileColumnNumber = 3
+                # print("plum's column set to " + str(val.pythonFileColumnNumber) + " .... looking at position: " + str(val.position))
+            if val.position[1] == mustardColumnNum:
+                val.pythonFileColumnNumber = 4
+                # print("mustard's column set to " + str(val.pythonFileColumnNumber) + " .... looking at position: " + str(val.position))
+            if val.position[1] == orchidColumnNum:
+                val.pythonFileColumnNumber = 5
+                # print("orchid's column set to " + str(val.pythonFileColumnNumber) + " .... looking at position: " + str(val.position))
+
+        for row in range(21):
+            for column in range(6):
+                # print("row: " + str(row) + " colum: " + str(column))
+                for key, val in self.ids.items():
+                    # print("asdfasdfasdfasfd " + str(val.text))
+                    # print("val.row: " + str(val.row) + "     val.column: " + str(val.column))
+                    # if val.position[0] == row and val.position[1] == column:            # position[0] is the row number, position[1] is the column number
+                    if val.position[0] == row and val.pythonFileColumnNumber == column:            # position[0] is the row number, position[1] is the column number                    
+                        # print("********* the row: " + str(val.position[0]) + "   the column: " + str(val.position[1]) + "rowrow: " + str(row) + " colcol: " + str(column))
+                        # print("     we have row: " + str(row) + "   and val.pythonFileColumnNumber: " + str(val.pythonFileColumnNumber) + " .... and column is " + str(column))
+                        if '-' in analysisTable[row][column]:
+                            val.text = '-'          # this puts less clutter on the screen, i.e. you see    -       instead of      ['-']
+                        elif 'Y' in analysisTable[row][column]:
+                            val.text = 'YES'
+                        else:
+                            val.text = str(analysisTable[row][column])
+                        # val.text = "TTTTT"
+
+        # update the labels at bottom of screen, announcing killer/wep/room
+        self.ids.killer_label.text = "KILLER: " + str(actualKillerWeaponRoom[0])
+        if '?' not in actualKillerWeaponRoom[0]:
+            self.ids.killer_label.background_color = 1, 0, 0, 1
+            # self.ids.killer_label.rgba = 1, 0, 0, 1
+            # self.ids.killer_label.setLabelBackgroundColor(1, 0, 0, 1)
+
+        self.ids.weapon_label.text = "WEAPON: " + str(actualKillerWeaponRoom[1])
+        if '?' not in actualKillerWeaponRoom[1]:
+            # print(">.......the background color of WEAPON should be red here")
+            # self.ids.weapon_label.rgba = 1, 0, 0, 1   
+            # self.rgba = 1, 0, 0, 1     
+            # self.ids.weapon_label.setLabelBackgroundColor(1, 0, 0, 1)
+            # self.ids.weapon_label.canvas.before.rgba = 1, 0, 0, 1
+            self.ids.weapon_label.background_color = 1, 0, 0, 1
+
+        self.ids.room_label.text = "ROOM: " + str(actualKillerWeaponRoom[2])
+        if '?' not in actualKillerWeaponRoom[2]:
+            self.ids.room_label.background_color = 1, 0, 0, 1        
+
+        # now print the analysis table in the terminal, for comparison
+        self.printTheAnalysisTable()
+
+        # change the text of the goto_turn_button
+        self.ids.goto_turn_button.text = "Go to Turn " + str(currentTurnNumber)
+
+        return super().on_enter(*args)
+
+
+    @staticmethod
+    def incrementTurnNumber():
+        global currentTurnNumber
+        currentTurnNumber += 1
+
+    def startNextTurn(self):
+        pass
+
 class LoadGameScreen(Screen):
     # filename = StringProperty('')
     global fileName                         #### we need to set fileName so we can continue saving to the same file
@@ -1217,8 +1305,43 @@ class LoadGameScreen(Screen):
     
     def on_enter(self, *args):
         path = os.getcwd()
-        self.ids.fileChooser.rootpath = path
+        # self.ids.fileChooser.rootpath = path
+
+
+####        test code for a python-created list of filenames
+        # Scan the directory and get an iterator of os.DirEntry objects corresponding to entries in it using os.scandir() method
+        obj = os.scandir(path)
+        listOfSaveFiles = []
+
+        # List all files and directories in the specified path
+        # print("Files and Directories in '% s':" % path)
+        for entry in obj :
+            # if entry.is_dir() or entry.is_file():     # don't want directories to be printed
+            if entry.is_file() and ".txt" in entry.name and "ClueSolverGameSave" in entry.name:           
+                listOfSaveFiles.append(str(entry.name))
+        obj.close()   # To close the iterator and free acquired resources use scandir.close() method
+
+        ### now send this list of files into the kivy spinner
+        self.ids.fileChooserSpinner.values = listOfSaveFiles
+
+        print("this is a list of saved game files:")
+        x = 1
+        for entry in listOfSaveFiles:
+            print(str(x) + ". " + str(entry))
+            x += 1
+
+        # userChoice = askUserInputInt([y+1 for y in range(x)], "which game do you want to load? :  ")
+        # gameToLoad = str(listOfSaveFiles[userChoice - 1])    
+        # return gameToLoad
+
+
         return super().on_enter(*args)
+
+    def spinnerSelect(self):
+        global fileName
+        fileName = self.ids.fileChooserSpinner.text
+        print("fileName selected: " + str(fileName))
+        self.ids.next_button.disabled = False
 
     def selected(self, file):
         self.filename = file
@@ -1226,7 +1349,8 @@ class LoadGameScreen(Screen):
         self.ids.next_button.disabled = False
 
     def confirmLoadGame(self):
-        with open(self.filename[0]) as fileObject:
+        # with open(self.filename[0]) as fileObject:        # this line is for if we use the kivy FileChooserListView
+        with open(str(fileName)) as fileObject:
             fileContents = fileObject.readlines()
         playerName = str(fileContents[0]).strip()        # .strip() will remove the /n newline character     # line 0 is the player name
         print("Game loaded.... playerName: " + str(playerName))
@@ -1285,18 +1409,4 @@ class MyMainApp(App):
 
 if __name__ == "__main__":
     MyMainApp().run()
-
-###########################################################################################################################################################
-#       end of kivy stuff
-
-
-
-
-
-
-
-
-#############################
-#   break
-
 
