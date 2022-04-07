@@ -1,3 +1,4 @@
+import random       # so we can create unique filenames, minecraft-style
 import datetime
 from dis import dis
 from fileinput import filename
@@ -138,7 +139,7 @@ userCharacterName = ""          #   this will be defined by the checkboxes on th
 userCharacter = Player
 playerOrder = ['', '', '', '', '', '']     # to be changed by the clickPlayerOrderCheckbox function
 analysisTable = [[ ["?"] for i in range(6)] for j in range(21)]
-actualKillerWeaponRoom = ["?", "?", "?"]
+actualKillerWeaponRoom = ["?", "?", "?"]                            # this allows the analysis table screen to display the discovery of the correct killer/wep/room
 announcementsHaveBeenMadeForKillerWeaponRoom = [False, False, False]   # this regulates when, in the terminal, the discovery of the killer/weapon/room is announced
 fileName = ""
 currentTurnNumber = -1
@@ -146,7 +147,23 @@ turnLog = {}
 
 
 class HomeScreen(Screen):
-    pass
+    def clearOldData(self):
+        
+        global turnLog
+        turnLog = {}        # added this line to "reset" the log when a user loads 2 different games in a row
+
+        global initialAnalysisCompletedOfLoadedSavedGame
+        initialAnalysisCompletedOfLoadedSavedGame = [False, False]	   
+
+        # reset the analysis table (adding this because if user loads 2 games in a row the first game lingers inside the data)
+        global analysisTable
+        analysisTable = [[ ["?"] for i in range(6)] for j in range(21)]
+
+        # reset the announcements  (adding this because if user loads 2 games in a row the first game lingers inside the data)
+        global actualKillerWeaponRoom
+        actualKillerWeaponRoom = ["?", "?", "?"]
+        global announcementsHaveBeenMadeForKillerWeaponRoom
+        announcementsHaveBeenMadeForKillerWeaponRoom = [False, False, False]
 
 class PlayerSelectScreen(Screen):
     userNNNNname = StringProperty("")
@@ -295,10 +312,32 @@ class ConfirmationScreen(Screen):
         self.ids.your_player_order.text = "The player turn order is: " + str(playerOrder)     
         return super().on_enter(*args)
     def createGameSaveFile(self):
+        
+        # create a filename string consisting of adjective + animal name
+        with open('list of adjectives.txt') as adjectivesFileObject:
+            adjectivesList = adjectivesFileObject.readlines()
+        adjectives = []
+        for word in adjectivesList:
+            adjectives.append(word.strip())
+        with open('list of animals.txt') as animalsFileObject:
+            animalsList = animalsFileObject.readlines()
+        animals = []
+        for word in animalsList:
+            animals.append(word.strip())
+        # pick a random adjective
+        numberAdjective = random.randint(0, len(adjectives) - 1)
+        # pick a random animal
+        numberAnimal = random.randint(0, len(animals) - 1)
+        # get only the last word in the animal name... because some of these names are way too long
+        tempAnimal = animals[numberAnimal].split()[-1]
+        # done: 
+        adjectivePlusAnimal = str(adjectives[numberAdjective]).capitalize() + " " + str(tempAnimal)
+
         x = datetime.datetime.now()     # create a timestamp, for the purpose of making a unique filename
         timeStamp = str(x.year) + "-" + str(x.month) + "-" + str(x.day) + " " + str(x.hour) + "h-" + str(x.minute) + "m-" + str(x.second) + "s"
         global fileName
-        fileName = "ClueSolverGameSave " + str(timeStamp) + ".txt"        
+        # fileName = "ClueSolverGameSave " + str(timeStamp) + ".txt"    
+        fileName = "ClueSolver " + str(timeStamp) + " " + str(adjectivePlusAnimal) + ".txt"    
         fileObject = open(fileName, 'w')        # use 'w' because we're creating a new file
         fileObject.write(str(userCharacter.getNameOnly()) + "\n")       # line 0
         fileObject.close()
@@ -363,7 +402,7 @@ class ExecuteTurnScreen(Screen):
         turnLog[currentTurnNumber]['killerGuessed'] = -1
         turnLog[currentTurnNumber]['weaponGuessed'] = -1
         turnLog[currentTurnNumber]['roomGuessed'] = -1
-        # initialize the turnLog so that, in the turnLog file, the respondents always appear in the same order... this prevents the turnHistory kivy screen from being out of order
+        # initialize the turnLog so that, in the turnLog file, the respondents always appear in the same order... this prevents the turnHistory kivy screen from being messed up (although ideally the kivy turnHistory screen would self-adjust to put the user first, then follow turn order)
         turnLog[currentTurnNumber]['scarlettResponse'] = 'n'
         turnLog[currentTurnNumber]['greenResponse'] = 'n'
         turnLog[currentTurnNumber]['orchidResponse'] = 'n'
@@ -373,7 +412,7 @@ class ExecuteTurnScreen(Screen):
         turnLog[currentTurnNumber]['card'] = -1
 
         # set the spinners & checkboxes to default
-        self.ids.able_to_guess.text = self.ids.able_to_guess.defaultText            # these .text changes WILL TRIGGER the functions attached to the spinners
+        self.ids.able_to_guess.text = self.ids.able_to_guess.defaultText            # these .text changes WILL TRIGGER the functions attached to the spinners... just be aware of that
         self.ids.killer_spinner.text = self.ids.killer_spinner.defaultText
         self.ids.weapon_spinner.text = self.ids.weapon_spinner.defaultText
         self.ids.room_spinner.text = self.ids.room_spinner.defaultText
@@ -383,6 +422,9 @@ class ExecuteTurnScreen(Screen):
         self.ids.player4_response_spinner.text = self.ids.player4_response_spinner.defaultText
         self.ids.player5_response_spinner.text = self.ids.player5_response_spinner.defaultText                                
         self.ids.card_known_checkbox_NO.active = True
+
+        # put the filename in the bottom corner, for reference
+        self.ids.filename_label.text = str(fileName)
 
         return super().on_enter(*args)
 
@@ -455,7 +497,6 @@ class ExecuteTurnScreen(Screen):
             if val.section == 'B':
                 val.color = 0, 1, 0.2, 1                
 
-
     suggestedKiller = StringProperty('')
     suggestedKillerCardNum = NumericProperty(-1)
     suggestedWeapon = StringProperty('')
@@ -469,14 +510,13 @@ class ExecuteTurnScreen(Screen):
     cardShown = NumericProperty(-1)
     textOfCardShown = StringProperty('')
 
-
     def spinnerClicked(self, spinner):
         spinner.text = spinner.text                 # this function can handle all the spinners
         global turnLog
         # Set the killer / weapon / room
         if spinner.type == "killer":
             if 'suggested' in spinner.text:
-                self.suggestedKiller = ''
+                self.suggestedKiller = ''           # this is so that if the spinner is reset by another function, the turnLog is also reset
                 self.killerSuggested = False
             else:
                 self.suggestedKiller = spinner.text
@@ -523,6 +563,36 @@ class ExecuteTurnScreen(Screen):
             if inCardList == False:
                 self.suggestedRoomCardNum = -1
             turnLog[currentTurnNumber]['roomGuessed'] = self.suggestedRoomCardNum
+
+        # if killer/wep/room filled out, then enable completeTurn button
+        # if player not able to guess, then enable completeTurn button
+        if (self.ids.killer_spinner.text != 'suggested killer' and self.ids.weapon_spinner.text != 'suggested weapon' and self.ids.room_spinner.text != 'suggested room') or self.ids.able_to_guess.text == 'NOT able':
+            self.enable_completeTurnButton()            # we REALLY ought to figure out how to make the disabling of buttons & spinners more robust & more able to prevent user input error
+        # if player not able to guess, then disable the other spinners
+        if self.ids.able_to_guess.text == 'NOT able':
+            self.ids.killer_spinner.disabled = True
+            self.ids.weapon_spinner.disabled = True
+            self.ids.room_spinner.disabled = True
+            self.ids.player1_response_spinner.disabled = True
+            self.ids.player2_response_spinner.disabled = True
+            self.ids.player3_response_spinner.disabled = True
+            self.ids.player4_response_spinner.disabled = True
+            self.ids.player5_response_spinner.disabled = True
+            self.ids.card_known_checkbox_NO.active = True
+        # if the player is able to guess, enable the other spinners
+        if self.ids.able_to_guess.text == 'Able to suggest':
+            self.ids.killer_spinner.disabled = False
+            self.ids.weapon_spinner.disabled = False
+            self.ids.room_spinner.disabled = False
+            self.ids.player1_response_spinner.disabled = False
+            self.ids.player2_response_spinner.disabled = False
+            self.ids.player3_response_spinner.disabled = False
+            self.ids.player4_response_spinner.disabled = False
+            self.ids.player5_response_spinner.disabled = False
+            # self.ids.card_known_checkbox_NO.active = True     
+        # if able to guess, but killer/wep/room not filled out, then disable completeTurn button
+        if self.ids.able_to_guess.text == 'Able to suggest' and (self.ids.killer_spinner.text == 'suggested killer' or self.ids.weapon_spinner.text == 'suggested weapon' or self.ids.room_spinner.text == 'suggested room'):
+            self.ids.complete_turn_button.disabled = True
 
 
         # record players who declined to show a card
@@ -589,6 +659,9 @@ class ExecuteTurnScreen(Screen):
             print(str(turnDataDictionary[turnNum]['card']).ljust(8, " "))
         print("")
 
+    def printTheTurnsPretty(self):          # we can call this function from the kivy file
+        self.printTurnsPretty(currentTurnNumber, turnLog)
+
     def completeTurn(self, button):
         # print out the turns to the terminal
         self.printTurnsPretty(currentTurnNumber, turnLog)
@@ -604,7 +677,7 @@ class ExecuteTurnScreen(Screen):
             fileObject.writelines(currentContents)
 
     @staticmethod
-    def analyzeData(turnNumber, turnData, analyTable, user, killerWeaponRoom, announces):
+    def analyzeData(turnNumber, turnData, analyTable, user, killerWeaponRoom, announces):               # this function is the workhorse of the whole app
 
         # if turnNumber == 1:
         #       turning this off so we can paste in old games and start at turnNumber > 1
@@ -708,105 +781,128 @@ class ExecuteTurnScreen(Screen):
                             functionsToCallIfNegativeAdded()                    
                             # allFunctions()
 
+                # added April 7 2022, very late to the game.... if a column has one Y and two ? total, then obviously those two ? should be changed to Y
+                if numberOfYs == 1 and numberOfQuestionMarks == 2:
+                    for row in range(21):
+                        if '?' in analyTable[row][column]:
+                            analyTable[row][column] = ["Y"]
+                            ########### CALL FUNCTION HERE                                
+                            functionsToCallIfYAdded()
+                            functionsToCallIfTurnNumberRemoved()
+                            functionsToCallIfQuestionMarkRemoved()
+
+
+
                 #   if a player has one Y  in their column and two distinct "groups" of turnNumbers, then we know that all '?'-only cells in the column should be changed to '-'
-                if numberOfYs == 1:       # don't bother will all this crap if numberOfYs isn't 1
+                #   ALSO, if there are 3 distinct "groups" of turnNumbers, then we know that all ?-only cells should be changed to '-'
     #######################################################################################################################################################
     #######################################################################################################################################################
     ##########################       START      #############################################################################################################################
     #######################################################################################################################################################
     #######################################################################################################################################################
-                    groupXCells = [ [] for i in range(10)]          # for example, groupXCells[1] = []          is a list of the cells in group 1
-                    groupXTurnNumbers = [ [] for i in range(10)]	# for example, groupXTurnNumbers[1] = []    is a list of the turnNumbers in group 1
-                    # we're assuming that there will never be more than 10 groups... doesn't feel like a dangerous assumption in a six player game.....
+                groupXCells = [ [] for i in range(10)]          # for example, groupXCells[1] = []          is a list of the cells in group 1
+                groupXTurnNumbers = [ [] for i in range(10)]	# for example, groupXTurnNumbers[1] = []    is a list of the turnNumbers in group 1
+                # we're assuming that there will never be more than 10 groups... doesn't feel like a dangerous assumption in a six player game.....
 
-                    # save all non-Y, non-'-', non-?-only cells to a list
-                    listOfCellsInColumnWithTurnNumbers = []
-                    for row in range(21):
-                        if 'Y' not in analyTable[row][column] and '-' not in analyTable[row][column] and analyTable[row][column] != ['?']:
-                            listOfCellsInColumnWithTurnNumbers.append(row)         
+                # save all non-Y, non-'-', non-?-only cells to a list
+                listOfCellsInColumnWithTurnNumbers = []
+                for row in range(21):
+                    if 'Y' not in analyTable[row][column] and '-' not in analyTable[row][column] and analyTable[row][column] != ['?']:
+                        listOfCellsInColumnWithTurnNumbers.append(row)         
 
-                    # if column == 1:
-                    #     print("listOfCells: " + str(listOfCellsInColumnWithTurnNumbers))
-                    #     for element in listOfCellsInColumnWithTurnNumbers:
-                    #         print(analyTable[element][column])
-                    #         print("done")
+                # if column == 1:
+                #     print("listOfCells: " + str(listOfCellsInColumnWithTurnNumbers))
+                #     for element in listOfCellsInColumnWithTurnNumbers:
+                #         print(analyTable[element][column])
+                #         print("done")
 
-                    def putCellsIntoGroupsCorrectlyForGodsSake(listOfCells, groupNum):
-                        # pick one of the biggest cells to start with
-                        biggestCellSize = -1
-                        for cell in listOfCells:            # 'cell' is a row number
-                            if len(analyTable[cell][column]) > biggestCellSize:
-                                biggestCellSize = len(analyTable[cell][column])
-                        indexOfOneOfBiggestCells = -1
-                        for cell in listOfCells:
-                            if len(analyTable[cell][column]) == biggestCellSize:
-                                indexOfOneOfBiggestCells = cell
-                                # break                   # as of right now this line makes or break it... and that should not be the case#################################################
+                def putCellsIntoGroupsCorrectlyForGodsSake(listOfCells, groupNum):
+                    # pick one of the biggest cells to start with
+                    biggestCellSize = -1
+                    for cell in listOfCells:            # 'cell' is a row number
+                        if len(analyTable[cell][column]) > biggestCellSize:
+                            biggestCellSize = len(analyTable[cell][column])
+                    indexOfOneOfBiggestCells = -1
+                    for cell in listOfCells:
+                        if len(analyTable[cell][column]) == biggestCellSize:
+                            indexOfOneOfBiggestCells = cell
+                            # break                   # as of right now this line makes or break it... and that should not be the case#################################################
 
-                        # identify the turnNumbers contained in that "biggest" cell and consider them the founding members of our first "group"
-                        turnNumbersInBiggestGroup = []
-                        for element in analyTable[indexOfOneOfBiggestCells][column]:
-                            if element != '?' and element != '-' and element not in turnNumbersInBiggestGroup:
-                                turnNumbersInBiggestGroup.append(element)
-                                # now that we've added a turnNumber into the group, let's hunt down every single row that might also have that turnNumber
-                                for y in range(len(listOfCells)):     # not sure how many times, at minimum, the following loop needs to repeat..... but i know that stuff gets missed if only once
-                                    for cell in listOfCells:    # if anything in this cell is already in turnNumbersInBiggestGroup, then add EVERYTHING in that cell to turnNumbersInBiggestGroup
-                                        isAnythingAlreadyInGroup = False
+                    # identify the turnNumbers contained in that "biggest" cell and consider them the founding members of our first "group"
+                    turnNumbersInBiggestGroup = []
+                    for element in analyTable[indexOfOneOfBiggestCells][column]:
+                        if element != '?' and element != '-' and element not in turnNumbersInBiggestGroup:
+                            turnNumbersInBiggestGroup.append(element)
+                            # now that we've added a turnNumber into the group, let's hunt down every single row that might also have that turnNumber
+                            for y in range(len(listOfCells)):     # not sure how many times, at minimum, the following loop needs to repeat..... but i know that stuff gets missed if only once
+                                for cell in listOfCells:    # if anything in this cell is already in turnNumbersInBiggestGroup, then add EVERYTHING in that cell to turnNumbersInBiggestGroup
+                                    isAnythingAlreadyInGroup = False
+                                    for thingInCell in analyTable[cell][column]:
+                                        if thingInCell in turnNumbersInBiggestGroup:
+                                            isAnythingAlreadyInGroup = True
+                                    if isAnythingAlreadyInGroup:        # add the entire contents of the cell to the group
                                         for thingInCell in analyTable[cell][column]:
-                                            if thingInCell in turnNumbersInBiggestGroup:
-                                                isAnythingAlreadyInGroup = True
-                                        if isAnythingAlreadyInGroup:        # add the entire contents of the cell to the group
-                                            for thingInCell in analyTable[cell][column]:
-                                                if thingInCell not in turnNumbersInBiggestGroup and thingInCell != '?':
-                                                    turnNumbersInBiggestGroup.append(thingInCell)       
+                                            if thingInCell not in turnNumbersInBiggestGroup and thingInCell != '?':
+                                                turnNumbersInBiggestGroup.append(thingInCell)       
 
-                        # identify any cells that DO NOT SHARE any turnNumbers with our "biggest" cell, so we can try to put these in ANOTHER group
-                        cellsThatDidntFitInThisGroup = []     # again, remember that "cell" = row number in the analyTable
-                        for cell in listOfCells:
-                            cellDoesShareTurnNumbersWithBiggestCell = False
-                            for turnNum in turnNumbersInBiggestGroup:
-                                if turnNum in analyTable[cell][column] and turnNum != '?':
-                                    cellDoesShareTurnNumbersWithBiggestCell = True
-                            if cellDoesShareTurnNumbersWithBiggestCell == False:
-                                cellsThatDidntFitInThisGroup.append(cell)
-                        cellsThatDoFITINTHEGROUP = []                # we'll make a parallel list, so we can process these cells first
-                        for cell in listOfCells:
-                            if cell not in cellsThatDidntFitInThisGroup:
-                                cellsThatDoFITINTHEGROUP.append(cell)            #boom, this is group1... don't need to use that other function
+                    # identify any cells that DO NOT SHARE any turnNumbers with our "biggest" cell, so we can try to put these in ANOTHER group
+                    cellsThatDidntFitInThisGroup = []     # again, remember that "cell" = row number in the analyTable
+                    for cell in listOfCells:
+                        cellDoesShareTurnNumbersWithBiggestCell = False
+                        for turnNum in turnNumbersInBiggestGroup:
+                            if turnNum in analyTable[cell][column] and turnNum != '?':
+                                cellDoesShareTurnNumbersWithBiggestCell = True
+                        if cellDoesShareTurnNumbersWithBiggestCell == False:
+                            cellsThatDidntFitInThisGroup.append(cell)
+                    cellsThatDoFITINTHEGROUP = []                # we'll make a parallel list, so we can process these cells first
+                    for cell in listOfCells:
+                        if cell not in cellsThatDidntFitInThisGroup:
+                            cellsThatDoFITINTHEGROUP.append(cell)            #boom, this is group1... don't need to use that other function
 
-                        groupXCells[groupNum] = cellsThatDoFITINTHEGROUP
-                        groupXTurnNumbers[groupNum] = turnNumbersInBiggestGroup
-                        
-                        # now that that is done, we start again, this time defining our "biggest" cell again from the cellsThatDoNotShareTurnNumbers
-                        if len(cellsThatDidntFitInThisGroup) > 0:
-                            putCellsIntoGroupsCorrectlyForGodsSake(cellsThatDidntFitInThisGroup, groupNum + 1)
+                    groupXCells[groupNum] = cellsThatDoFITINTHEGROUP
+                    groupXTurnNumbers[groupNum] = turnNumbersInBiggestGroup
+                    
+                    # now that that is done, we start again, this time defining our "biggest" cell again from the cellsThatDoNotShareTurnNumbers
+                    if len(cellsThatDidntFitInThisGroup) > 0:
+                        putCellsIntoGroupsCorrectlyForGodsSake(cellsThatDidntFitInThisGroup, groupNum + 1)
 
 
-                    putCellsIntoGroupsCorrectlyForGodsSake(listOfCellsInColumnWithTurnNumbers, 0) 
+                putCellsIntoGroupsCorrectlyForGodsSake(listOfCellsInColumnWithTurnNumbers, 0) 
 
-                    # if len(groupXCells[0]) > 0:
-                    #     print("groupXCells:       " + str(groupXCells))
-                    #     print("groupXTurnNumbers: " + str(groupXTurnNumbers))
+                # if len(groupXCells[0]) > 0:
+                #     print("groupXCells:       " + str(groupXCells))
+                #     print("groupXTurnNumbers: " + str(groupXTurnNumbers))
 
-                    numberOfGroups = 0
-                    for x in range(len(groupXCells)):
-                        if len(groupXCells[x]) > 0:
-                            numberOfGroups += 1
+                numberOfGroups = 0
+                for x in range(len(groupXCells)):
+                    if len(groupXCells[x]) > 0:
+                        numberOfGroups += 1
 
-                    # all of this was so we can execute the following:
-                    if numberOfYs == 1 and numberOfGroups > 1:      # yes, we already know that numberOfYs is 1, because we indented above... but we repeat here for the coder's benefit
-                        # if there is one Y and at least 2 distinct groups of turnNumbers, then we know that all cells in that column that only have '?' can be changed to '-'
-                        # so, go thru this __column and change the ? to -
-                        for row in range(21):
-                            if analyTable[row][column] == ['?']:
-                                analyTable[row][column] = ['-']
-                                print("OMG IT ACTUALLY WORKED?? in column " + str(column) + " we found one Y and two or more groups of turnNumbers, so we changed row " + str(row) + "'s '?' to '-'")
-                                ############# CALL FUNCTION HERE
-                                functionsToCallIfQuestionMarkRemoved()
-                                functionsToCallIfNegativeAdded()
-                                functionsToCallIfTurnNumberRemoved()
-                                # allFunctions()
-                    # look at .txt file titled 'clueSolver - one Y and groups.txt' for a breakdown (or muddy history?) of how we got this to work
+                # all of this was so we can execute the following:
+                if numberOfGroups == 4:
+                    print("problem: we have 4 distinct groups of turnNumbers in column " + str(column))
+                if numberOfGroups == 3:         # if there are 3 distinct "groups" of turnNumbers, then we know that all ?-only cells should be changed to '-'
+                    print("there are 3 groups of turnNumbers in column " + str(column) + ": " + str(groupXTurnNumbers[0]) + ", " + str(groupXTurnNumbers[1]) + ", " + str(groupXTurnNumbers[2]))
+                    for row in range(21):
+                        if analyTable[row][column] == ['?']:                # added this late to the game on April 7 2022, yikes how did i miss this?
+                            analyTable[row][column] = ['-']
+                            ############# CALL FUNCTION(S) HERE      
+                            functionsToCallIfQuestionMarkRemoved()
+                            functionsToCallIfNegativeAdded()                                                   
+                if numberOfGroups == 2:
+                    print("there are 2 groups of turnNumbers in column " + str(column) + ". They are " + str(groupXTurnNumbers[0]) + " and " + str(groupXTurnNumbers[1]))
+                if numberOfYs == 1 and numberOfGroups > 1:
+                    # if there is one Y and at least 2 distinct groups of turnNumbers, then we know that all cells in that column that only have '?' can be changed to '-'
+                    # so, go thru this __column and change the ? to -
+                    for row in range(21):
+                        if analyTable[row][column] == ['?']:
+                            analyTable[row][column] = ['-']
+                            print("OMG IT ACTUALLY WORKED?? in column " + str(column) + " we found one Y and two or more groups of turnNumbers, so we changed row " + str(row) + "'s '?' to '-'")
+                            ############# CALL FUNCTION(S) HERE
+                            functionsToCallIfQuestionMarkRemoved()
+                            functionsToCallIfNegativeAdded()
+                            # allFunctions()
+                # look at .txt file titled 'clueSolver - one Y and groups.txt' for a breakdown (or muddy history?) of how we got this to work
 
 
         def checkForAllNegativesInRow(namesOfKillerWeaponRoom, announcements):
@@ -862,7 +958,7 @@ class ExecuteTurnScreen(Screen):
                                 for element in whatWasRemoved:
                                     if element in analyTable[rrow][column] and element != "?" and element != "Y" and element != "-":   # include "Y" bc we don't want to undo what we just did
                                         analyTable[rrow][column].remove(element)
-                            ############ CALL FUNCTION HERE
+                            ############ CALL FUNCTION(S) HERE
                             functionsToCallIfYAdded()
                             functionsToCallIfQuestionMarkRemoved()
                             # allFunctions()
@@ -969,7 +1065,7 @@ class ExecuteTurnScreen(Screen):
                             if (turn + 1) in analyTable[row][column]:
                                 # WE NEED TO ACT IMMEDIATELY to prevent a logic error!!!!!!! Keep track of whatWasThere and remove those turn numbers from the rest of the column
                                 # for example if a cell has [17, 18, 19] and the 19 is the only 19 in the column, then when we change the cell to ["Y"] it will look like the 
-                                # 17 and 18 that are in other cells in that column are indicative of a card being held... and that should not happen
+                                # 17 and 18 that are in other cells in that column are indicative of a card being held by the player... and that should not happen
                                 whatWasThere = []
                                 whatWasThere = analyTable[row][column]
                                 analyTable[row][column] = ["Y"]
@@ -1116,16 +1212,19 @@ class ExecuteTurnScreen(Screen):
             processRespond()            # there will always be 1 response, and possibly some declines, so always run these
 
     def analyzeTheData(self):
-        # reset the analysis table (adding this because if user loads 2 games in a row the first game lingers inside the data)
-        global analysisTable
-        analysisTable = [[ ["?"] for i in range(6)] for j in range(21)]
-        # reset the announcements  (adding this because if user loads 2 games in a row the first game lingers inside the data)
-        global actualKillerWeaponRoom
-        actualKillerWeaponRoom = ["?", "?", "?"]
-        global announcementsHaveBeenMadeForKillerWeaponRoom
-        announcementsHaveBeenMadeForKillerWeaponRoom = [False, False, False]
-        global initialAnalysisCompletedOfLoadedSavedGame
-        initialAnalysisCompletedOfLoadedSavedGame = [False, False]
+
+        # # reset the analysis table (adding this because if user loads 2 games in a row the first game lingers inside the data)
+        # global analysisTable
+        # analysisTable = [[ ["?"] for i in range(6)] for j in range(21)]               # moved this to the confirmLoadGame function
+
+        # # reset the announcements  (adding this because if user loads 2 games in a row the first game lingers inside the data)
+        # global actualKillerWeaponRoom
+        # actualKillerWeaponRoom = ["?", "?", "?"]
+        # global announcementsHaveBeenMadeForKillerWeaponRoom
+        # announcementsHaveBeenMadeForKillerWeaponRoom = [False, False, False]          # moved this to the confirmLoadGame function
+
+        # global initialAnalysisCompletedOfLoadedSavedGame                      # i moved these 2 lines to the confirmLoadGame function, because they only need to be reset once (when a new game is loaded)
+        # initialAnalysisCompletedOfLoadedSavedGame = [False, False]
         self.analyzeData(currentTurnNumber, turnLog, analysisTable, userCharacter, actualKillerWeaponRoom, announcementsHaveBeenMadeForKillerWeaponRoom)
 
     @staticmethod
@@ -1327,7 +1426,7 @@ class AnalysisTableScreen(Screen):
 class LoadGameScreen(Screen):
     # filename = StringProperty('')
     global fileName                         #### we need to set fileName so we can continue saving to the same file
-    filename = ObjectProperty()
+    filename = ObjectProperty()     # not using this
     
     def on_enter(self, *args):
         path = os.getcwd()
@@ -1343,7 +1442,7 @@ class LoadGameScreen(Screen):
         # print("Files and Directories in '% s':" % path)
         for entry in obj :
             # if entry.is_dir() or entry.is_file():     # don't want directories to be printed
-            if entry.is_file() and ".txt" in entry.name and "ClueSolverGameSave" in entry.name:           
+            if entry.is_file() and ".txt" in entry.name and "ClueSolver" in entry.name:           
                 listOfSaveFiles.append(str(entry.name))
         obj.close()   # To close the iterator and free acquired resources use scandir.close() method
 
@@ -1359,8 +1458,6 @@ class LoadGameScreen(Screen):
         # userChoice = askUserInputInt([y+1 for y in range(x)], "which game do you want to load? :  ")
         # gameToLoad = str(listOfSaveFiles[userChoice - 1])    
         # return gameToLoad
-
-
         return super().on_enter(*args)
 
     def spinnerSelect(self):
@@ -1368,8 +1465,9 @@ class LoadGameScreen(Screen):
         fileName = self.ids.fileChooserSpinner.text
         print("fileName selected: " + str(fileName))
         self.ids.next_button.disabled = False
+        self.ids.delete_file_button.disabled = False
 
-    def selected(self, file):
+    def selected(self, file):           # this function isn't used
         self.filename = file
         print("file selected: " + str(self.filename))
         self.ids.next_button.disabled = False
@@ -1422,6 +1520,32 @@ class LoadGameScreen(Screen):
         global currentTurnNumber
         currentTurnNumber = int(fileContents[6].strip())       # line 6 is the last completed turn number
         currentTurnNumber += 1
+
+        global initialAnalysisCompletedOfLoadedSavedGame
+        initialAnalysisCompletedOfLoadedSavedGame = [False, False]	   
+
+        # reset the analysis table (adding this because if user loads 2 games in a row the first game lingers inside the data)
+        global analysisTable
+        analysisTable = [[ ["?"] for i in range(6)] for j in range(21)]
+
+        # reset the announcements  (adding this because if user loads 2 games in a row the first game lingers inside the data)
+        global actualKillerWeaponRoom
+        actualKillerWeaponRoom = ["?", "?", "?"]
+        global announcementsHaveBeenMadeForKillerWeaponRoom
+        announcementsHaveBeenMadeForKillerWeaponRoom = [False, False, False]
+
+    def deleteSelectedFile(self):
+        os.remove(fileName)
+        path = os.getcwd()
+        obj = os.scandir(path)
+        listOfSaveFiles = []
+        for entry in obj :
+            if entry.is_file() and ".txt" in entry.name and "ClueSolver" in entry.name:           
+                listOfSaveFiles.append(str(entry.name))
+        obj.close()   # To close the iterator and free acquired resources use scandir.close() method
+        ### now send this list of files into the kivy spinner
+        self.ids.fileChooserSpinner.values = listOfSaveFiles
+        self.ids.fileChooserSpinner.text = 'Click here to choose a file to load:'
 
 class SuggestionHistoryScreen(Screen):
     def on_enter(self, *args):
@@ -1503,6 +1627,8 @@ class SuggestionHistoryScreen(Screen):
                         val.text = str(turnInfoLists[turn][9])
                     elif val.turn == turn and val.column == 'cardShown':
                         val.text = str(turnInfoLists[turn][10])
+
+        self.ids.filename_label.text = str(fileName)
 
         return super().on_enter(*args)
 

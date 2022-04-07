@@ -27,6 +27,7 @@ WindowManager:
             size_hint: (0.25, 0.25)
             pos_hint: {"x":0.125, "y":0.25}
             on_release: 
+                root.clearOldData()
                 app.root.current = "PlayerSelectScreen"
                 root.manager.transition.direction = "left"
         Button:
@@ -262,7 +263,7 @@ WindowManager:
 
 <TooManyCards@Popup>
     auto_dismiss: False
-    title: "More than 3 cards are selected!"
+    title: "More than 3 cards are selected!"            # need to figure out popups later... i'm not using this right now  
 
 <CardDeclarationScreen>
     name: "cardDeclaration"
@@ -1335,6 +1336,12 @@ WindowManager:
                 app.root.current = "ExecuteTurnScreen"
                 # root.manager.transition.direction = "left"  
 
+<DropDownCustomClass@SpinnerOption>
+    # max_height: 22            # https://devdreamz.com/question/497982-kivy-how-to-change-spinner-button-colour-and-size
+    height: 40             # omg it finally works... i can customize the height of the dropdown items in a spinner
+                            # https://kivy.org/doc/stable/api-kivy.uix.spinner.html#kivy.uix.spinner.Spinner.option_cls
+
+
 <ExecuteTurnScreen>
     name: "ExecuteTurnScreen"
     FloatLayout:
@@ -1354,6 +1361,20 @@ WindowManager:
                     size: self.size
             size_hint: (0.6, 0.1)   
             pos_hint: {"x": 0.2, "y": 0.9}
+        Label:
+            id: filename_label
+            text: 'filename placeholder text'
+            text_size: self.size            # https://stackoverflow.com/questions/31638788/python-kivy-align-text-to-the-left-side-of-a-label
+            halign: 'left'
+            size_hint: (1, 0.05)
+            pos_hint: {"x": 0.03, "y": 0.03}
+            color: 0.3, 0.3, 0.3, 1
+            # canvas.before:
+            #     Color:
+            #         rgba: 0.3, 0.3, 0.3, 1
+            #     Rectangle:
+            #         pos: self.pos
+            #         size: self.size            
         Button:
             id: notes_button
             section: "header"
@@ -1383,8 +1404,7 @@ WindowManager:
             pos_hint: {"x": 0, "y":1 - 2 * 0.075}
             disabled: False
             on_press: 
-                #       goes to TURN HISTORY
-                # root.createGameSaveFile()
+                root.printTheTurnsPretty()
                 app.root.current = "SuggestionHistoryScreen"
                 # root.manager.transition.direction = "left"  
         Button:
@@ -1407,6 +1427,7 @@ WindowManager:
             type: 'ableToGuess'
             section: "ableToGuess"
             defaultText: 'Able to suggest'
+            # halign: 'left'
             text: 'Able to suggest'
             values: ['Able to suggest', 'NOT able']
             on_text: root.spinnerClicked(self)
@@ -1418,9 +1439,10 @@ WindowManager:
             id: killer_spinner
             type: "killer"
             section: 'A'
+            option_cls: 'DropDownCustomClass'
             defaultText: 'suggested killer'
             text: "suggested killer"
-            values: ['Green', 'Mustard', 'Peacock', 'Plum', 'Scarlett', 'Orchid']
+            values: ['0. Green', '1. Mustard', '2. Peacock', '3. Plum', '4. Scarlett', '5. Orchid']
             on_text: root.spinnerClicked(self)
             size_hint: (0.2, 0.08)
             pos_hint: {"x": 0.05 + 0.2 + 0.1 / 3, "y": 0.7}
@@ -1428,9 +1450,10 @@ WindowManager:
             id: weapon_spinner
             type: "weapon"
             section: 'A'
+            option_cls: 'DropDownCustomClass'
             defaultText: 'suggested weapon'
             text: "suggested weapon"
-            values: ['Candlestick', 'Dagger', 'Pipe', 'Revolver', 'Rope', 'Wrench']
+            values: ['6. Candlestick', '7. Dagger', '8. Pipe', '9. Revolver', '10. Rope', '11. Wrench']
             on_text: root.spinnerClicked(self)
             size_hint: (0.2, 0.08)
             pos_hint: {"x": 0.05 + 0.2 * 2 + 2 * (0.1 / 3), "y": 0.7}
@@ -1438,9 +1461,11 @@ WindowManager:
             id: room_spinner
             type: "room"
             section: 'A'
+            # dropdown_cls: 'DropDownCustomClass'
+            option_cls: 'DropDownCustomClass'       # https://devdreamz.com/question/497982-kivy-how-to-change-spinner-button-colour-and-size
             defaultText: 'suggested room'
             text: "suggested room"
-            values: ['Ballroom', 'Billiard Room', 'Conservatory', 'Dining Room', 'Hall', 'Kitchen', 'Library', 'Lounge', 'Study']
+            values: ['12. Ballroom', '13. Billiard Room', '14. Conservatory', '15. Dining Room', '16. Hall', '17. Kitchen', '18. Library', '19. Lounge', '20. Study']
             on_text: root.spinnerClicked(self)
             size_hint: (0.2, 0.08)
             pos_hint: {"x": 0.05 + 0.2 * 3 + 3 * (0.1 / 3), "y": 0.7}
@@ -1645,7 +1670,7 @@ WindowManager:
             section: "completeTurnButton"
             defaultText: "Complete Turn"
             text: "Complete Turn"
-            disabled: False
+            disabled: True
             background_color: 0, 1, 0.2, 1
             size_hint: (0.2, 0.075)
             pos_hint: {"x": 0.8, "y": 0}
@@ -2487,8 +2512,7 @@ WindowManager:
     name: "load"
     FloatLayout:
         Button:
-            text: "Go Back"
-            font_size: '10sp'
+            text: "Back"
             background_color: 0, 1, 0.2, 1
             size_hint: (0.0625, 0.0625)
             pos_hint: {"x":0.0625 / 2, "y":1 - 1.5 * 0.0625}
@@ -2513,6 +2537,17 @@ WindowManager:
             on_text: root.spinnerSelect()
             size_hint: (0.8, 0.1)
             pos_hint: {"x": 0.1, "y": 0.7}
+        Button:
+            id: delete_file_button
+            text: "DELETE SELECTED FILE"
+            disabled: True
+            background_color: 1, 0, 0, 1
+            size_hint: (0.3, 0.1)
+            pos_hint: {"x": 0.6, "y": 0.05}
+            on_press:
+                root.deleteSelectedFile()
+
+
 
         # FileChooserListView:
         #     id: fileChooser
@@ -2555,6 +2590,14 @@ WindowManager:
             pythonFileColumnNumber: -1
             size_hint: (0.6, 0.075)   
             pos_hint: {"x": 0.2, "y": 1 - 0.075}
+        Label:
+            id: filename_label
+            text: 'filename placeholder text'
+            text_size: self.size            # https://stackoverflow.com/questions/31638788/python-kivy-align-text-to-the-left-side-of-a-label
+            halign: 'left'
+            size_hint: (1, 0.05)
+            pos_hint: {"x": 0.03, "y": 0.03}
+            color: 0.3, 0.3, 0.3, 1
 
         #:set fontSize 14 
         #:set leftBuffer 0.06
