@@ -11,6 +11,7 @@ WindowManager:
     ConfirmationScreen:
     ExecuteTurnScreen:
     AnalysisTableScreen:
+    SuggestionHistoryScreen:
 
 <HomeScreen>
     transition: NoTransition()
@@ -1384,7 +1385,7 @@ WindowManager:
             on_press: 
                 #       goes to TURN HISTORY
                 # root.createGameSaveFile()
-                # app.root.current = "ExecuteTurnScreen"
+                app.root.current = "SuggestionHistoryScreen"
                 # root.manager.transition.direction = "left"  
         Button:
             id: homescreen_button
@@ -1658,7 +1659,7 @@ WindowManager:
 
 <AnalysisTableScreen>   
     name: "AnalysisTableScreen"       # this screen should merely display the analysis table
-    rgba: (0.3, .3, .3, 1)      # establish the default gray background color, to be changed later
+    rgba: (0.3, .3, .3, 1)      # establish the default gray background color, to be changed later      reference in button to root.rgba
     # NORMALrgba: .3, .3, .3, 1
     # REDrgba: 1, 0.2, 0.2, 1
     FloatLayout:
@@ -2523,8 +2524,2900 @@ WindowManager:
 
 
 
+<SuggestionHistoryScreen>
+    name: "SuggestionHistoryScreen"
+    FloatLayout:
+        Button:
+            id: return_to_execute_turn_screen
+            turn: -1
+            column: 'ignore me'
+            text: "Go to current turn... placeholder text"
+            position: [-1, -1]
+            # pythonFileColumnNumber: -1
+            background_color: 0, 1, 0.2, 1
+            # font_size: '10sp'
+            size_hint: (0.2, 0.075)
+            pos_hint: {"x":0, "y":1 - 0.075}
+            on_release: 
+                app.root.current = "ExecuteTurnScreen"
+                # root.manager.transition.direction = "right"            
+        Label:
+            # id: title_label
+            text: "Turn History"
+            text_color: 1, 1, 0, 1
+            canvas.before:
+                Color:
+                    rgba: 0.3, 0.3, 0.3, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            position: [-1, -1]
+            pythonFileColumnNumber: -1
+            size_hint: (0.6, 0.075)   
+            pos_hint: {"x": 0.2, "y": 1 - 0.075}
 
+        #:set fontSize 14 
+        #:set leftBuffer 0.06
+        #:set topRowYLevel 0.89
+        Label:
+            text: '---------GUESSED--------'
+            # size_hint: (0.1, 0.1)
+            pos_hint: {"x": 4 * leftBuffer, "y": topRowYLevel}
+            text_size: self.size
+            halign: 'left'                        
+        Label:
+            text: '------------------------RESPONSES-----------------------'
+            # size_hint: (0.3, 0.1)
+            pos_hint: {"x": 8 * leftBuffer, "y": topRowYLevel}
+            text_size: self.size
+            halign: 'left'                        
+    ####################################################################################        column headers
+        #:set verticalBufferBetweenTurns 0.03
+        Label:
+            text: 'turn'
+            # size_hint: (0.05, 0.1)
+            pos_hint: {"x": 1 * leftBuffer, "y": topRowYLevel - 1 * verticalBufferBetweenTurns}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'            
+        Label:
+            text: 'Guesser'
+            # size_hint: (0.05, 0.1)
+            pos_hint: {"x": 2 * leftBuffer, "y": topRowYLevel - 1 * verticalBufferBetweenTurns}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'
+        Label:
+            text: 'kilr'
+            pos_hint: {"x": 4 * leftBuffer, "y": topRowYLevel - 1 * verticalBufferBetweenTurns}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'
+        Label:
+            text: 'wep'
+            pos_hint: {"x": 5 * leftBuffer, "y": topRowYLevel - 1 * verticalBufferBetweenTurns}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'            
+        Label:
+            text: 'room'
+            pos_hint: {"x": 6 * leftBuffer, "y": topRowYLevel - 1 * verticalBufferBetweenTurns}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'
+        Label:
+            text: 'scar'
+            pos_hint: {"x": 8 * leftBuffer, "y": topRowYLevel - 1 * verticalBufferBetweenTurns}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'            
+        Label:
+            text: 'green'
+            pos_hint: {"x": 9 * leftBuffer, "y": topRowYLevel - 1 * verticalBufferBetweenTurns}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'            
+        Label:
+            text: 'orch'
+            pos_hint: {"x": 10 * leftBuffer, "y": topRowYLevel - 1 * verticalBufferBetweenTurns}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'            
+        Label:
+            text: 'must'
+            pos_hint: {"x": 11 * leftBuffer, "y": topRowYLevel - 1 * verticalBufferBetweenTurns}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'            
+        Label:
+            text: 'plum'
+            pos_hint: {"x": 12 * leftBuffer, "y": topRowYLevel - 1 * verticalBufferBetweenTurns}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'            
+        Label:
+            text: 'peac'
+            pos_hint: {"x": 13 * leftBuffer, "y": topRowYLevel - 1 * verticalBufferBetweenTurns}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'            
+        Label:
+            text: 'cardShown'
+            pos_hint: {"x": 14.4 * leftBuffer, "y": topRowYLevel - 1 * verticalBufferBetweenTurns}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'            
+    ############################################################################################### turn 1
+        #:set turn1_height topRowYLevel - 2 * verticalBufferBetweenTurns
+        Label:
+            id: turn1_1
+            turn: 1
+            column: 'turnNumber'
+            text: ''
+            pos_hint: {"x": 1 * leftBuffer, "y": turn1_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn1_2
+            turn: 1
+            column: 'guesser'
+            text: ''
+            pos_hint: {"x": 2 * leftBuffer, "y": turn1_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn1_3
+            turn: 1
+            column: 'killerGuessed'
+            text: ''
+            pos_hint: {"x": 4 * leftBuffer, "y": turn1_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                     
+        Label:
+            id: turn1_4
+            turn: 1
+            column: 'weaponGuessed'
+            text: ''
+            pos_hint: {"x": 5 * leftBuffer, "y": turn1_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                                
+        Label:
+            id: turn1_5
+            turn: 1
+            column: 'roomGuessed'
+            text: ''
+            pos_hint: {"x": 6 * leftBuffer, "y": turn1_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn1_6
+            turn: 1
+            column: 'scarlettResponse'
+            text: ''
+            pos_hint: {"x": 8 * leftBuffer, "y": turn1_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn1_7
+            turn: 1
+            column: 'greenResponse'
+            text: ''
+            pos_hint: {"x": 9 * leftBuffer, "y": turn1_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn1_8
+            turn: 1
+            column: 'orchidResponse'
+            text: ''
+            pos_hint: {"x": 10 * leftBuffer, "y": turn1_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn1_9
+            turn: 1
+            column: 'mustardResponse'
+            text: ''
+            pos_hint: {"x": 11 * leftBuffer, "y": turn1_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn1_10
+            turn: 1
+            column: 'plumResponse'
+            text: ''
+            pos_hint: {"x": 12 * leftBuffer, "y": turn1_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn1_11
+            turn: 1
+            column: 'peacockResponse'
+            text: ''
+            pos_hint: {"x": 13 * leftBuffer, "y": turn1_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn1_12
+            turn: 1
+            column: 'cardShown'
+            text: ''
+            pos_hint: {"x": 14.4 * leftBuffer, "y": turn1_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                                                                                                                    
 
+    ############################################################################################### turn 2
+        #:set turn2_height topRowYLevel - 3 * verticalBufferBetweenTurns
+        Label:
+            id: turn2_1
+            turn: 2
+            column: 'turnNumber'
+            text: ''
+            pos_hint: {"x": 1 * leftBuffer, "y": turn2_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn2_2
+            turn: 2
+            column: 'guesser'
+            text: ''
+            pos_hint: {"x": 2 * leftBuffer, "y": turn2_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn2_3
+            turn: 2
+            column: 'killerGuessed'
+            text: ''
+            pos_hint: {"x": 4 * leftBuffer, "y": turn2_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                     
+        Label:
+            id: turn2_4
+            turn: 2
+            column: 'weaponGuessed'
+            text: ''
+            pos_hint: {"x": 5 * leftBuffer, "y": turn2_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                                
+        Label:
+            id: turn2_5
+            turn: 2
+            column: 'roomGuessed'
+            text: ''
+            pos_hint: {"x": 6 * leftBuffer, "y": turn2_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn2_6
+            turn: 2
+            column: 'scarlettResponse'
+            text: ''
+            pos_hint: {"x": 8 * leftBuffer, "y": turn2_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn2_7
+            turn: 2
+            column: 'greenResponse'
+            text: ''
+            pos_hint: {"x": 9 * leftBuffer, "y": turn2_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn2_8
+            turn: 2
+            column: 'orchidResponse'
+            text: ''
+            pos_hint: {"x": 10 * leftBuffer, "y": turn2_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn2_9
+            turn: 2
+            column: 'mustardResponse'
+            text: ''
+            pos_hint: {"x": 11 * leftBuffer, "y": turn2_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn2_10
+            turn: 2
+            column: 'plumResponse'
+            text: ''
+            pos_hint: {"x": 12 * leftBuffer, "y": turn2_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn2_11
+            turn: 2
+            column: 'peacockResponse'
+            text: ''
+            pos_hint: {"x": 13 * leftBuffer, "y": turn2_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn2_12
+            turn: 2
+            column: 'cardShown'
+            text: ''
+            pos_hint: {"x": 14.4 * leftBuffer, "y": turn2_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                                        
 
+    ############################################################################################### turn 3
+        #:set turn3_height topRowYLevel - 4 * verticalBufferBetweenTurns
+        Label:
+            id: turn3_1
+            turn: 3
+            column: 'turnNumber'
+            text: ''
+            pos_hint: {"x": 1 * leftBuffer, "y": turn3_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn3_2
+            turn: 3
+            column: 'guesser'
+            text: ''
+            pos_hint: {"x": 2 * leftBuffer, "y": turn3_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn3_3
+            turn: 3
+            column: 'killerGuessed'
+            text: ''
+            pos_hint: {"x": 4 * leftBuffer, "y": turn3_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                     
+        Label:
+            id: turn3_4
+            turn: 3
+            column: 'weaponGuessed'
+            text: ''
+            pos_hint: {"x": 5 * leftBuffer, "y": turn3_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                                
+        Label:
+            id: turn3_5
+            turn: 3
+            column: 'roomGuessed'
+            text: ''
+            pos_hint: {"x": 6 * leftBuffer, "y": turn3_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn3_6
+            turn: 3
+            column: 'scarlettResponse'
+            text: ''
+            pos_hint: {"x": 8 * leftBuffer, "y": turn3_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn3_7
+            turn: 3
+            column: 'greenResponse'
+            text: ''
+            pos_hint: {"x": 9 * leftBuffer, "y": turn3_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn3_8
+            turn: 3
+            column: 'orchidResponse'
+            text: ''
+            pos_hint: {"x": 10 * leftBuffer, "y": turn3_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn3_9
+            turn: 3
+            column: 'mustardResponse'
+            text: ''
+            pos_hint: {"x": 11 * leftBuffer, "y": turn3_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn3_10
+            turn: 3
+            column: 'plumResponse'
+            text: ''
+            pos_hint: {"x": 12 * leftBuffer, "y": turn3_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn3_11
+            turn: 3
+            column: 'peacockResponse'
+            text: ''
+            pos_hint: {"x": 13 * leftBuffer, "y": turn3_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn3_12
+            turn: 3
+            column: 'cardShown'
+            text: ''
+            pos_hint: {"x": 14.4 * leftBuffer, "y": turn3_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                  
 
+    ############################################################################################### turn 4
+        #:set turn4_height topRowYLevel - 5 * verticalBufferBetweenTurns
+        Label:
+            id: turn4_1
+            turn: 4
+            column: 'turnNumber'
+            text: ''
+            pos_hint: {"x": 1 * leftBuffer, "y": turn4_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn4_2
+            turn: 4
+            column: 'guesser'
+            text: ''
+            pos_hint: {"x": 2 * leftBuffer, "y": turn4_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn4_3
+            turn: 4
+            column: 'killerGuessed'
+            text: ''
+            pos_hint: {"x": 4 * leftBuffer, "y": turn4_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                     
+        Label:
+            id: turn4_4
+            turn: 4
+            column: 'weaponGuessed'
+            text: ''
+            pos_hint: {"x": 5 * leftBuffer, "y": turn4_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                                
+        Label:
+            id: turn4_5
+            turn: 4
+            column: 'roomGuessed'
+            text: ''
+            pos_hint: {"x": 6 * leftBuffer, "y": turn4_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn4_6
+            turn: 4
+            column: 'scarlettResponse'
+            text: ''
+            pos_hint: {"x": 8 * leftBuffer, "y": turn4_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn4_7
+            turn: 4
+            column: 'greenResponse'
+            text: ''
+            pos_hint: {"x": 9 * leftBuffer, "y": turn4_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn4_8
+            turn: 4
+            column: 'orchidResponse'
+            text: ''
+            pos_hint: {"x": 10 * leftBuffer, "y": turn4_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn4_9
+            turn: 4
+            column: 'mustardResponse'
+            text: ''
+            pos_hint: {"x": 11 * leftBuffer, "y": turn4_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn4_10
+            turn: 4
+            column: 'plumResponse'
+            text: ''
+            pos_hint: {"x": 12 * leftBuffer, "y": turn4_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn4_11
+            turn: 4
+            column: 'peacockResponse'
+            text: ''
+            pos_hint: {"x": 13 * leftBuffer, "y": turn4_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn4_12
+            turn: 4
+            column: 'cardShown'
+            text: ''
+            pos_hint: {"x": 14.4 * leftBuffer, "y": turn4_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
 
+    ############################################################################################### turn 5
+        #:set turn5_height topRowYLevel - 6 * verticalBufferBetweenTurns
+        Label:
+            id: turn5_1
+            turn: 5
+            column: 'turnNumber'
+            text: ''
+            pos_hint: {"x": 1 * leftBuffer, "y": turn5_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn5_2
+            turn: 5
+            column: 'guesser'
+            text: ''
+            pos_hint: {"x": 2 * leftBuffer, "y": turn5_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn5_3
+            turn: 5
+            column: 'killerGuessed'
+            text: ''
+            pos_hint: {"x": 4 * leftBuffer, "y": turn5_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                     
+        Label:
+            id: turn5_4
+            turn: 5
+            column: 'weaponGuessed'
+            text: ''
+            pos_hint: {"x": 5 * leftBuffer, "y": turn5_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                                
+        Label:
+            id: turn5_5
+            turn: 5
+            column: 'roomGuessed'
+            text: ''
+            pos_hint: {"x": 6 * leftBuffer, "y": turn5_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn5_6
+            turn: 5
+            column: 'scarlettResponse'
+            text: ''
+            pos_hint: {"x": 8 * leftBuffer, "y": turn5_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn5_7
+            turn: 5
+            column: 'greenResponse'
+            text: ''
+            pos_hint: {"x": 9 * leftBuffer, "y": turn5_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn5_8
+            turn: 5
+            column: 'orchidResponse'
+            text: ''
+            pos_hint: {"x": 10 * leftBuffer, "y": turn5_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn5_9
+            turn: 5
+            column: 'mustardResponse'
+            text: ''
+            pos_hint: {"x": 11 * leftBuffer, "y": turn5_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn5_10
+            turn: 5
+            column: 'plumResponse'
+            text: ''
+            pos_hint: {"x": 12 * leftBuffer, "y": turn5_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn5_11
+            turn: 5
+            column: 'peacockResponse'
+            text: ''
+            pos_hint: {"x": 13 * leftBuffer, "y": turn5_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn5_12
+            turn: 5
+            column: 'cardShown'
+            text: ''
+            pos_hint: {"x": 14.4 * leftBuffer, "y": turn5_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'       
+
+    ############################################################################################### turn 6
+        #:set turn6_height topRowYLevel - 7 * verticalBufferBetweenTurns
+        Label:
+            id: turn6_1
+            turn: 6
+            column: 'turnNumber'
+            text: ''
+            pos_hint: {"x": 1 * leftBuffer, "y": turn6_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn6_2
+            turn: 6
+            column: 'guesser'
+            text: ''
+            pos_hint: {"x": 2 * leftBuffer, "y": turn6_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn6_3
+            turn: 6
+            column: 'killerGuessed'
+            text: ''
+            pos_hint: {"x": 4 * leftBuffer, "y": turn6_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                     
+        Label:
+            id: turn6_4
+            turn: 6
+            column: 'weaponGuessed'
+            text: ''
+            pos_hint: {"x": 5 * leftBuffer, "y": turn6_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                                
+        Label:
+            id: turn6_5
+            turn: 6
+            column: 'roomGuessed'
+            text: ''
+            pos_hint: {"x": 6 * leftBuffer, "y": turn6_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn6_6
+            turn: 6
+            column: 'scarlettResponse'
+            text: ''
+            pos_hint: {"x": 8 * leftBuffer, "y": turn6_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn6_7
+            turn: 6
+            column: 'greenResponse'
+            text: ''
+            pos_hint: {"x": 9 * leftBuffer, "y": turn6_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn6_8
+            turn: 6
+            column: 'orchidResponse'
+            text: ''
+            pos_hint: {"x": 10 * leftBuffer, "y": turn6_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn6_9
+            turn: 6
+            column: 'mustardResponse'
+            text: ''
+            pos_hint: {"x": 11 * leftBuffer, "y": turn6_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn6_10
+            turn: 6
+            column: 'plumResponse'
+            text: ''
+            pos_hint: {"x": 12 * leftBuffer, "y": turn6_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn6_11
+            turn: 6
+            column: 'peacockResponse'
+            text: ''
+            pos_hint: {"x": 13 * leftBuffer, "y": turn6_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn6_12
+            turn: 6
+            column: 'cardShown'
+            text: ''
+            pos_hint: {"x": 14.4 * leftBuffer, "y": turn6_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'       
+
+    ############################################################################################### turn 7
+        #:set turn7_height topRowYLevel - 8 * verticalBufferBetweenTurns
+        Label:
+            id: turn7_1
+            turn: 7
+            column: 'turnNumber'
+            text: ''
+            pos_hint: {"x": 1 * leftBuffer, "y": turn7_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn7_2
+            turn: 7
+            column: 'guesser'
+            text: ''
+            pos_hint: {"x": 2 * leftBuffer, "y": turn7_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn7_3
+            turn: 7
+            column: 'killerGuessed'
+            text: ''
+            pos_hint: {"x": 4 * leftBuffer, "y": turn7_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                     
+        Label:
+            id: turn7_4
+            turn: 7
+            column: 'weaponGuessed'
+            text: ''
+            pos_hint: {"x": 5 * leftBuffer, "y": turn7_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                                
+        Label:
+            id: turn7_5
+            turn: 7
+            column: 'roomGuessed'
+            text: ''
+            pos_hint: {"x": 6 * leftBuffer, "y": turn7_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn7_6
+            turn: 7
+            column: 'scarlettResponse'
+            text: ''
+            pos_hint: {"x": 8 * leftBuffer, "y": turn7_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn7_7
+            turn: 7
+            column: 'greenResponse'
+            text: ''
+            pos_hint: {"x": 9 * leftBuffer, "y": turn7_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn7_8
+            turn: 7
+            column: 'orchidResponse'
+            text: ''
+            pos_hint: {"x": 10 * leftBuffer, "y": turn7_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn7_9
+            turn: 7
+            column: 'mustardResponse'
+            text: ''
+            pos_hint: {"x": 11 * leftBuffer, "y": turn7_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn7_10
+            turn: 7
+            column: 'plumResponse'
+            text: ''
+            pos_hint: {"x": 12 * leftBuffer, "y": turn7_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn7_11
+            turn: 7
+            column: 'peacockResponse'
+            text: ''
+            pos_hint: {"x": 13 * leftBuffer, "y": turn7_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn7_12
+            turn: 7
+            column: 'cardShown'
+            text: ''
+            pos_hint: {"x": 14.4 * leftBuffer, "y": turn7_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'       
+
+    ############################################################################################### turn 8
+        #:set turn8_height topRowYLevel - 9 * verticalBufferBetweenTurns
+        Label:
+            id: turn8_1
+            turn: 8
+            column: 'turnNumber'
+            text: ''
+            pos_hint: {"x": 1 * leftBuffer, "y": turn8_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn8_2
+            turn: 8
+            column: 'guesser'
+            text: ''
+            pos_hint: {"x": 2 * leftBuffer, "y": turn8_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn8_3
+            turn: 8
+            column: 'killerGuessed'
+            text: ''
+            pos_hint: {"x": 4 * leftBuffer, "y": turn8_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                     
+        Label:
+            id: turn8_4
+            turn: 8
+            column: 'weaponGuessed'
+            text: ''
+            pos_hint: {"x": 5 * leftBuffer, "y": turn8_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                                
+        Label:
+            id: turn8_5
+            turn: 8
+            column: 'roomGuessed'
+            text: ''
+            pos_hint: {"x": 6 * leftBuffer, "y": turn8_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn8_6
+            turn: 8
+            column: 'scarlettResponse'
+            text: ''
+            pos_hint: {"x": 8 * leftBuffer, "y": turn8_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn8_7
+            turn: 8
+            column: 'greenResponse'
+            text: ''
+            pos_hint: {"x": 9 * leftBuffer, "y": turn8_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn8_8
+            turn: 8
+            column: 'orchidResponse'
+            text: ''
+            pos_hint: {"x": 10 * leftBuffer, "y": turn8_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn8_9
+            turn: 8
+            column: 'mustardResponse'
+            text: ''
+            pos_hint: {"x": 11 * leftBuffer, "y": turn8_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn8_10
+            turn: 8
+            column: 'plumResponse'
+            text: ''
+            pos_hint: {"x": 12 * leftBuffer, "y": turn8_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn8_11
+            turn: 8
+            column: 'peacockResponse'
+            text: ''
+            pos_hint: {"x": 13 * leftBuffer, "y": turn8_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn8_12
+            turn: 8
+            column: 'cardShown'
+            text: ''
+            pos_hint: {"x": 14.4 * leftBuffer, "y": turn8_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'       
+
+    ############################################################################################### turn 9
+        #:set turn9_height topRowYLevel - 10 * verticalBufferBetweenTurns
+        Label:
+            id: turn9_1
+            turn: 9
+            column: 'turnNumber'
+            text: ''
+            pos_hint: {"x": 1 * leftBuffer, "y": turn9_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn9_2
+            turn: 9
+            column: 'guesser'
+            text: ''
+            pos_hint: {"x": 2 * leftBuffer, "y": turn9_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn9_3
+            turn: 9
+            column: 'killerGuessed'
+            text: ''
+            pos_hint: {"x": 4 * leftBuffer, "y": turn9_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                     
+        Label:
+            id: turn9_4
+            turn: 9
+            column: 'weaponGuessed'
+            text: ''
+            pos_hint: {"x": 5 * leftBuffer, "y": turn9_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                                
+        Label:
+            id: turn9_5
+            turn: 9
+            column: 'roomGuessed'
+            text: ''
+            pos_hint: {"x": 6 * leftBuffer, "y": turn9_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn9_6
+            turn: 9
+            column: 'scarlettResponse'
+            text: ''
+            pos_hint: {"x": 8 * leftBuffer, "y": turn9_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn9_7
+            turn: 9
+            column: 'greenResponse'
+            text: ''
+            pos_hint: {"x": 9 * leftBuffer, "y": turn9_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn9_8
+            turn: 9
+            column: 'orchidResponse'
+            text: ''
+            pos_hint: {"x": 10 * leftBuffer, "y": turn9_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn9_9
+            turn: 9
+            column: 'mustardResponse'
+            text: ''
+            pos_hint: {"x": 11 * leftBuffer, "y": turn9_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn9_10
+            turn: 9
+            column: 'plumResponse'
+            text: ''
+            pos_hint: {"x": 12 * leftBuffer, "y": turn9_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn9_11
+            turn: 9
+            column: 'peacockResponse'
+            text: ''
+            pos_hint: {"x": 13 * leftBuffer, "y": turn9_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn9_12
+            turn: 9
+            column: 'cardShown'
+            text: ''
+            pos_hint: {"x": 14.4 * leftBuffer, "y": turn9_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'       
+
+    ############################################################################################### turn 10
+        #:set turn10_height topRowYLevel - 11 * verticalBufferBetweenTurns
+        Label:
+            id: turn10_1
+            turn: 10
+            column: 'turnNumber'
+            text: ''
+            pos_hint: {"x": 1 * leftBuffer, "y": turn10_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn10_2
+            turn: 10
+            column: 'guesser'
+            text: ''
+            pos_hint: {"x": 2 * leftBuffer, "y": turn10_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn10_3
+            turn: 10
+            column: 'killerGuessed'
+            text: ''
+            pos_hint: {"x": 4 * leftBuffer, "y": turn10_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                     
+        Label:
+            id: turn10_4
+            turn: 10
+            column: 'weaponGuessed'
+            text: ''
+            pos_hint: {"x": 5 * leftBuffer, "y": turn10_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                                
+        Label:
+            id: turn10_5
+            turn: 10
+            column: 'roomGuessed'
+            text: ''
+            pos_hint: {"x": 6 * leftBuffer, "y": turn10_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn10_6
+            turn: 10
+            column: 'scarlettResponse'
+            text: ''
+            pos_hint: {"x": 8 * leftBuffer, "y": turn10_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn10_7
+            turn: 10
+            column: 'greenResponse'
+            text: ''
+            pos_hint: {"x": 9 * leftBuffer, "y": turn10_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn10_8
+            turn: 10
+            column: 'orchidResponse'
+            text: ''
+            pos_hint: {"x": 10 * leftBuffer, "y": turn10_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn10_9
+            turn: 10
+            column: 'mustardResponse'
+            text: ''
+            pos_hint: {"x": 11 * leftBuffer, "y": turn10_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn10_10
+            turn: 10
+            column: 'plumResponse'
+            text: ''
+            pos_hint: {"x": 12 * leftBuffer, "y": turn10_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn10_11
+            turn: 10
+            column: 'peacockResponse'
+            text: ''
+            pos_hint: {"x": 13 * leftBuffer, "y": turn10_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn10_12
+            turn: 10
+            column: 'cardShown'
+            text: ''
+            pos_hint: {"x": 14.4 * leftBuffer, "y": turn10_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'       
+
+    ############################################################################################### turn 11
+        #:set turn11_height topRowYLevel - 12 * verticalBufferBetweenTurns
+        Label:
+            id: turn11_1
+            turn: 11
+            column: 'turnNumber'
+            text: ''
+            pos_hint: {"x": 1 * leftBuffer, "y": turn11_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn11_2
+            turn: 11
+            column: 'guesser'
+            text: ''
+            pos_hint: {"x": 2 * leftBuffer, "y": turn11_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn11_3
+            turn: 11
+            column: 'killerGuessed'
+            text: ''
+            pos_hint: {"x": 4 * leftBuffer, "y": turn11_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                     
+        Label:
+            id: turn11_4
+            turn: 11
+            column: 'weaponGuessed'
+            text: ''
+            pos_hint: {"x": 5 * leftBuffer, "y": turn11_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                                
+        Label:
+            id: turn11_5
+            turn: 11
+            column: 'roomGuessed'
+            text: ''
+            pos_hint: {"x": 6 * leftBuffer, "y": turn11_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn11_6
+            turn: 11
+            column: 'scarlettResponse'
+            text: ''
+            pos_hint: {"x": 8 * leftBuffer, "y": turn11_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn11_7
+            turn: 11
+            column: 'greenResponse'
+            text: ''
+            pos_hint: {"x": 9 * leftBuffer, "y": turn11_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn11_8
+            turn: 11
+            column: 'orchidResponse'
+            text: ''
+            pos_hint: {"x": 10 * leftBuffer, "y": turn11_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn11_9
+            turn: 11
+            column: 'mustardResponse'
+            text: ''
+            pos_hint: {"x": 11 * leftBuffer, "y": turn11_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn11_10
+            turn: 11
+            column: 'plumResponse'
+            text: ''
+            pos_hint: {"x": 12 * leftBuffer, "y": turn11_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn11_11
+            turn: 11
+            column: 'peacockResponse'
+            text: ''
+            pos_hint: {"x": 13 * leftBuffer, "y": turn11_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn11_12
+            turn: 11
+            column: 'cardShown'
+            text: ''
+            pos_hint: {"x": 14.4 * leftBuffer, "y": turn11_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'       
+
+    ############################################################################################### turn 12
+        #:set turn12_height topRowYLevel - 13 * verticalBufferBetweenTurns
+        Label:
+            id: turn12_1
+            turn: 12
+            column: 'turnNumber'
+            text: ''
+            pos_hint: {"x": 1 * leftBuffer, "y": turn12_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn12_2
+            turn: 12
+            column: 'guesser'
+            text: ''
+            pos_hint: {"x": 2 * leftBuffer, "y": turn12_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn12_3
+            turn: 12
+            column: 'killerGuessed'
+            text: ''
+            pos_hint: {"x": 4 * leftBuffer, "y": turn12_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                     
+        Label:
+            id: turn12_4
+            turn: 12
+            column: 'weaponGuessed'
+            text: ''
+            pos_hint: {"x": 5 * leftBuffer, "y": turn12_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                                
+        Label:
+            id: turn12_5
+            turn: 12
+            column: 'roomGuessed'
+            text: ''
+            pos_hint: {"x": 6 * leftBuffer, "y": turn12_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn12_6
+            turn: 12
+            column: 'scarlettResponse'
+            text: ''
+            pos_hint: {"x": 8 * leftBuffer, "y": turn12_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn12_7
+            turn: 12
+            column: 'greenResponse'
+            text: ''
+            pos_hint: {"x": 9 * leftBuffer, "y": turn12_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn12_8
+            turn: 12
+            column: 'orchidResponse'
+            text: ''
+            pos_hint: {"x": 10 * leftBuffer, "y": turn12_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn12_9
+            turn: 12
+            column: 'mustardResponse'
+            text: ''
+            pos_hint: {"x": 11 * leftBuffer, "y": turn12_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn12_10
+            turn: 12
+            column: 'plumResponse'
+            text: ''
+            pos_hint: {"x": 12 * leftBuffer, "y": turn12_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn12_11
+            turn: 12
+            column: 'peacockResponse'
+            text: ''
+            pos_hint: {"x": 13 * leftBuffer, "y": turn12_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn12_12
+            turn: 12
+            column: 'cardShown'
+            text: ''
+            pos_hint: {"x": 14.4 * leftBuffer, "y": turn12_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'       
+
+    ############################################################################################### turn 13
+        #:set turn13_height topRowYLevel - 14 * verticalBufferBetweenTurns
+        Label:
+            id: turn13_1
+            turn: 13
+            column: 'turnNumber'
+            text: ''
+            pos_hint: {"x": 1 * leftBuffer, "y": turn13_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn13_2
+            turn: 13
+            column: 'guesser'
+            text: ''
+            pos_hint: {"x": 2 * leftBuffer, "y": turn13_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn13_3
+            turn: 13
+            column: 'killerGuessed'
+            text: ''
+            pos_hint: {"x": 4 * leftBuffer, "y": turn13_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                     
+        Label:
+            id: turn13_4
+            turn: 13
+            column: 'weaponGuessed'
+            text: ''
+            pos_hint: {"x": 5 * leftBuffer, "y": turn13_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                                
+        Label:
+            id: turn13_5
+            turn: 13
+            column: 'roomGuessed'
+            text: ''
+            pos_hint: {"x": 6 * leftBuffer, "y": turn13_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn13_6
+            turn: 13
+            column: 'scarlettResponse'
+            text: ''
+            pos_hint: {"x": 8 * leftBuffer, "y": turn13_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn13_7
+            turn: 13
+            column: 'greenResponse'
+            text: ''
+            pos_hint: {"x": 9 * leftBuffer, "y": turn13_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn13_8
+            turn: 13
+            column: 'orchidResponse'
+            text: ''
+            pos_hint: {"x": 10 * leftBuffer, "y": turn13_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn13_9
+            turn: 13
+            column: 'mustardResponse'
+            text: ''
+            pos_hint: {"x": 11 * leftBuffer, "y": turn13_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn13_10
+            turn: 13
+            column: 'plumResponse'
+            text: ''
+            pos_hint: {"x": 12 * leftBuffer, "y": turn13_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn13_11
+            turn: 13
+            column: 'peacockResponse'
+            text: ''
+            pos_hint: {"x": 13 * leftBuffer, "y": turn13_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn13_12
+            turn: 13
+            column: 'cardShown'
+            text: ''
+            pos_hint: {"x": 14.4 * leftBuffer, "y": turn13_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'       
+
+    ############################################################################################### turn 14
+        #:set turn14_height topRowYLevel - 15 * verticalBufferBetweenTurns
+        Label:
+            id: turn14_1
+            turn: 14
+            column: 'turnNumber'
+            text: ''
+            pos_hint: {"x": 1 * leftBuffer, "y": turn14_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn14_2
+            turn: 14
+            column: 'guesser'
+            text: ''
+            pos_hint: {"x": 2 * leftBuffer, "y": turn14_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn14_3
+            turn: 14
+            column: 'killerGuessed'
+            text: ''
+            pos_hint: {"x": 4 * leftBuffer, "y": turn14_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                     
+        Label:
+            id: turn14_4
+            turn: 14
+            column: 'weaponGuessed'
+            text: ''
+            pos_hint: {"x": 5 * leftBuffer, "y": turn14_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                                
+        Label:
+            id: turn14_5
+            turn: 14
+            column: 'roomGuessed'
+            text: ''
+            pos_hint: {"x": 6 * leftBuffer, "y": turn14_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn14_6
+            turn: 14
+            column: 'scarlettResponse'
+            text: ''
+            pos_hint: {"x": 8 * leftBuffer, "y": turn14_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn14_7
+            turn: 14
+            column: 'greenResponse'
+            text: ''
+            pos_hint: {"x": 9 * leftBuffer, "y": turn14_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn14_8
+            turn: 14
+            column: 'orchidResponse'
+            text: ''
+            pos_hint: {"x": 10 * leftBuffer, "y": turn14_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn14_9
+            turn: 14
+            column: 'mustardResponse'
+            text: ''
+            pos_hint: {"x": 11 * leftBuffer, "y": turn14_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn14_10
+            turn: 14
+            column: 'plumResponse'
+            text: ''
+            pos_hint: {"x": 12 * leftBuffer, "y": turn14_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn14_11
+            turn: 14
+            column: 'peacockResponse'
+            text: ''
+            pos_hint: {"x": 13 * leftBuffer, "y": turn14_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn14_12
+            turn: 14
+            column: 'cardShown'
+            text: ''
+            pos_hint: {"x": 14.4 * leftBuffer, "y": turn14_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'       
+
+    ############################################################################################### turn 15
+        #:set turn15_height topRowYLevel - 16 * verticalBufferBetweenTurns
+        Label:
+            id: turn15_1
+            turn: 15
+            column: 'turnNumber'
+            text: ''
+            pos_hint: {"x": 1 * leftBuffer, "y": turn15_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn15_2
+            turn: 15
+            column: 'guesser'
+            text: ''
+            pos_hint: {"x": 2 * leftBuffer, "y": turn15_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn15_3
+            turn: 15
+            column: 'killerGuessed'
+            text: ''
+            pos_hint: {"x": 4 * leftBuffer, "y": turn15_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                     
+        Label:
+            id: turn15_4
+            turn: 15
+            column: 'weaponGuessed'
+            text: ''
+            pos_hint: {"x": 5 * leftBuffer, "y": turn15_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                                
+        Label:
+            id: turn15_5
+            turn: 15
+            column: 'roomGuessed'
+            text: ''
+            pos_hint: {"x": 6 * leftBuffer, "y": turn15_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn15_6
+            turn: 15
+            column: 'scarlettResponse'
+            text: ''
+            pos_hint: {"x": 8 * leftBuffer, "y": turn15_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn15_7
+            turn: 15
+            column: 'greenResponse'
+            text: ''
+            pos_hint: {"x": 9 * leftBuffer, "y": turn15_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn15_8
+            turn: 15
+            column: 'orchidResponse'
+            text: ''
+            pos_hint: {"x": 10 * leftBuffer, "y": turn15_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn15_9
+            turn: 15
+            column: 'mustardResponse'
+            text: ''
+            pos_hint: {"x": 11 * leftBuffer, "y": turn15_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn15_10
+            turn: 15
+            column: 'plumResponse'
+            text: ''
+            pos_hint: {"x": 12 * leftBuffer, "y": turn15_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn15_11
+            turn: 15
+            column: 'peacockResponse'
+            text: ''
+            pos_hint: {"x": 13 * leftBuffer, "y": turn15_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn15_12
+            turn: 15
+            column: 'cardShown'
+            text: ''
+            pos_hint: {"x": 14.4 * leftBuffer, "y": turn15_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'       
+
+    ############################################################################################### turn 16
+        #:set turn16_height topRowYLevel - 17 * verticalBufferBetweenTurns
+        Label:
+            id: turn16_1
+            turn: 16
+            column: 'turnNumber'
+            text: ''
+            pos_hint: {"x": 1 * leftBuffer, "y": turn16_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn16_2
+            turn: 16
+            column: 'guesser'
+            text: ''
+            pos_hint: {"x": 2 * leftBuffer, "y": turn16_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn16_3
+            turn: 16
+            column: 'killerGuessed'
+            text: ''
+            pos_hint: {"x": 4 * leftBuffer, "y": turn16_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                     
+        Label:
+            id: turn16_4
+            turn: 16
+            column: 'weaponGuessed'
+            text: ''
+            pos_hint: {"x": 5 * leftBuffer, "y": turn16_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                                
+        Label:
+            id: turn16_5
+            turn: 16
+            column: 'roomGuessed'
+            text: ''
+            pos_hint: {"x": 6 * leftBuffer, "y": turn16_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn16_6
+            turn: 16
+            column: 'scarlettResponse'
+            text: ''
+            pos_hint: {"x": 8 * leftBuffer, "y": turn16_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn16_7
+            turn: 16
+            column: 'greenResponse'
+            text: ''
+            pos_hint: {"x": 9 * leftBuffer, "y": turn16_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn16_8
+            turn: 16
+            column: 'orchidResponse'
+            text: ''
+            pos_hint: {"x": 10 * leftBuffer, "y": turn16_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn16_9
+            turn: 16
+            column: 'mustardResponse'
+            text: ''
+            pos_hint: {"x": 11 * leftBuffer, "y": turn16_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn16_10
+            turn: 16
+            column: 'plumResponse'
+            text: ''
+            pos_hint: {"x": 12 * leftBuffer, "y": turn16_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn16_11
+            turn: 16
+            column: 'peacockResponse'
+            text: ''
+            pos_hint: {"x": 13 * leftBuffer, "y": turn16_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn16_12
+            turn: 16
+            column: 'cardShown'
+            text: ''
+            pos_hint: {"x": 14.4 * leftBuffer, "y": turn16_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'       
+
+    ############################################################################################### turn 17	
+        #:set turn17_height topRowYLevel - 18 * verticalBufferBetweenTurns
+        Label:
+            id: turn17_1
+            turn: 17
+            column: 'turnNumber'
+            text: ''
+            pos_hint: {"x": 1 * leftBuffer, "y": turn17_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn17_2
+            turn: 17
+            column: 'guesser'
+            text: ''
+            pos_hint: {"x": 2 * leftBuffer, "y": turn17_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn17_3
+            turn: 17
+            column: 'killerGuessed'
+            text: ''
+            pos_hint: {"x": 4 * leftBuffer, "y": turn17_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                     
+        Label:
+            id: turn17_4
+            turn: 17
+            column: 'weaponGuessed'
+            text: ''
+            pos_hint: {"x": 5 * leftBuffer, "y": turn17_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                                
+        Label:
+            id: turn17_5
+            turn: 17
+            column: 'roomGuessed'
+            text: ''
+            pos_hint: {"x": 6 * leftBuffer, "y": turn17_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn17_6
+            turn: 17
+            column: 'scarlettResponse'
+            text: ''
+            pos_hint: {"x": 8 * leftBuffer, "y": turn17_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn17_7
+            turn: 17
+            column: 'greenResponse'
+            text: ''
+            pos_hint: {"x": 9 * leftBuffer, "y": turn17_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn17_8
+            turn: 17
+            column: 'orchidResponse'
+            text: ''
+            pos_hint: {"x": 10 * leftBuffer, "y": turn17_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn17_9
+            turn: 17
+            column: 'mustardResponse'
+            text: ''
+            pos_hint: {"x": 11 * leftBuffer, "y": turn17_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn17_10
+            turn: 17
+            column: 'plumResponse'
+            text: ''
+            pos_hint: {"x": 12 * leftBuffer, "y": turn17_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn17_11
+            turn: 17
+            column: 'peacockResponse'
+            text: ''
+            pos_hint: {"x": 13 * leftBuffer, "y": turn17_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn17_12
+            turn: 17
+            column: 'cardShown'
+            text: ''
+            pos_hint: {"x": 14.4 * leftBuffer, "y": turn17_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'       
+
+    ############################################################################################### turn 18	
+        #:set turn18_height topRowYLevel - 19 * verticalBufferBetweenTurns
+        Label:
+            id: turn18_1
+            turn: 18
+            column: 'turnNumber'
+            text: ''
+            pos_hint: {"x": 1 * leftBuffer, "y": turn18_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn18_2
+            turn: 18
+            column: 'guesser'
+            text: ''
+            pos_hint: {"x": 2 * leftBuffer, "y": turn18_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn18_3
+            turn: 18
+            column: 'killerGuessed'
+            text: ''
+            pos_hint: {"x": 4 * leftBuffer, "y": turn18_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                     
+        Label:
+            id: turn18_4
+            turn: 18
+            column: 'weaponGuessed'
+            text: ''
+            pos_hint: {"x": 5 * leftBuffer, "y": turn18_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                                
+        Label:
+            id: turn18_5
+            turn: 18
+            column: 'roomGuessed'
+            text: ''
+            pos_hint: {"x": 6 * leftBuffer, "y": turn18_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn18_6
+            turn: 18
+            column: 'scarlettResponse'
+            text: ''
+            pos_hint: {"x": 8 * leftBuffer, "y": turn18_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn18_7
+            turn: 18
+            column: 'greenResponse'
+            text: ''
+            pos_hint: {"x": 9 * leftBuffer, "y": turn18_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn18_8
+            turn: 18
+            column: 'orchidResponse'
+            text: ''
+            pos_hint: {"x": 10 * leftBuffer, "y": turn18_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn18_9
+            turn: 18
+            column: 'mustardResponse'
+            text: ''
+            pos_hint: {"x": 11 * leftBuffer, "y": turn18_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn18_10
+            turn: 18
+            column: 'plumResponse'
+            text: ''
+            pos_hint: {"x": 12 * leftBuffer, "y": turn18_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn18_11
+            turn: 18
+            column: 'peacockResponse'
+            text: ''
+            pos_hint: {"x": 13 * leftBuffer, "y": turn18_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn18_12
+            turn: 18
+            column: 'cardShown'
+            text: ''
+            pos_hint: {"x": 14.4 * leftBuffer, "y": turn18_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'       
+
+    ############################################################################################### turn 19
+        #:set turn19_height topRowYLevel - 20 * verticalBufferBetweenTurns
+        Label:
+            id: turn19_1
+            turn: 19
+            column: 'turnNumber'
+            text: ''
+            pos_hint: {"x": 1 * leftBuffer, "y": turn19_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn19_2
+            turn: 19
+            column: 'guesser'
+            text: ''
+            pos_hint: {"x": 2 * leftBuffer, "y": turn19_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn19_3
+            turn: 19
+            column: 'killerGuessed'
+            text: ''
+            pos_hint: {"x": 4 * leftBuffer, "y": turn19_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                     
+        Label:
+            id: turn19_4
+            turn: 19
+            column: 'weaponGuessed'
+            text: ''
+            pos_hint: {"x": 5 * leftBuffer, "y": turn19_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                                
+        Label:
+            id: turn19_5
+            turn: 19
+            column: 'roomGuessed'
+            text: ''
+            pos_hint: {"x": 6 * leftBuffer, "y": turn19_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn19_6
+            turn: 19
+            column: 'scarlettResponse'
+            text: ''
+            pos_hint: {"x": 8 * leftBuffer, "y": turn19_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn19_7
+            turn: 19
+            column: 'greenResponse'
+            text: ''
+            pos_hint: {"x": 9 * leftBuffer, "y": turn19_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn19_8
+            turn: 19
+            column: 'orchidResponse'
+            text: ''
+            pos_hint: {"x": 10 * leftBuffer, "y": turn19_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn19_9
+            turn: 19
+            column: 'mustardResponse'
+            text: ''
+            pos_hint: {"x": 11 * leftBuffer, "y": turn19_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn19_10
+            turn: 19
+            column: 'plumResponse'
+            text: ''
+            pos_hint: {"x": 12 * leftBuffer, "y": turn19_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn19_11
+            turn: 19
+            column: 'peacockResponse'
+            text: ''
+            pos_hint: {"x": 13 * leftBuffer, "y": turn19_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn19_12
+            turn: 19
+            column: 'cardShown'
+            text: ''
+            pos_hint: {"x": 14.4 * leftBuffer, "y": turn19_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'       
+
+    ############################################################################################### turn 20
+        #:set turn20_height topRowYLevel - 21 * verticalBufferBetweenTurns
+        Label:
+            id: turn20_1
+            turn: 20
+            column: 'turnNumber'
+            text: ''
+            pos_hint: {"x": 1 * leftBuffer, "y": turn20_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn20_2
+            turn: 20
+            column: 'guesser'
+            text: ''
+            pos_hint: {"x": 2 * leftBuffer, "y": turn20_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn20_3
+            turn: 20
+            column: 'killerGuessed'
+            text: ''
+            pos_hint: {"x": 4 * leftBuffer, "y": turn20_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                     
+        Label:
+            id: turn20_4
+            turn: 20
+            column: 'weaponGuessed'
+            text: ''
+            pos_hint: {"x": 5 * leftBuffer, "y": turn20_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                                
+        Label:
+            id: turn20_5
+            turn: 20
+            column: 'roomGuessed'
+            text: ''
+            pos_hint: {"x": 6 * leftBuffer, "y": turn20_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn20_6
+            turn: 20
+            column: 'scarlettResponse'
+            text: ''
+            pos_hint: {"x": 8 * leftBuffer, "y": turn20_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn20_7
+            turn: 20
+            column: 'greenResponse'
+            text: ''
+            pos_hint: {"x": 9 * leftBuffer, "y": turn20_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn20_8
+            turn: 20
+            column: 'orchidResponse'
+            text: ''
+            pos_hint: {"x": 10 * leftBuffer, "y": turn20_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn20_9
+            turn: 20
+            column: 'mustardResponse'
+            text: ''
+            pos_hint: {"x": 11 * leftBuffer, "y": turn20_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn20_10
+            turn: 20
+            column: 'plumResponse'
+            text: ''
+            pos_hint: {"x": 12 * leftBuffer, "y": turn20_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn20_11
+            turn: 20
+            column: 'peacockResponse'
+            text: ''
+            pos_hint: {"x": 13 * leftBuffer, "y": turn20_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn20_12
+            turn: 20
+            column: 'cardShown'
+            text: ''
+            pos_hint: {"x": 14.4 * leftBuffer, "y": turn20_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'       
+
+    ############################################################################################### turn 21
+        #:set turn21_height topRowYLevel - 22 * verticalBufferBetweenTurns
+        Label:
+            id: turn21_1
+            turn: 21
+            column: 'turnNumber'
+            text: ''
+            pos_hint: {"x": 1 * leftBuffer, "y": turn21_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn21_2
+            turn: 21
+            column: 'guesser'
+            text: ''
+            pos_hint: {"x": 2 * leftBuffer, "y": turn21_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn21_3
+            turn: 21
+            column: 'killerGuessed'
+            text: ''
+            pos_hint: {"x": 4 * leftBuffer, "y": turn21_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                     
+        Label:
+            id: turn21_4
+            turn: 21
+            column: 'weaponGuessed'
+            text: ''
+            pos_hint: {"x": 5 * leftBuffer, "y": turn21_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                                
+        Label:
+            id: turn21_5
+            turn: 21
+            column: 'roomGuessed'
+            text: ''
+            pos_hint: {"x": 6 * leftBuffer, "y": turn21_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn21_6
+            turn: 21
+            column: 'scarlettResponse'
+            text: ''
+            pos_hint: {"x": 8 * leftBuffer, "y": turn21_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn21_7
+            turn: 21
+            column: 'greenResponse'
+            text: ''
+            pos_hint: {"x": 9 * leftBuffer, "y": turn21_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn21_8
+            turn: 21
+            column: 'orchidResponse'
+            text: ''
+            pos_hint: {"x": 10 * leftBuffer, "y": turn21_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn21_9
+            turn: 21
+            column: 'mustardResponse'
+            text: ''
+            pos_hint: {"x": 11 * leftBuffer, "y": turn21_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn21_10
+            turn: 21
+            column: 'plumResponse'
+            text: ''
+            pos_hint: {"x": 12 * leftBuffer, "y": turn21_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn21_11
+            turn: 21
+            column: 'peacockResponse'
+            text: ''
+            pos_hint: {"x": 13 * leftBuffer, "y": turn21_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn21_12
+            turn: 21
+            column: 'cardShown'
+            text: ''
+            pos_hint: {"x": 14.4 * leftBuffer, "y": turn21_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'       
+
+    ############################################################################################### turn 22
+        #:set turn22_height topRowYLevel - 23 * verticalBufferBetweenTurns
+        Label:
+            id: turn22_1
+            turn: 22
+            column: 'turnNumber'
+            text: ''
+            pos_hint: {"x": 1 * leftBuffer, "y": turn22_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn22_2
+            turn: 22
+            column: 'guesser'
+            text: ''
+            pos_hint: {"x": 2 * leftBuffer, "y": turn22_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn22_3
+            turn: 22
+            column: 'killerGuessed'
+            text: ''
+            pos_hint: {"x": 4 * leftBuffer, "y": turn22_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                     
+        Label:
+            id: turn22_4
+            turn: 22
+            column: 'weaponGuessed'
+            text: ''
+            pos_hint: {"x": 5 * leftBuffer, "y": turn22_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                                
+        Label:
+            id: turn22_5
+            turn: 22
+            column: 'roomGuessed'
+            text: ''
+            pos_hint: {"x": 6 * leftBuffer, "y": turn22_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn22_6
+            turn: 22
+            column: 'scarlettResponse'
+            text: ''
+            pos_hint: {"x": 8 * leftBuffer, "y": turn22_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn22_7
+            turn: 22
+            column: 'greenResponse'
+            text: ''
+            pos_hint: {"x": 9 * leftBuffer, "y": turn22_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn22_8
+            turn: 22
+            column: 'orchidResponse'
+            text: ''
+            pos_hint: {"x": 10 * leftBuffer, "y": turn22_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn22_9
+            turn: 22
+            column: 'mustardResponse'
+            text: ''
+            pos_hint: {"x": 11 * leftBuffer, "y": turn22_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn22_10
+            turn: 22
+            column: 'plumResponse'
+            text: ''
+            pos_hint: {"x": 12 * leftBuffer, "y": turn22_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn22_11
+            turn: 22
+            column: 'peacockResponse'
+            text: ''
+            pos_hint: {"x": 13 * leftBuffer, "y": turn22_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn22_12
+            turn: 22
+            column: 'cardShown'
+            text: ''
+            pos_hint: {"x": 14.4 * leftBuffer, "y": turn22_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'       
+
+    ############################################################################################### turn 23
+        #:set turn23_height topRowYLevel - 24 * verticalBufferBetweenTurns
+        Label:
+            id: turn23_1
+            turn: 23
+            column: 'turnNumber'
+            text: ''
+            pos_hint: {"x": 1 * leftBuffer, "y": turn23_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn23_2
+            turn: 23
+            column: 'guesser'
+            text: ''
+            pos_hint: {"x": 2 * leftBuffer, "y": turn23_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn23_3
+            turn: 23
+            column: 'killerGuessed'
+            text: ''
+            pos_hint: {"x": 4 * leftBuffer, "y": turn23_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                     
+        Label:
+            id: turn23_4
+            turn: 23
+            column: 'weaponGuessed'
+            text: ''
+            pos_hint: {"x": 5 * leftBuffer, "y": turn23_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                                
+        Label:
+            id: turn23_5
+            turn: 23
+            column: 'roomGuessed'
+            text: ''
+            pos_hint: {"x": 6 * leftBuffer, "y": turn23_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn23_6
+            turn: 23
+            column: 'scarlettResponse'
+            text: ''
+            pos_hint: {"x": 8 * leftBuffer, "y": turn23_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn23_7
+            turn: 23
+            column: 'greenResponse'
+            text: ''
+            pos_hint: {"x": 9 * leftBuffer, "y": turn23_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn23_8
+            turn: 23
+            column: 'orchidResponse'
+            text: ''
+            pos_hint: {"x": 10 * leftBuffer, "y": turn23_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn23_9
+            turn: 23
+            column: 'mustardResponse'
+            text: ''
+            pos_hint: {"x": 11 * leftBuffer, "y": turn23_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn23_10
+            turn: 23
+            column: 'plumResponse'
+            text: ''
+            pos_hint: {"x": 12 * leftBuffer, "y": turn23_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn23_11
+            turn: 23
+            column: 'peacockResponse'
+            text: ''
+            pos_hint: {"x": 13 * leftBuffer, "y": turn23_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn23_12
+            turn: 23
+            column: 'cardShown'
+            text: ''
+            pos_hint: {"x": 14.4 * leftBuffer, "y": turn23_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'       
+
+    ############################################################################################### turn 24
+        #:set turn24_height topRowYLevel - 25 * verticalBufferBetweenTurns
+        Label:
+            id: turn24_1
+            turn: 24
+            column: 'turnNumber'
+            text: ''
+            pos_hint: {"x": 1 * leftBuffer, "y": turn24_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn24_2
+            turn: 24
+            column: 'guesser'
+            text: ''
+            pos_hint: {"x": 2 * leftBuffer, "y": turn24_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn24_3
+            turn: 24
+            column: 'killerGuessed'
+            text: ''
+            pos_hint: {"x": 4 * leftBuffer, "y": turn24_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                     
+        Label:
+            id: turn24_4
+            turn: 24
+            column: 'weaponGuessed'
+            text: ''
+            pos_hint: {"x": 5 * leftBuffer, "y": turn24_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                                
+        Label:
+            id: turn24_5
+            turn: 24
+            column: 'roomGuessed'
+            text: ''
+            pos_hint: {"x": 6 * leftBuffer, "y": turn24_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn24_6
+            turn: 24
+            column: 'scarlettResponse'
+            text: ''
+            pos_hint: {"x": 8 * leftBuffer, "y": turn24_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn24_7
+            turn: 24
+            column: 'greenResponse'
+            text: ''
+            pos_hint: {"x": 9 * leftBuffer, "y": turn24_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn24_8
+            turn: 24
+            column: 'orchidResponse'
+            text: ''
+            pos_hint: {"x": 10 * leftBuffer, "y": turn24_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn24_9
+            turn: 24
+            column: 'mustardResponse'
+            text: ''
+            pos_hint: {"x": 11 * leftBuffer, "y": turn24_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn24_10
+            turn: 24
+            column: 'plumResponse'
+            text: ''
+            pos_hint: {"x": 12 * leftBuffer, "y": turn24_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn24_11
+            turn: 24
+            column: 'peacockResponse'
+            text: ''
+            pos_hint: {"x": 13 * leftBuffer, "y": turn24_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn24_12
+            turn: 24
+            column: 'cardShown'
+            text: ''
+            pos_hint: {"x": 14.4 * leftBuffer, "y": turn24_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'       
+
+    ############################################################################################### turn 25
+        #:set turn25_height topRowYLevel - 26 * verticalBufferBetweenTurns
+        Label:
+            id: turn25_1
+            turn: 25
+            column: 'turnNumber'
+            text: ''
+            pos_hint: {"x": 1 * leftBuffer, "y": turn25_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn25_2
+            turn: 25
+            column: 'guesser'
+            text: ''
+            pos_hint: {"x": 2 * leftBuffer, "y": turn25_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'         
+        Label:
+            id: turn25_3
+            turn: 25
+            column: 'killerGuessed'
+            text: ''
+            pos_hint: {"x": 4 * leftBuffer, "y": turn25_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                     
+        Label:
+            id: turn25_4
+            turn: 25
+            column: 'weaponGuessed'
+            text: ''
+            pos_hint: {"x": 5 * leftBuffer, "y": turn25_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                                
+        Label:
+            id: turn25_5
+            turn: 25
+            column: 'roomGuessed'
+            text: ''
+            pos_hint: {"x": 6 * leftBuffer, "y": turn25_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn25_6
+            turn: 25
+            column: 'scarlettResponse'
+            text: ''
+            pos_hint: {"x": 8 * leftBuffer, "y": turn25_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn25_7
+            turn: 25
+            column: 'greenResponse'
+            text: ''
+            pos_hint: {"x": 9 * leftBuffer, "y": turn25_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn25_8
+            turn: 25
+            column: 'orchidResponse'
+            text: ''
+            pos_hint: {"x": 10 * leftBuffer, "y": turn25_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn25_9
+            turn: 25
+            column: 'mustardResponse'
+            text: ''
+            pos_hint: {"x": 11 * leftBuffer, "y": turn25_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn25_10
+            turn: 25
+            column: 'plumResponse'
+            text: ''
+            pos_hint: {"x": 12 * leftBuffer, "y": turn25_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn25_11
+            turn: 25
+            column: 'peacockResponse'
+            text: ''
+            pos_hint: {"x": 13 * leftBuffer, "y": turn25_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                    
+        Label:
+            id: turn25_12
+            turn: 25
+            column: 'cardShown'
+            text: ''
+            pos_hint: {"x": 14.4 * leftBuffer, "y": turn25_height}
+            text_size: self.size
+            font_size: fontSize
+            halign: 'left'                                                                                                                                                                                                                                                                   

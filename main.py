@@ -363,10 +363,13 @@ class ExecuteTurnScreen(Screen):
         turnLog[currentTurnNumber]['killerGuessed'] = -1
         turnLog[currentTurnNumber]['weaponGuessed'] = -1
         turnLog[currentTurnNumber]['roomGuessed'] = -1
-        for x in range(6):
-            for player in playerList:               
-                if x+1 == player.getTurnOrder():
-                    turnLog[currentTurnNumber][str(player.getNameOnly()).lower() + "Response"] = "n"        
+        # initialize the turnLog so that, in the turnLog file, the respondents always appear in the same order... this prevents the turnHistory kivy screen from being out of order
+        turnLog[currentTurnNumber]['scarlettResponse'] = 'n'
+        turnLog[currentTurnNumber]['greenResponse'] = 'n'
+        turnLog[currentTurnNumber]['orchidResponse'] = 'n'
+        turnLog[currentTurnNumber]['mustardResponse'] = 'n'
+        turnLog[currentTurnNumber]['plumResponse'] = 'n'
+        turnLog[currentTurnNumber]['peacockResponse'] = 'n'                                                      
         turnLog[currentTurnNumber]['card'] = -1
 
         # set the spinners & checkboxes to default
@@ -1113,6 +1116,16 @@ class ExecuteTurnScreen(Screen):
             processRespond()            # there will always be 1 response, and possibly some declines, so always run these
 
     def analyzeTheData(self):
+        # reset the analysis table (adding this because if user loads 2 games in a row the first game lingers inside the data)
+        global analysisTable
+        analysisTable = [[ ["?"] for i in range(6)] for j in range(21)]
+        # reset the announcements  (adding this because if user loads 2 games in a row the first game lingers inside the data)
+        global actualKillerWeaponRoom
+        actualKillerWeaponRoom = ["?", "?", "?"]
+        global announcementsHaveBeenMadeForKillerWeaponRoom
+        announcementsHaveBeenMadeForKillerWeaponRoom = [False, False, False]
+        global initialAnalysisCompletedOfLoadedSavedGame
+        initialAnalysisCompletedOfLoadedSavedGame = [False, False]
         self.analyzeData(currentTurnNumber, turnLog, analysisTable, userCharacter, actualKillerWeaponRoom, announcementsHaveBeenMadeForKillerWeaponRoom)
 
     @staticmethod
@@ -1243,6 +1256,13 @@ class AnalysisTableScreen(Screen):
                 val.pythonFileColumnNumber = 5
                 # print("orchid's column set to " + str(val.pythonFileColumnNumber) + " .... looking at position: " + str(val.position))
 
+        # clear out the old values, if, for example, the user loads 2 different games in a row
+        for row in range(21):
+            for column in range(6):
+                for key, val in self.ids.items():
+                    if val.position[0] == row and val.pythonFileColumnNumber == column:
+                        val.text = 'reset'
+
         for row in range(21):
             for column in range(6):
                 # print("row: " + str(row) + " colum: " + str(column))
@@ -1265,6 +1285,8 @@ class AnalysisTableScreen(Screen):
         self.ids.killer_label.text = "KILLER: " + str(actualKillerWeaponRoom[0])
         if '?' not in actualKillerWeaponRoom[0]:
             self.ids.killer_label.background_color = 1, 0, 0, 1
+        else:
+            self.ids.killer_label.background_color = 0.3, 0.3, 0.3, 1
             # self.ids.killer_label.rgba = 1, 0, 0, 1
             # self.ids.killer_label.setLabelBackgroundColor(1, 0, 0, 1)
 
@@ -1276,10 +1298,14 @@ class AnalysisTableScreen(Screen):
             # self.ids.weapon_label.setLabelBackgroundColor(1, 0, 0, 1)
             # self.ids.weapon_label.canvas.before.rgba = 1, 0, 0, 1
             self.ids.weapon_label.background_color = 1, 0, 0, 1
+        else:
+            self.ids.weapon_label.background_color = 0.3, 0.3, 0.3, 1            
 
         self.ids.room_label.text = "ROOM: " + str(actualKillerWeaponRoom[2])
         if '?' not in actualKillerWeaponRoom[2]:
             self.ids.room_label.background_color = 1, 0, 0, 1        
+        else:
+            self.ids.room_label.background_color = 0.3, 0.3, 0.3, 1            
 
         # now print the analysis table in the terminal, for comparison
         self.printTheAnalysisTable()
@@ -1389,6 +1415,7 @@ class LoadGameScreen(Screen):
                     x += 1
 
         global turnLog
+        turnLog = {}        # added this line to "reset" the log when a user loads 2 different games in a row
         turnLog = ast.literal_eval(fileContents[5].strip())     # line 5 is the turnDataDictionary
         # turnLog = fileContents[5].strip()     # this line doesn't work on a dictionary object
 
@@ -1396,7 +1423,88 @@ class LoadGameScreen(Screen):
         currentTurnNumber = int(fileContents[6].strip())       # line 6 is the last completed turn number
         currentTurnNumber += 1
 
+class SuggestionHistoryScreen(Screen):
+    def on_enter(self, *args):
+        # update the text of the "back to execute turn screen" button
+        self.ids.return_to_execute_turn_screen.text = "Go to Turn " + str(currentTurnNumber)
 
+        # clear out the old values from the kivy labels, in the event that the user loaded 2 different games in a row or something
+        for turn in range(25 + 1):      # currently, there are only label widgets (in the kivy file) enough to cover 25 turns
+            # turn += 1
+            for column in range(12):
+                for key, val in self.ids.items():
+                    if val.turn == turn and val.column == 'turnNumber':
+                        val.text = ''
+                    elif val.turn == turn and val.column == 'guesser':
+                        val.text = ''
+                    elif val.turn == turn and val.column == 'killerGuessed':
+                        val.text = ''
+                    elif val.turn == turn and val.column == 'weaponGuessed':
+                        val.text = ''
+                    elif val.turn == turn and val.column == 'roomGuessed':
+                        val.text = ''                       
+                    elif val.turn == turn and val.column == 'scarlettResponse':
+                        val.text = ''
+                    elif val.turn == turn and val.column == 'greenResponse':
+                        val.text = ''
+                    elif val.turn == turn and val.column == 'orchidResponse':
+                        val.text = ''
+                    elif val.turn == turn and val.column == 'mustardResponse':
+                        val.text = ''
+                    elif val.turn == turn and val.column == 'plumResponse':
+                        val.text = ''
+                    elif val.turn == turn and val.column == 'peacockResponse':
+                        val.text = ''
+                    elif val.turn == turn and val.column == 'cardShown':
+                        val.text = ''
+
+        # convert the info in turnLog into lists to fill the kivy labels
+        # start with nested lists, where turnInfoLists[1] is a list of all turn 1 info, etc
+        turnInfoLists = []
+        turnInfoLists = [[] for j in range(currentTurnNumber + 1)]
+        # print("turnInfoLists was just initialized, it should be empty: " + str(turnInfoLists))
+        # print("len of turnInfoLists: " + str(len(turnInfoLists)))
+
+        # we won't use index 0, because it's simpler to start with turn 1, so there is no turn 0
+
+        for x in range(currentTurnNumber):
+            # turnInfoLists[x+1] = []
+            for key in turnLog[x+1]:
+                turnInfoLists[x+1].append(turnLog[x+1][key])
+        
+        # for x in range(currentTurnNumber):
+        #     print("things: " + str(turnInfoLists[x]))
+
+        for turn in range(currentTurnNumber + 1):
+            # turn += 1
+            for column in range(12):
+                for key, val in self.ids.items():
+                    if val.turn == turn and val.column == 'turnNumber':
+                        val.text = str(turn)
+                    elif val.turn == turn and val.column == 'guesser':
+                        val.text = str(turnInfoLists[turn][0])
+                    elif val.turn == turn and val.column == 'killerGuessed':
+                        val.text = str(turnInfoLists[turn][1])
+                    elif val.turn == turn and val.column == 'weaponGuessed':
+                        val.text = str(turnInfoLists[turn][2])
+                    elif val.turn == turn and val.column == 'roomGuessed':
+                        val.text = str(turnInfoLists[turn][3])                        
+                    elif val.turn == turn and val.column == 'scarlettResponse':
+                        val.text = str(turnInfoLists[turn][4])
+                    elif val.turn == turn and val.column == 'greenResponse':
+                        val.text = str(turnInfoLists[turn][5])
+                    elif val.turn == turn and val.column == 'orchidResponse':
+                        val.text = str(turnInfoLists[turn][6])
+                    elif val.turn == turn and val.column == 'mustardResponse':
+                        val.text = str(turnInfoLists[turn][7])
+                    elif val.turn == turn and val.column == 'plumResponse':
+                        val.text = str(turnInfoLists[turn][8])
+                    elif val.turn == turn and val.column == 'peacockResponse':
+                        val.text = str(turnInfoLists[turn][9])
+                    elif val.turn == turn and val.column == 'cardShown':
+                        val.text = str(turnInfoLists[turn][10])
+
+        return super().on_enter(*args)
 
 class WindowManager(ScreenManager):
     pass
