@@ -1419,6 +1419,7 @@ WindowManager:
             pos_hint: {"x": 0.8, "y":1 - 0.075}
             on_release: 
                 app.root.current = "home"
+                root.resetTurnHistoryScreen()
                 # root.manager.transition.direction = "right"
 
         # SECTION ABLETOGUESS                    ABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESS
@@ -2598,6 +2599,7 @@ WindowManager:
             size_hint: (1, 0.05)
             pos_hint: {"x": 0.03, "y": 0.03}
             color: 0.3, 0.3, 0.3, 1
+            column: 'ignore me'
 
         #:set fontSize 14 
         #:set leftBuffer 0.06
