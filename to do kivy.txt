@@ -1,13 +1,5 @@
+Friday, stopwatch at 12:51
 
-add picture/icon of each weapon to spinner dropdown
-
-
-
-
-
-
-player guess history screen
-	can make it scrollable and dynamically expanding? https://www.youtube.com/watch?v=WdcUg_rX2fM
 
 
 
@@ -18,4 +10,33 @@ if a newly created filename matches one that already exists... need to get a dif
 
 
 
+
 build an APK file and see how it performs on emulator / phone
+
+
+
+
+add picture/icon of each weapon to spinner dropdown
+	first see about adding images in general
+
+
+
+
+for guess history: 		(goal is to make it faster to load, and faster to resize)
+	use BoxLayout:
+		
+		padding: 50
+		spacing: 20
+	can you use padding & spacing with GridLayout?? or whatever? 
+
+
+
+player guess history screen
+	can make it scrollable and dynamically expanding? https://www.youtube.com/watch?v=WdcUg_rX2fM
+	ScrollView widget
+
+
+
+
+
+

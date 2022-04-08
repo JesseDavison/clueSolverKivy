@@ -5,12 +5,12 @@ from fileinput import filename
 import os
 import ast
 from os import stat
-from tkinter import BooleanVar
+# from tkinter import BooleanVar
 from xml.etree.ElementPath import get_parent_map
 import kivy
 from kivy.app import App
-from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.label import Label
+# from kivy.uix.floatlayout import FloatLayout
+# from kivy.uix.label import Label
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import StringProperty
@@ -19,9 +19,9 @@ from kivy.properties import BooleanProperty
 from kivy.properties import ListProperty
 from kivy.properties import ObjectProperty
 import datetime
-from kivy.uix.widget import Widget
-from kivy.uix.checkbox import CheckBox
-from kivy.uix.filechooser import FileChooserListView
+# from kivy.uix.widget import Widget
+# from kivy.uix.checkbox import CheckBox
+# from kivy.uix.filechooser import FileChooserListView
 from kivy.graphics import Color
 
 
@@ -620,7 +620,6 @@ class ExecuteTurnScreen(Screen):
         if self.ids.able_to_guess.text == 'Able to suggest' and (self.ids.killer_spinner.text == 'suggested killer' or self.ids.weapon_spinner.text == 'suggested weapon' or self.ids.room_spinner.text == 'suggested room'):
             self.ids.complete_turn_button.disabled = True
 
-
         # record players who declined to show a card
         if spinner.type == 'playerResponseSpinner':
             playerName = str(spinner.playerName)
@@ -663,7 +662,6 @@ class ExecuteTurnScreen(Screen):
                     if x+1 == self.ids.player5_response_spinner.player:
                         self.ids.player5_response_spinner.text = 'null'                                                                        
             turnLog[currentTurnNumber][tempString] = response
-
 
         if spinner.type == 'cardKnownSpinner':
             if spinner.text != '':

@@ -97,6 +97,9 @@ WindowManager:
             #         size: self.size
             size_hint: (nameLabelSizeX, nameLabelSizeY)
             pos_hint: {"x": pos_hint_x, "y": pos_hint_y - pos_hint_y_interval * 0}
+            Image: 
+                source: 'images/scarlettPNG.png'
+        
         CheckBox:
             id: scarlett_checkBox
             group: "character_selection"
@@ -1449,6 +1452,8 @@ WindowManager:
             on_text: root.spinnerClicked(self)
             size_hint: (0.2, 0.08)
             pos_hint: {"x": 0.05 + 0.2 + 0.1 / 3, "y": 0.7}
+            Image: 
+                source: 'images/scarlettPNG.png'
         Spinner:
             id: weapon_spinner
             type: "weapon"
