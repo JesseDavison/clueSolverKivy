@@ -1,0 +1,42 @@
+
+
+suggestionHistory screen... need to update the kivy labels at end of each turn
+	use the method to access label on a different screen
+	use manner similar to this:
+
+        for key, val in self.manager.get_screen('SuggestionHistoryScreen').ids.items(): 
+            if val.column != 'ignore me':
+                val.text = ''
+        global suggestionHistoryScreenHasBeenBuilt
+        suggestionHistoryScreenHasBeenBuilt = False                
+        print("kivy labels on SuggestionHistoryScreen are reset via the resetTurnHistoryScreen() function in the executeTurnScreen screen")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+player guess history screen
+	can make it scrollable and dynamically expanding? https://www.youtube.com/watch?v=WdcUg_rX2fM
+
+
+
+
+
+if a newly created filename matches one that already exists... need to get a different filename
+
+
+
+
+build an APK file and see how it performs on emulator / phone
