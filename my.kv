@@ -1419,7 +1419,7 @@ WindowManager:
             pos_hint: {"x": 0.8, "y":1 - 0.075}
             on_release: 
                 app.root.current = "home"
-                root.resetTurnHistoryScreen()
+                # root.resetTurnHistoryScreen()              # we moved the resetting of the kivy labels on the turnHistoryScreen to ... the confirmLoadGame
                 # root.manager.transition.direction = "right"
 
         # SECTION ABLETOGUESS                    ABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESSABLETOGUESS
@@ -1430,6 +1430,7 @@ WindowManager:
             defaultText: 'Able to suggest'
             # halign: 'left'
             text: 'Able to suggest'
+            color: 0.2, 1, 0.2, 1
             values: ['Able to suggest', 'NOT able']
             on_text: root.spinnerClicked(self)
             size_hint: (0.2, 0.08)
@@ -1443,6 +1444,7 @@ WindowManager:
             option_cls: 'DropDownCustomClass'
             defaultText: 'suggested killer'
             text: "suggested killer"
+            color: 1, 0.5, 0.5, 1
             values: ['0. Green', '1. Mustard', '2. Peacock', '3. Plum', '4. Scarlett', '5. Orchid']
             on_text: root.spinnerClicked(self)
             size_hint: (0.2, 0.08)
@@ -1454,6 +1456,7 @@ WindowManager:
             option_cls: 'DropDownCustomClass'
             defaultText: 'suggested weapon'
             text: "suggested weapon"
+            color: 1, 0.5, 0.5, 1            
             values: ['6. Candlestick', '7. Dagger', '8. Pipe', '9. Revolver', '10. Rope', '11. Wrench']
             on_text: root.spinnerClicked(self)
             size_hint: (0.2, 0.08)
@@ -1466,6 +1469,7 @@ WindowManager:
             option_cls: 'DropDownCustomClass'       # https://devdreamz.com/question/497982-kivy-how-to-change-spinner-button-colour-and-size
             defaultText: 'suggested room'
             text: "suggested room"
+            color: 1, 0.5, 0.5, 1            
             values: ['12. Ballroom', '13. Billiard Room', '14. Conservatory', '15. Dining Room', '16. Hall', '17. Kitchen', '18. Library', '19. Lounge', '20. Study']
             on_text: root.spinnerClicked(self)
             size_hint: (0.2, 0.08)
@@ -1498,6 +1502,7 @@ WindowManager:
             disabled: False
             defaultText: "null"
             text: "null"
+            # color: 1, 0, 0, 1
             values: ['declined', 'showed card', 'null']
             on_text: root.spinnerClicked(self)
             size_hint: (spinnerWidth, spinnerHeight)
@@ -1676,7 +1681,7 @@ WindowManager:
             size_hint: (0.2, 0.075)
             pos_hint: {"x": 0.8, "y": 0}
             on_release: 
-                root.completeTurn(self)     # completeTurn saves the turn info to the file
+                root.completeTurn(self)     # completeTurn saves the turn info to the file, and as of April 8 2022 it will also update the kivy labels on the SuggestionHistoryScreen
                 # analyze the data here
                 root.analyzeTheData()
                 root.incrementTurnNumber()

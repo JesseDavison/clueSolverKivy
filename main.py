@@ -421,7 +421,8 @@ class ExecuteTurnScreen(Screen):
         self.ids.player3_response_spinner.text = self.ids.player3_response_spinner.defaultText
         self.ids.player4_response_spinner.text = self.ids.player4_response_spinner.defaultText
         self.ids.player5_response_spinner.text = self.ids.player5_response_spinner.defaultText                                
-        self.ids.card_known_checkbox_NO.active = True
+        self.ids.card_known_checkbox_NO.active = True         
+        self.ids.card_known_spinner.disabled = True
 
         # put the filename in the bottom corner, for reference
         self.ids.filename_label.text = str(fileName)
@@ -518,12 +519,14 @@ class ExecuteTurnScreen(Screen):
             if 'suggested' in spinner.text:
                 self.suggestedKiller = ''           # this is so that if the spinner is reset by another function, the turnLog is also reset
                 self.killerSuggested = False
+                spinner.color = 1, 0.5, 0.5, 1
             else:
                 unparsedText = (spinner.text).split()
                 parsedText = " ".join(unparsedText[1:])
                 # print("parsed text: " + str(parsedText))
                 self.suggestedKiller = parsedText       # this is to chop off the "4." or whatever that appears at the beginning
                 self.killerSuggested = True
+                spinner.color = 0.2, 1, 0.2, 1
             self.ids.card_known_spinner.values[0] = self.suggestedKiller
             # get the cardNum
             inCardList = False
@@ -538,12 +541,14 @@ class ExecuteTurnScreen(Screen):
             if 'suggested' in spinner.text:
                 self.suggestedWeapon = ''
                 self.weaponSuggested = False
+                spinner.color = 1, 0.5, 0.5, 1
             else:
                 unparsedText = (spinner.text).split()
                 parsedText = " ".join(unparsedText[1:])
                 # print("parsed text: " + str(parsedText))
                 self.suggestedWeapon = parsedText
                 self.weaponSuggested = True
+                spinner.color = 0.2, 1, 0.2, 1
             self.ids.card_known_spinner.values[1] = self.suggestedWeapon
             inCardList = False
             for card in cardList:
@@ -557,12 +562,14 @@ class ExecuteTurnScreen(Screen):
             if 'suggested' in spinner.text:
                 self.suggestedRoom = ''
                 self.roomSuggested = False
+                spinner.color = 1, 0.5, 0.5, 1
             else:
                 unparsedText = (spinner.text).split()
                 parsedText = " ".join(unparsedText[1:])
                 # print("parsed text: " + str(parsedText))                
                 self.suggestedRoom = parsedText
                 self.roomSuggested = True
+                spinner.color = 0.2, 1, 0.2, 1
             self.ids.card_known_spinner.values[2] = self.suggestedRoom            
             inCardList = False
             for card in cardList:
@@ -579,17 +586,27 @@ class ExecuteTurnScreen(Screen):
             self.enable_completeTurnButton()            # we REALLY ought to figure out how to make the disabling of buttons & spinners more robust & more able to prevent user input error
         # if player not able to guess, then disable the other spinners
         if self.ids.able_to_guess.text == 'NOT able':
+            self.ids.able_to_guess.color = 1, 0.5, 0.5, 1
+            self.ids.killer_spinner.text = 'suggested killer'
             self.ids.killer_spinner.disabled = True
+            self.ids.weapon_spinner.text = 'suggested weapon'
             self.ids.weapon_spinner.disabled = True
+            self.ids.room_spinner.text = 'suggested room'
             self.ids.room_spinner.disabled = True
+            self.ids.player1_response_spinner.text = 'null'
             self.ids.player1_response_spinner.disabled = True
+            self.ids.player2_response_spinner.text = 'null'
             self.ids.player2_response_spinner.disabled = True
+            self.ids.player3_response_spinner.text = 'null'
             self.ids.player3_response_spinner.disabled = True
+            self.ids.player4_response_spinner.text = 'null'
             self.ids.player4_response_spinner.disabled = True
+            self.ids.player5_response_spinner.text = 'null'
             self.ids.player5_response_spinner.disabled = True
             self.ids.card_known_checkbox_NO.active = True
         # if the player is able to guess, enable the other spinners
         if self.ids.able_to_guess.text == 'Able to suggest':
+            self.ids.able_to_guess.color = 0.2, 1, 0.2, 1
             self.ids.killer_spinner.disabled = False
             self.ids.weapon_spinner.disabled = False
             self.ids.room_spinner.disabled = False
@@ -612,12 +629,39 @@ class ExecuteTurnScreen(Screen):
             if spinner.text == 'declined':
                 self.playerResponses[spinner.player - 1] = 'declined'           # might not need this
                 response = 'd'
+                spinner.color = 1, 0.5, 0.5, 1
             elif spinner.text == 'null':
                 self.playerResponses[spinner.player - 1] = 'null'
                 response = 'n'
+                spinner.color = 1, 1, 1, 1
             elif spinner.text == 'showed card':
                 self.playerResponses[spinner.player - 1] = 'showed card'
                 response = 'r'  # 'r' means responded, as in, they showed a card
+                spinner.color = 0.2, 1, 0.2, 1
+                # now set all the characters BEFORE this character (before in response order, that is) to 'declined'            .... refer to self.respondentList = []
+                # identify the character who 'showed card':
+                playerNumWhoShowedCard = spinner.player
+                for x in range(playerNumWhoShowedCard - 1):
+                    if x+1 == self.ids.player1_response_spinner.player: # and x+1 != playerNumWhoShowedCard:
+                        self.ids.player1_response_spinner.text = 'declined'         # this *should* automatically trigger the spinnerClicked function & update the turnLog
+                    if x+1 == self.ids.player2_response_spinner.player: # and x+1 != playerNumWhoShowedCard:
+                        self.ids.player2_response_spinner.text = 'declined'         # this *should* automatically trigger the spinnerClicked function & update the turnLog
+                    if x+1 == self.ids.player3_response_spinner.player: # and x+1 != playerNumWhoShowedCard:
+                        self.ids.player3_response_spinner.text = 'declined'         # this *should* automatically trigger the spinnerClicked function & update the turnLog
+                    if x+1 == self.ids.player4_response_spinner.player: # and x+1 != playerNumWhoShowedCard:
+                        self.ids.player4_response_spinner.text = 'declined'         # this *should* automatically trigger the spinnerClicked function & update the turnLog
+                    if x+1 == self.ids.player5_response_spinner.player: # and x+1 != playerNumWhoShowedCard:
+                        self.ids.player5_response_spinner.text = 'declined'         # this *should* automatically trigger the spinnerClicked function & update the turnLog                                                                        
+                # now set all the characters AFTER this character to 'null'
+                for x in range(playerNumWhoShowedCard, 5):
+                    if x+1 == self.ids.player2_response_spinner.player:
+                        self.ids.player2_response_spinner.text = 'null'
+                    if x+1 == self.ids.player3_response_spinner.player:
+                        self.ids.player3_response_spinner.text = 'null'
+                    if x+1 == self.ids.player4_response_spinner.player:
+                        self.ids.player4_response_spinner.text = 'null'
+                    if x+1 == self.ids.player5_response_spinner.player:
+                        self.ids.player5_response_spinner.text = 'null'                                                                        
             turnLog[currentTurnNumber][tempString] = response
 
 
@@ -684,6 +728,39 @@ class ExecuteTurnScreen(Screen):
 
         with open(fileName, 'w') as fileObject:
             fileObject.writelines(currentContents)
+
+        # now that the turnLog is updated, we will update the kivy labels on the SuggestionHistoryScreen ... we do it here, one turn at a time, so that the work of updating all those goddam labels is spread out
+                # ABCDEFG
+        # numberOfLoops = 0
+        for column in range(12):
+            for key, val in self.manager.get_screen('SuggestionHistoryScreen').ids.items(): 
+                if val.turn == currentTurnNumber and val.column == 'turnNumber':
+                    val.text = str(currentTurnNumber)
+                elif val.turn == currentTurnNumber and val.column == 'guesser':
+                    val.text = str(turnLog[currentTurnNumber]['guesser'])
+                elif val.turn == currentTurnNumber and val.column == 'killerGuessed':
+                    val.text = str(turnLog[currentTurnNumber]['killerGuessed'])
+                elif val.turn == currentTurnNumber and val.column == 'weaponGuessed':
+                    val.text = str(turnLog[currentTurnNumber]['weaponGuessed'])
+                elif val.turn == currentTurnNumber and val.column == 'roomGuessed':
+                    val.text = str(turnLog[currentTurnNumber]['roomGuessed'])                        
+                elif val.turn == currentTurnNumber and val.column == 'scarlettResponse':
+                    val.text = str(turnLog[currentTurnNumber]['scarlettResponse'])
+                elif val.turn == currentTurnNumber and val.column == 'greenResponse':
+                    val.text = str(turnLog[currentTurnNumber]['greenResponse'])
+                elif val.turn == currentTurnNumber and val.column == 'orchidResponse':
+                    val.text = str(turnLog[currentTurnNumber]['orchidResponse'])
+                elif val.turn == currentTurnNumber and val.column == 'mustardResponse':
+                    val.text = str(turnLog[currentTurnNumber]['mustardResponse'])
+                elif val.turn == currentTurnNumber and val.column == 'plumResponse':
+                    val.text = str(turnLog[currentTurnNumber]['plumResponse'])
+                elif val.turn == currentTurnNumber and val.column == 'peacockResponse':
+                    val.text = str(turnLog[currentTurnNumber]['peacockResponse'])
+                elif val.turn == currentTurnNumber and val.column == 'cardShown':
+                    val.text = str(turnLog[currentTurnNumber]['card'])
+                # numberOfLoops += 1
+
+        # print("numberOfLoops: " + str(numberOfLoops))       
 
     @staticmethod
     def analyzeData(turnNumber, turnData, analyTable, user, killerWeaponRoom, announces):               # this function is the workhorse of the whole app
@@ -1241,21 +1318,6 @@ class ExecuteTurnScreen(Screen):
         global currentTurnNumber
         currentTurnNumber += 1      
 
-
-    def resetTurnHistoryScreen(self):
-        # reset the contents of the kivy labels in the SuggestionHistoryScreen:
-        # # clear out the old values from the kivy labels, in the event that the user loaded 2 different games in a row or something (e.g, if the 1st game had 22 turns & 2nd game had 12 turns, the History screen will have 10-too-many rows)
-        #############   going to reset this screen when a new game is loaded, rather than over & over when user is 
-        #############   playing the second game
-        for key, val in self.manager.get_screen('SuggestionHistoryScreen').ids.items(): ############# https://stackoverflow.com/questions/33498120/how-to-update-label-text-on-second-kivy-screen
-            # if xyz > 302:
-            #     break
-            if val.column != 'ignore me':
-                val.text = ''
-        global suggestionHistoryScreenHasBeenBuilt
-        suggestionHistoryScreenHasBeenBuilt = False                
-        print("kivy labels on SuggestionHistoryScreen are reset via the resetTurnHistoryScreen() function in the executeTurnScreen screen")
-
 class AnalysisTableScreen(Screen):
 
     def setLabelBackgroundColor(self, r, g, b, o):
@@ -1438,11 +1500,10 @@ class AnalysisTableScreen(Screen):
 
         return super().on_enter(*args)
 
-
-    @staticmethod
-    def incrementTurnNumber():
-        global currentTurnNumber
-        currentTurnNumber += 1
+    # @staticmethod               
+    # def incrementTurnNumber():
+    #     global currentTurnNumber            # not using this in the analysisTableScreen for now
+    #     currentTurnNumber += 1
 
     def startNextTurn(self):
         pass
@@ -1498,7 +1559,7 @@ class LoadGameScreen(Screen):
 
     def confirmLoadGame(self):
         # with open(self.filename[0]) as fileObject:        # this line is for if we use the kivy FileChooserListView
-        with open(str(fileName)) as fileObject:
+        with open(str(fileName)) as fileObject:             # this line is for using the python way to open files
             fileContents = fileObject.readlines()
         playerName = str(fileContents[0]).strip()        # .strip() will remove the /n newline character     # line 0 is the player name
         print("Game loaded.... playerName: " + str(playerName))
@@ -1557,6 +1618,20 @@ class LoadGameScreen(Screen):
         actualKillerWeaponRoom = ["?", "?", "?"]
         global announcementsHaveBeenMadeForKillerWeaponRoom
         announcementsHaveBeenMadeForKillerWeaponRoom = [False, False, False]
+
+        # reset the contents of the kivy labels in the SuggestionHistoryScreen:
+        # # clear out the old values from the kivy labels, in the event that the user loaded 2 different games in a row or something (e.g, if the 1st game had 22 turns & 2nd game had 12 turns, the History screen will have 10-too-many rows)
+        #############   going to reset this screen when a new game is loaded, rather than over & over when user is 
+        #############   playing the second game
+        for key, val in self.manager.get_screen('SuggestionHistoryScreen').ids.items(): ############# https://stackoverflow.com/questions/33498120/how-to-update-label-text-on-second-kivy-screen
+            # if xyz > 302:
+            #     break
+            if val.column != 'ignore me':
+                val.text = ''
+        global suggestionHistoryScreenHasBeenBuilt
+        suggestionHistoryScreenHasBeenBuilt = False                
+        print("kivy labels on SuggestionHistoryScreen are reset inside the confirmLoadGame() function in the LoadGameScreen screen")
+
 
         # # reset the contents of the kivy labels in the SuggestionHistoryScreen:
         # # # clear out the old values from the kivy labels, in the event that the user loaded 2 different games in a row or something
@@ -1655,22 +1730,22 @@ class SuggestionHistoryScreen(Screen):
         #             elif val.turn == turn and val.column == 'cardShown':
         #                 val.text = ''
 
-        # convert the info in turnLog into lists to fill the kivy labels
-        # start with nested lists, where turnInfoLists[1] is a list of all turn 1 info, etc
-        turnInfoLists = []
-        turnInfoLists = [[] for j in range(currentTurnNumber + 1)]
-        # print("turnInfoLists was just initialized, it should be empty: " + str(turnInfoLists))
-        # print("len of turnInfoLists: " + str(len(turnInfoLists)))
+        # # convert the info in turnLog into lists to fill the kivy labels
+        # # start with nested lists, where turnInfoLists[1] is a list of all turn 1 info, etc
+        # turnInfoLists = []
+        # turnInfoLists = [[] for j in range(currentTurnNumber + 1)]
+        # # print("turnInfoLists was just initialized, it should be empty: " + str(turnInfoLists))
+        # # print("len of turnInfoLists: " + str(len(turnInfoLists)))
 
-        # we won't use index 0, because it's simpler to start with turn 1, so there is no turn 0
+        # # we won't use index 0, because it's simpler to start with turn 1, so there is no turn 0
 
-        for x in range(currentTurnNumber):
-            # turnInfoLists[x+1] = []
-            for key in turnLog[x+1]:
-                turnInfoLists[x+1].append(turnLog[x+1][key])
-        
         # for x in range(currentTurnNumber):
-        #     print("things: " + str(turnInfoLists[x]))
+        #     # turnInfoLists[x+1] = []
+        #     for key in turnLog[x+1]:
+        #         turnInfoLists[x+1].append(turnLog[x+1][key])
+        
+        # # for x in range(currentTurnNumber):
+        # #     print("things: " + str(turnInfoLists[x]))
 
 
         # test whether the list is already populated... if it is, then NO NEED TO DO IT ALL OVER AGAIN
@@ -1690,43 +1765,47 @@ class SuggestionHistoryScreen(Screen):
         # print("test done at " + str(y) + "..... time elapsed: " + str(y-x))
         global suggestionHistoryScreenHasBeenBuilt
         print("suggestionHistoryScreenHasBeenBuilt: " + str(suggestionHistoryScreenHasBeenBuilt))
-        print("about to populate suggestionHistory kivy labels...")
+        # print("about to populate suggestionHistory kivy labels AFTER LOADING A SAVED GAME...")
         y = datetime.datetime.now()             
         # global suggestionHistoryScreenHasBeenBuilt 
         if suggestionHistoryScreenHasBeenBuilt == False:
-            for turn in range(currentTurnNumber + 1):
-                for column in range(12):
-                    for key, val in self.ids.items():
-                        if val.turn == turn and val.column == 'turnNumber':
-                            val.text = str(turn)
-                        elif val.turn == turn and val.column == 'guesser':
-                            val.text = str(turnInfoLists[turn][0])
-                        elif val.turn == turn and val.column == 'killerGuessed':
-                            val.text = str(turnInfoLists[turn][1])
-                        elif val.turn == turn and val.column == 'weaponGuessed':
-                            val.text = str(turnInfoLists[turn][2])
-                        elif val.turn == turn and val.column == 'roomGuessed':
-                            val.text = str(turnInfoLists[turn][3])                        
-                        elif val.turn == turn and val.column == 'scarlettResponse':
-                            val.text = str(turnInfoLists[turn][4])
-                        elif val.turn == turn and val.column == 'greenResponse':
-                            val.text = str(turnInfoLists[turn][5])
-                        elif val.turn == turn and val.column == 'orchidResponse':
-                            val.text = str(turnInfoLists[turn][6])
-                        elif val.turn == turn and val.column == 'mustardResponse':
-                            val.text = str(turnInfoLists[turn][7])
-                        elif val.turn == turn and val.column == 'plumResponse':
-                            val.text = str(turnInfoLists[turn][8])
-                        elif val.turn == turn and val.column == 'peacockResponse':
-                            val.text = str(turnInfoLists[turn][9])
-                        elif val.turn == turn and val.column == 'cardShown':
-                            val.text = str(turnInfoLists[turn][10])
+            for turn in range(currentTurnNumber):           # at this point currentTurnNumber is the newly created turn that hasn't been completed, so we don't want the turn HISTORY to include it
+                # turn += 1                                 
+                if turn == 0:
+                    pass                                    # turn 0 does not exist, so don't bother with it
+                else:
+                    for column in range(12):
+                        for key, val in self.ids.items():
+                            if val.turn == turn and val.column == 'turnNumber':
+                                val.text = str(turn)
+                            elif val.turn == turn and val.column == 'guesser':
+                                val.text = str(turnLog[turn]['guesser'])
+                            elif val.turn == turn and val.column == 'killerGuessed':
+                                val.text = str(turnLog[turn]['killerGuessed'])
+                            elif val.turn == turn and val.column == 'weaponGuessed':
+                                val.text = str(turnLog[turn]['weaponGuessed'])
+                            elif val.turn == turn and val.column == 'roomGuessed':
+                                val.text = str(turnLog[turn]['roomGuessed'])                        
+                            elif val.turn == turn and val.column == 'scarlettResponse':
+                                val.text = str(turnLog[turn]['scarlettResponse'])
+                            elif val.turn == turn and val.column == 'greenResponse':
+                                val.text = str(turnLog[turn]['greenResponse'])
+                            elif val.turn == turn and val.column == 'orchidResponse':
+                                val.text = str(turnLog[turn]['orchidResponse'])
+                            elif val.turn == turn and val.column == 'mustardResponse':
+                                val.text = str(turnLog[turn]['mustardResponse'])
+                            elif val.turn == turn and val.column == 'plumResponse':
+                                val.text = str(turnLog[turn]['plumResponse'])
+                            elif val.turn == turn and val.column == 'peacockResponse':
+                                val.text = str(turnLog[turn]['peacockResponse'])
+                            elif val.turn == turn and val.column == 'cardShown':
+                                val.text = str(turnLog[turn]['card'])
             suggestionHistoryScreenHasBeenBuilt = True                            
 
         z = datetime.datetime.now()     
         print("finished populating suggestionHistory at " + str(z) + ".....  time elapsed: " + str(z-y))
 
-        self.ids.filename_label.text = str(fileName)
+        self.ids.filename_label.text = str(fileName)            # put the filename on the bottom of the screen, in grey font, for user reference
 
         return super().on_enter(*args)
 

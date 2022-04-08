@@ -1,26 +1,5 @@
 
-
-suggestionHistory screen... need to update the kivy labels at end of each turn
-	use the method to access label on a different screen
-	use manner similar to this:
-
-        for key, val in self.manager.get_screen('SuggestionHistoryScreen').ids.items(): 
-            if val.column != 'ignore me':
-                val.text = ''
-        global suggestionHistoryScreenHasBeenBuilt
-        suggestionHistoryScreenHasBeenBuilt = False                
-        print("kivy labels on SuggestionHistoryScreen are reset via the resetTurnHistoryScreen() function in the executeTurnScreen screen")
-
-
-
-
-
-
-
-
-
-
-
+add picture/icon of each weapon to spinner dropdown
 
 
 
