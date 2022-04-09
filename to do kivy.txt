@@ -4,13 +4,6 @@ Friday, stopwatch at 12:51
 
 
 
-
-if a newly created filename matches one that already exists... need to get a different filename
-
-
-
-
-
 build an APK file and see how it performs on emulator / phone
 
 
@@ -39,4 +32,6 @@ player guess history screen
 
 
 
+kivy originally was: 
+	#:kivy 1.0.9
 

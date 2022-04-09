@@ -311,8 +311,8 @@ class ConfirmationScreen(Screen):
         self.ids.your_cards.text = "Your cards are " + str(userCharacter.getCardList())
         self.ids.your_player_order.text = "The player turn order is: " + str(playerOrder)     
         return super().on_enter(*args)
+
     def createGameSaveFile(self):
-        
         # create a filename string consisting of adjective + animal name
         with open('list of adjectives.txt') as adjectivesFileObject:
             adjectivesList = adjectivesFileObject.readlines()
@@ -331,12 +331,10 @@ class ConfirmationScreen(Screen):
         # get only the last word in the animal name... because some of these names are way too long
         tempAnimal = animals[numberAnimal].split()[-1]
         # done: 
-        adjectivePlusAnimal = str(adjectives[numberAdjective]).capitalize() + " " + str(tempAnimal)
-
+        adjectivePlusAnimal = str(adjectives[numberAdjective]).capitalize() + " " + str(tempAnimal).capitalize()
         x = datetime.datetime.now()     # create a timestamp, for the purpose of making a unique filename
-        timeStamp = str(x.year) + "-" + str(x.month) + "-" + str(x.day) + " " + str(x.hour) + "h-" + str(x.minute) + "m-" + str(x.second) + "s"
+        timeStamp = str(x.year) + "-" + str(x.month) + "-" + str(x.day) + " " + str(x.hour) + "h-" + str(x.minute) + "m"
         global fileName
-        # fileName = "ClueSolverGameSave " + str(timeStamp) + ".txt"    
         fileName = "ClueSolver " + str(timeStamp) + " " + str(adjectivePlusAnimal) + ".txt"    
         fileObject = open(fileName, 'w')        # use 'w' because we're creating a new file
         fileObject.write(str(userCharacter.getNameOnly()) + "\n")       # line 0
