@@ -53,8 +53,10 @@ WindowManager:
             text: "Back"
             background_color: 0, 1, 0.2, 1
             # font_size: '10sp'
-            size_hint: (0.0625, 0.0625)
-            pos_hint: {"x":0.0625 / 2, "y":1 - 1.5 * 0.0625}
+            # size_hint: (0.0625, 0.0625)
+            # pos_hint: {"x":0.0625 / 2, "y":1 - 1.5 * 0.0625}
+            size_hint: (0.15, 0.15)
+            pos_hint: {"x": 0, "y": 1 - 0.15}
             on_release: 
                 app.root.current = "home"
                 root.manager.transition.direction = "right"
@@ -68,8 +70,8 @@ WindowManager:
                 Rectangle:
                     pos: self.pos
                     size: self.size
-            size_hint: (0.8, 0.1)
-            pos_hint: {"x": 0.1, "y": 0.9}
+            size_hint: (0.7, 0.1)
+            pos_hint: {"x": 0.15, "y": 0.9}
         
         ##############################################################    Character Selection    ##############################################################
 
@@ -252,15 +254,18 @@ WindowManager:
             background_color: 0, 1, 0.2, 1
             # font_size: '10sp'
             # size_hint: (0.125, 0.125)
-            size_hint: (0.0625, 0.0625)
+            # size_hint: (0.0625, 0.0625)
             # pos_hint: {"x":1 - 2 * 0.125, "y":.125}
             # pos_hint: {"x":1 - 1.5 * 0.125, "y":0.5 * 0.125}            
-            pos_hint: {"x":1 - 1.5 * 0.0625, "y":1 - 1.5 * 0.0625}
+            # pos_hint: {"x":1 - 1.5 * 0.0625, "y":1 - 1.5 * 0.0625}
+            size_hint: (0.15, 0.15)
+            # pos_hint: {"x":0.0625 / 2, "y":1 - 1.5 * 0.0625}
+            pos_hint: {"x": 0.85, "y": 1 - 0.15}            
             disabled: True
             on_press: 
                 root.confirmUserCharacter()
                 app.root.current = "cardDeclaration"
-                root.manager.transition.direction = "left"        
+                # root.manager.transition.direction = "left"        
 
 
 
@@ -287,7 +292,7 @@ WindowManager:
             # pos_hint: {"x": 0.1, "y": 0.9}
 
         GridLayout:
-            cols: 7
+            cols: 8
             
             ##################################################################      Row 1
             #   blank label, followed by the 6 killer names
@@ -329,6 +334,8 @@ WindowManager:
                 id: label_card_orchid
                 valign: 'bottom'
                 halign: 'center'
+            Label:
+                text: ""
             ##################################################################      Row 2            
             Label:
                 id: killers
@@ -357,6 +364,8 @@ WindowManager:
                 id: cardSelectionCheckbox_killer_orchid
                 text: "Orchid"
                 on_active: root.clickOnBox(self, self.active)
+            Label:
+                text: ""                
             ##################################################################      Row 3
             #   blank label, followed by the 6 weapon names
             Label:
@@ -397,6 +406,8 @@ WindowManager:
                 id: label_card_wrench
                 valign: 'bottom'
                 halign: 'center'
+            Label:
+                text: ""                
             ##################################################################      Row 4
             Label:
                 text: "Weapons:"
@@ -425,6 +436,8 @@ WindowManager:
                 id: cardSelectionCheckbox_weapon_wrench
                 text: "Wrench"
                 on_active: root.clickOnBox(self, self.active)
+            Label:
+                text: ""                
             ##################################################################      Row 5
             #   blank label, followed by the 9 room names
             Label:
@@ -465,6 +478,8 @@ WindowManager:
                 id: label_card_kitchen
                 valign: 'bottom'
                 halign: 'center'
+            Label:
+                text: ""                
             ##################################################################      Row 6
             Label:
                 text: "Rooms:"
@@ -492,6 +507,8 @@ WindowManager:
                 id: cardSelectionCheckbox_room_kitchen
                 text: "Kitchen"
                 on_active: root.clickOnBox(self, self.active)
+            Label:
+                text: ""                
             ##################################################################      Row 7
             Label:
                 text: ""
@@ -519,6 +536,8 @@ WindowManager:
                 text: ""
             Label:
                 text: ""
+            Label:
+                text: ""                
             ##################################################################      Row 8
             Label:
                 text: ""
@@ -540,6 +559,8 @@ WindowManager:
                 text: ""
             Label:
                 text: ""
+            Label:
+                text: ""                
             ##################################################################      Row 9     
             Label:
                 text: ""
@@ -553,6 +574,8 @@ WindowManager:
                 text: ""
             Label:
                 text: ""
+            Label:
+                text: ""                
     FloatLayout:
         Label:
             id: whatCards
@@ -565,14 +588,16 @@ WindowManager:
                 Rectangle:
                     pos: self.pos
                     size: self.size
-            size_hint: (0.8, 0.1)   
-            pos_hint: {"x": 0.1, "y": 0.9}
+            size_hint: (0.7, 0.1)   
+            pos_hint: {"x": 0.15, "y": 0.9}
         Button:
             text: "Back"
             background_color: 0, 1, 0.2, 1
             # font_size: '10sp'
-            size_hint: (0.0625, 0.0625)
-            pos_hint: {"x":0.0625 / 2, "y":1 - 1.5 * 0.0625}
+            # size_hint: (0.0625, 0.0625)
+            # pos_hint: {"x":0.0625 / 2, "y":1 - 1.5 * 0.0625}
+            size_hint: (0.15, 0.15)
+            pos_hint: {"x": 0, "y": 1 - 0.15}            
             on_release: 
                 root.uncheckAllCheckboxes()      # this function resets all checkboxes to unchecked
                 app.root.current = "PlayerSelectScreen"
@@ -582,10 +607,12 @@ WindowManager:
             id: next_button
             background_color: 0, 1, 0.2, 1
             # font_size: '10sp'
-            size_hint: (0.0625, 0.0625)
+            # size_hint: (0.0625, 0.0625)
             # pos_hint: {"x":1 - 2 * 0.125, "y":.125}
             # pos_hint: {"x":1 - 1.5 * 0.125, "y":0.5 * 0.125}            
-            pos_hint: {"x":1 - 1.5 * 0.0625, "y":1 - 1.5 * 0.0625}
+            # pos_hint: {"x":1 - 1.5 * 0.0625, "y":1 - 1.5 * 0.0625}
+            size_hint: (0.15, 0.15)
+            pos_hint: {"x": 0.85, "y": 1 - 0.15}            
             disabled: True
             on_press: 
                 # check if exactly 3 cards have been selected.... we'll add this later
@@ -618,7 +645,7 @@ WindowManager:
             text: ""
             size_hint: (0.8, 0.1)   
         GridLayout:
-            cols: 7
+            cols: 8
             
             ##################################################################      Row 1
             #   
@@ -672,6 +699,8 @@ WindowManager:
                 disabled: False
                 valign: 'bottom'
                 halign: 'center'
+            Label:
+                text: ""                
             ##################################################################      Row 2
             Label:
                 text: "First turn:"
@@ -722,7 +751,9 @@ WindowManager:
                 group: "first turn"
                 vrs: {'turnNumber': 1, 'player': 'Orchid', 'type': 'checkbox'}
                 disabled: False
-                on_active: root.clickPlayerOrderCheckbox(self)                                               
+                on_active: root.clickPlayerOrderCheckbox(self)         
+            Label:
+                text: ""                                                      
             ##################################################################      Row 3
             #   
             Label:
@@ -775,6 +806,8 @@ WindowManager:
                 disabled: False
                 valign: 'bottom'
                 halign: 'center'
+            Label:
+                text: ""                
             ##################################################################      Row 4
             Label:
                 text: "Second turn:"
@@ -822,7 +855,8 @@ WindowManager:
                 vrs: {'turnNumber': 2, 'player': 'Orchid', 'type': 'checkbox'}
                 disabled: False
                 on_active: root.clickPlayerOrderCheckbox(self)
-
+            Label:
+                text: ""
 
             ##################################################################      Row 5
             #   
@@ -876,6 +910,8 @@ WindowManager:
                 disabled: False
                 valign: 'bottom'
                 halign: 'center'
+            Label:
+                text: ""                
             ##################################################################      Row 6
             Label:
                 text: "Third turn:"
@@ -923,7 +959,8 @@ WindowManager:
                 vrs: {'turnNumber': 3, 'player': 'Orchid', 'type': 'checkbox'}
                 disabled: False
                 on_active: root.clickPlayerOrderCheckbox(self)
-
+            Label:
+                text: ""
 
             ##################################################################      Row 7
             #   
@@ -977,6 +1014,8 @@ WindowManager:
                 disabled: False
                 valign: 'bottom'
                 halign: 'center'
+            Label:
+                text: ""                
             ##################################################################      Row 8
             Label:
                 text: "Fourth turn:"
@@ -1024,7 +1063,8 @@ WindowManager:
                 vrs: {'turnNumber': 4, 'player': 'Orchid', 'type': 'checkbox'}
                 disabled: False
                 on_active: root.clickPlayerOrderCheckbox(self)
-
+            Label:
+                text: ""
 
             ##################################################################      Row 9
             #   
@@ -1078,6 +1118,8 @@ WindowManager:
                 disabled: False
                 valign: 'bottom'
                 halign: 'center'
+            Label:
+                text: ""                
             ##################################################################      Row 10
             Label:
                 text: "Fifth turn:"
@@ -1125,7 +1167,8 @@ WindowManager:
                 vrs: {'turnNumber': 5, 'player': 'Orchid', 'type': 'checkbox'}
                 disabled: False
                 on_active: root.clickPlayerOrderCheckbox(self)
-
+            Label:
+                text: ""
 
             ##################################################################      Row 11
             #   
@@ -1179,6 +1222,8 @@ WindowManager:
                 disabled: False
                 valign: 'bottom'
                 halign: 'center'
+            Label:
+                text: ""                
             ##################################################################      Row 12
             Label:
                 text: "Sixth turn:"
@@ -1226,6 +1271,8 @@ WindowManager:
                 vrs: {'turnNumber': 6, 'player': 'Orchid', 'type': 'checkbox'}
                 disabled: False
                 on_active: root.clickPlayerOrderCheckbox(self)
+            Label:
+                text: ""                
             ##################################################################      Row 13
             #   
             Label:
@@ -1241,7 +1288,9 @@ WindowManager:
             Label:
                 text: ""
             Label:
-                text: ""                                                                                
+                text: ""       
+            Label:
+                text: ""                                                                                         
 
     FloatLayout:
         Label:
@@ -1255,14 +1304,16 @@ WindowManager:
                 Rectangle:
                     pos: self.pos
                     size: self.size
-            size_hint: (0.8, 0.1)   
-            pos_hint: {"x": 0.1, "y": 0.9}
+            size_hint: (0.7, 0.1)   
+            pos_hint: {"x": 0.15, "y": 0.9}
         Button:
             text: "Back"
             background_color: 0, 1, 0.2, 1
             # font_size: '10sp'
-            size_hint: (0.0625, 0.0625)
-            pos_hint: {"x":0.0625 / 2, "y":1 - 1.5 * 0.0625}
+            # size_hint: (0.0625, 0.0625)
+            # pos_hint: {"x":0.0625 / 2, "y":1 - 1.5 * 0.0625}
+            size_hint: (0.15, 0.15)
+            pos_hint: {"x": 0, "y": 1 - 0.15}            
             on_release: 
                 # root.uncheckAllCheckboxes()      # this function resets all checkboxes to unchecked
                 app.root.current = "cardDeclaration"
@@ -1272,8 +1323,10 @@ WindowManager:
             id: next_button
             vrs: {'turnNumber': -1, 'player': '', 'type': 'next_button'}            
             background_color: 0, 1, 0.2, 1
-            size_hint: (0.0625, 0.0625)
-            pos_hint: {"x":1 - 1.5 * 0.0625, "y":1 - 1.5 * 0.0625}
+            # size_hint: (0.0625, 0.0625)
+            # pos_hint: {"x":1 - 1.5 * 0.0625, "y":1 - 1.5 * 0.0625}
+            size_hint: (0.15, 0.15)
+            pos_hint: {"x": 0.85, "y": 1 - 0.15}            
             disabled: True
             on_press: 
                 # process the selected player order and incporporate it
@@ -1315,14 +1368,16 @@ WindowManager:
                 Rectangle:
                     pos: self.pos
                     size: self.size
-            size_hint: (0.8, 0.1)   
-            pos_hint: {"x": 0.1, "y": 0.9}
+            size_hint: (0.7, 0.1)   
+            pos_hint: {"x": 0.15, "y": 0.9}
         Button:
             text: "Back"
             background_color: 0, 1, 0.2, 1
             # font_size: '10sp'
-            size_hint: (0.0625, 0.0625)
-            pos_hint: {"x":0.0625 / 2, "y":1 - 1.5 * 0.0625}
+            # size_hint: (0.0625, 0.0625)
+            # pos_hint: {"x":0.0625 / 2, "y":1 - 1.5 * 0.0625}
+            size_hint: (0.15, 0.15)
+            pos_hint: {"x": 0, "y": 1 - 0.15}            
             on_release: 
                 app.root.current = "playerOrderScreen"
                 root.manager.transition.direction = "right"
@@ -1331,8 +1386,10 @@ WindowManager:
             id: next_button
             vrs: {'turnNumber': -1, 'player': '', 'type': 'next_button'}            
             background_color: 0, 1, 0.2, 1
-            size_hint: (0.0625, 0.0625)
-            pos_hint: {"x":1 - 1.5 * 0.0625, "y":1 - 1.5 * 0.0625}
+            # size_hint: (0.0625, 0.0625)
+            # pos_hint: {"x":1 - 1.5 * 0.0625, "y":1 - 1.5 * 0.0625}
+            size_hint: (0.15, 0.15)
+            pos_hint: {"x": 0.85, "y": 1 - 0.15}            
             disabled: False
             on_press: 
                 root.createGameSaveFile()
@@ -1341,7 +1398,7 @@ WindowManager:
 
 <DropDownCustomClass@SpinnerOption>
     # max_height: 22            # https://devdreamz.com/question/497982-kivy-how-to-change-spinner-button-colour-and-size
-    height: 40             # omg it finally works... i can customize the height of the dropdown items in a spinner
+    height: 90             # omg it finally works... i can customize the height of the dropdown items in a spinner
                             # https://kivy.org/doc/stable/api-kivy.uix.spinner.html#kivy.uix.spinner.Spinner.option_cls
 
 
@@ -1386,8 +1443,10 @@ WindowManager:
             text: "Analysis Table"
             background_color: 0, 1, 0.2, 1
             # font_size: '10sp'
-            size_hint: (0.2, 0.075)
-            pos_hint: {"x":0, "y":1 - 0.075}
+            # size_hint: (0.2, 0.075)
+            # pos_hint: {"x":0, "y":1 - 0.075}
+            size_hint: (0.2 , 0.1)
+            pos_hint: {"x": 0, "y": 1 - 0.1}
             on_release: 
                 # ANALYZE THE DATA BABY!
                 root.analyzeTheData()
@@ -1403,8 +1462,10 @@ WindowManager:
             # id: next_button
             # vrs: {'turnNumber': -1, 'player': '', 'type': 'next_button'}            
             background_color: 0, 1, 0.2, 1
-            size_hint: (0.2, 0.075)
-            pos_hint: {"x": 0, "y":1 - 2 * 0.075}
+            # size_hint: (0.2, 0.075)
+            # pos_hint: {"x": 0, "y":1 - 2 * 0.075}
+            size_hint: (0.2, 0.1)
+            pos_hint: {"x": 0, "y": 1 - 2 * 0.1}            
             disabled: False
             on_press: 
                 root.printTheTurnsPretty()
@@ -1418,8 +1479,10 @@ WindowManager:
             text: "Home Screen"
             background_color: 0, 1, 0.2, 1
             # font_size: '10sp'
-            size_hint: (0.2, 0.075)
-            pos_hint: {"x": 0.8, "y":1 - 0.075}
+            # size_hint: (0.2, 0.075)
+            # pos_hint: {"x": 0.8, "y":1 - 0.075}
+            size_hint: (0.2, 0.15)
+            pos_hint: {"x": 0.8, "y": 1 - 0.15}
             on_release: 
                 app.root.current = "home"
                 # root.resetTurnHistoryScreen()              # we moved the resetting of the kivy labels on the turnHistoryScreen to ... the confirmLoadGame
@@ -1683,7 +1746,7 @@ WindowManager:
             text: "Complete Turn"
             disabled: True
             background_color: 0, 1, 0.2, 1
-            size_hint: (0.2, 0.075)
+            size_hint: (0.2, 0.15)
             pos_hint: {"x": 0.8, "y": 0}
             on_release: 
                 root.completeTurn(self)     # completeTurn saves the turn info to the file, and as of April 8 2022 it will also update the kivy labels on the SuggestionHistoryScreen
@@ -1711,8 +1774,8 @@ WindowManager:
             pythonFileColumnNumber: -1
             background_color: 0, 1, 0.2, 1
             # font_size: '10sp'
-            size_hint: (0.2, 0.075)
-            pos_hint: {"x":0, "y":1 - 0.075}
+            size_hint: (0.2, 0.1)
+            pos_hint: {"x":0, "y":1 - 0.1}
             on_release: 
                 app.root.current = "ExecuteTurnScreen"
                 # root.manager.transition.direction = "right"            
@@ -1830,215 +1893,258 @@ WindowManager:
                 pythonFileColumnNumber: -11
                 text: '6'
             ############################################################################################## 0. Green      card row
+            #:set label_font_size '10sp'
             Label:
                 text: '0. Green'
                 text_size: self.size
                 halign: 'left'
+                font_size: label_font_size
             Label:
                 id: 0_0               # THIS column is where PEACOCK'S info goes, column 0... so when column == 2 in the FOR loop, we want that info put into THIS ONE
                 position: [0, 0]           
                 pythonFileColumnNumber: -11          # because this is where peacock info goes, the "pythonFileColumnNumber" should be peacock's column from the python file, which is 2
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 0_1
                 position: [0, 1]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 0_2     #superPLUS
                 position: [0, 2]            # this is column 2 in the python file, which is ALWAYS peacock, but NOW it should be in column 0
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 0_3
                 position: [0, 3]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 0_4
                 position: [0, 4]                # this is column 4 in the python file, which, in the python file is ALWAYS associated with mustard, but now mustard is in column 2
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 0_5
                 position: [0, 5]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             ############################################################################################## 1. Mustard      card row
             Label:
                 text: '1. Mustard'
                 text_size: self.size
-                halign: 'left'            
+                halign: 'left'      
+                font_size: label_font_size      
             Label:
                 id: 1_0
                 position: [1, 0]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 1_1
                 position: [1, 1]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 1_2
                 position: [1, 2]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 1_3
                 position: [1, 3]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 1_4
                 position: [1, 4]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 1_5
                 position: [1, 5]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             ############################################################################################## 2. Peacock      card row
             Label:
                 text: '2. Peacock'
                 text_size: self.size
-                halign: 'left'                
+                halign: 'left'            
+                font_size: label_font_size    
             Label:
                 id: 2_0
                 position: [2, 0]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 2_1
                 position: [2, 1]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 2_2
                 position: [2, 2]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 2_3
                 position: [2, 3]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 2_4
                 position: [2, 4]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 2_5
                 position: [2, 5]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             ############################################################################################## 3. Plum      card row
             Label:
                 text: '3. Plum'
                 text_size: self.size
-                halign: 'left'                
+                halign: 'left'            
+                font_size: label_font_size    
             Label:
                 id: 3_0
                 position: [3, 0]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 3_1
                 position: [3, 1]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 3_2
                 position: [3, 2]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 3_3
                 position: [3, 3]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 3_4
                 position: [3, 4]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 3_5
                 position: [3, 5]
                 pythonFileColumnNumber: -11
                 text: '?'            
+                font_size: label_font_size
             ############################################################################################## 4. Scarlett     card row
             Label:
                 text: '4. Scarlett'
                 text_size: self.size
-                halign: 'left'                
+                halign: 'left'            
+                font_size: label_font_size    
             Label:
                 id: 4_0
                 position: [4, 0]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 4_1
                 position: [4, 1]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 4_2
                 position: [4, 2]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 4_3
                 position: [4, 3]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 4_4
                 position: [4, 4]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 4_5
                 position: [4, 5]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             ############################################################################################## 5. Orchid      card row
             Label:
                 text: '5. Orchid'
                 text_size: self.size
-                halign: 'left'                
+                halign: 'left'            
+                font_size: label_font_size    
             Label:
                 id: 5_0
                 position: [5, 0]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 5_1
                 position: [5, 1]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 5_2
                 position: [5, 2]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 5_3
                 position: [5, 3]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 5_4
                 position: [5, 4]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 5_5
                 position: [5, 5]
                 pythonFileColumnNumber: -11
                 text: '?'
+                font_size: label_font_size
             ############################################################################################## BLANK ROW
             Label:
                 text: ''    
@@ -2058,176 +2164,218 @@ WindowManager:
             Label:
                 text: '6. Candlestick'
                 text_size: self.size
-                halign: 'left'                
+                halign: 'left'  
+                font_size: label_font_size              
             Label:
                 id: 6_0
                 position: [6, 0]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 6_1
                 position: [6, 1]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 6_2
                 position: [6, 2]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 6_3
                 position: [6, 3]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 6_4
                 position: [6, 4]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 6_5
                 position: [6, 5]
                 text: '?'
+                font_size: label_font_size
             ############################################################################################## 7. Dagger      card row
             Label:
                 text: '7. Dagger'
                 text_size: self.size
-                halign: 'left'                
+                halign: 'left'          
+                font_size: label_font_size      
             Label:
                 id: 7_0
                 position: [7, 0]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 7_1
                 position: [7, 1]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 7_2
                 position: [7, 2]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 7_3
                 position: [7, 3]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 7_4
                 position: [7, 4]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 7_5
                 position: [7, 5]
                 text: '?'
+                font_size: label_font_size
             ############################################################################################## 8. Pipe      card row
             Label:
                 text: '8. Pipe'
                 text_size: self.size
-                halign: 'left'                
+                halign: 'left' 
+                font_size: label_font_size               
             Label:
                 id: 8_0
                 position: [8, 0]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 8_1
                 position: [8, 1]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 8_2
                 position: [8, 2]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 8_3
                 position: [8, 3]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 8_4
                 position: [8, 4]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 8_5
                 position: [8, 5]
                 text: '?'
+                font_size: label_font_size
             ############################################################################################## 9. Revolver      card row
             Label:
                 text: '9. Revolver'
                 text_size: self.size
-                halign: 'left'                
+                halign: 'left'            
+                font_size: label_font_size    
             Label:
                 id: 9_0
                 position: [9, 0]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 9_1
                 position: [9, 1]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 9_2
                 position: [9, 2]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 9_3
                 position: [9, 3]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 9_4
                 position: [9, 4]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 9_5
                 position: [9, 5]
                 text: '?'
+                font_size: label_font_size
             ############################################################################################## 10. Rope      card row
             Label:
                 text: '10. Rope'
                 text_size: self.size
-                halign: 'left'                
+                halign: 'left'            
+                font_size: label_font_size    
             Label:
                 id: 10_0
                 position: [10, 0]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 10_1
                 position: [10, 1]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 10_2
                 position: [10, 2]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 10_3
                 position: [10, 3]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 10_4
                 position: [10, 4]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 10_5
                 position: [10, 5]
                 text: '?'
+                font_size: label_font_size
             ############################################################################################## 11. Wrench      card row
             Label:
                 text: '11. Wrench'
                 text_size: self.size
-                halign: 'left'                
+                halign: 'left'            
+                font_size: label_font_size    
             Label:
                 id: 11_0
                 position: [11, 0]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 11_1
                 position: [11, 1]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 11_2
                 position: [11, 2]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 11_3
                 position: [11, 3]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 11_4
                 position: [11, 4]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 11_5
                 position: [11, 5]
                 text: '?'
+                font_size: label_font_size
             ############################################################################################## BLANK ROW
             Label:
                 text: ''    
@@ -2247,263 +2395,326 @@ WindowManager:
             Label:
                 text: '12. Ballroom'
                 text_size: self.size
-                halign: 'left'                
+                halign: 'left'            
+                font_size: label_font_size    
             Label:
                 id: 12_0
                 position: [12, 0]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 12_1
                 position: [12, 1]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 12_2
                 position: [12, 2]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 12_3
                 position: [12, 3]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 12_4
                 position: [12, 4]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 12_5
                 position: [12, 5]
                 text: '?'
+                font_size: label_font_size
             ############################################################################################## 13. Billiard Room      card row
             Label:
                 text: '13. Billiard Room'
                 text_size: self.size
-                halign: 'left'                
+                halign: 'left'            
+                font_size: label_font_size    
             Label:
                 id: 13_0
                 position: [13, 0]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 13_1
                 position: [13, 1]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 13_2
                 position: [13, 2]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 13_3
                 position: [13, 3]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 13_4
                 position: [13, 4]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 13_5
                 position: [13, 5]
                 text: '?'
+                font_size: label_font_size
             ############################################################################################## 14. Conservatory      card row
             Label:
                 text: '14. Conservatory'
                 text_size: self.size
                 halign: 'left'                
+                font_size: label_font_size
             Label:
                 id: 14_0
                 position: [14, 0]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 14_1
                 position: [14, 1]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 14_2
                 position: [14, 2]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 14_3
                 position: [14, 3]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 14_4
                 position: [14, 4]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 14_5
                 position: [14, 5]
                 text: '?'
+                font_size: label_font_size
             ############################################################################################## 15. Dining Room      card row
             Label:
                 text: '15. Dining Room'
                 text_size: self.size
-                halign: 'left'                
+                halign: 'left'            
+                font_size: label_font_size    
             Label:
                 id: 15_0
                 position: [15, 0]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 15_1
                 position: [15, 1]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 15_2
                 position: [15, 2]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 15_3
                 position: [15, 3]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 15_4
                 position: [15, 4]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 15_5
                 position: [15, 5]
                 text: '?'
+                font_size: label_font_size
             ############################################################################################## 16. Hall      card row
             Label:
                 text: '16. Hall'
                 text_size: self.size
-                halign: 'left'                
+                halign: 'left'            
+                font_size: label_font_size    
             Label:
                 id: 16_0
                 position: [16, 0]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 16_1
                 position: [16, 1]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 16_2
                 position: [16, 2]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 16_3
                 position: [16, 3]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 16_4
                 position: [16, 4]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 16_5
                 position: [16, 5]
                 text: '?'
+                font_size: label_font_size
             ############################################################################################## 17. Kitchen      card row
             Label:
                 text: '17. Kitchen'
                 text_size: self.size
-                halign: 'left'                
+                halign: 'left'            
+                font_size: label_font_size    
             Label:
                 id: 17_0
                 position: [17, 0]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 17_1
                 position: [17, 1]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 17_2
                 position: [17, 2]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 17_3
                 position: [17, 3]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 17_4
                 position: [17, 4]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 17_5
                 position: [17, 5]
                 text: '?'
+                font_size: label_font_size
             ############################################################################################## 18. Library      card row
             Label:
                 text: '18. Library'
                 text_size: self.size
-                halign: 'left'                
+                halign: 'left'            
+                font_size: label_font_size    
             Label:
                 id: 18_0
                 position: [18, 0]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 18_1
                 position: [18, 1]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 18_2
                 position: [18, 2]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 18_3
                 position: [18, 3]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 18_4
                 position: [18, 4]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 18_5
                 position: [18, 5]
                 text: '?'
+                font_size: label_font_size
             ############################################################################################## 19. Lounge      card row
             Label:
                 text: '19. Lounge'
                 text_size: self.size
-                halign: 'left'                
+                halign: 'left'            
+                font_size: label_font_size    
             Label:
                 id: 19_0
                 position: [19, 0]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 19_1
                 position: [19, 1]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 19_2
                 position: [19, 2]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 19_3
                 position: [19, 3]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 19_4
                 position: [19, 4]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 19_5
                 position: [19, 5]
                 text: '?'
+                font_size: label_font_size
             ############################################################################################## 20. Study      card row
             Label:
                 text: '20. Study'
                 text_size: self.size
-                halign: 'left'                
+                halign: 'left'            
+                font_size: label_font_size    
             Label:
                 id: 20_0
                 position: [20, 0]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 20_1
                 position: [20, 1]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 20_2
                 position: [20, 2]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 20_3
                 position: [20, 3]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 20_4
                 position: [20, 4]
                 text: '?'
+                font_size: label_font_size
             Label:
                 id: 20_5
                 position: [20, 5]
                 text: '?'
+                font_size: label_font_size
         BoxLayout:
             size_hint: (1, 0.1)
 
@@ -2525,8 +2736,10 @@ WindowManager:
         Button:
             text: "Back"
             background_color: 0, 1, 0.2, 1
-            size_hint: (0.0625, 0.0625)
-            pos_hint: {"x":0.0625 / 2, "y":1 - 1.5 * 0.0625}
+            # size_hint: (0.0625, 0.0625)
+            size_hint: (0.15, 0.15)
+            # pos_hint: {"x":0.0625 / 2, "y":1 - 1.5 * 0.0625}
+            pos_hint: {"x": 0, "y": 1 - 0.15}
             on_release: 
                 app.root.current = "home"
                 root.manager.transition.direction = "right"
@@ -2534,8 +2747,10 @@ WindowManager:
             text: "Next"
             id: next_button
             background_color: 0, 1, 0.2, 1
-            size_hint: (0.0625, 0.0625)
-            pos_hint: {"x":1 - 1.5 * 0.0625, "y":1 - 1.5 * 0.0625}
+            # size_hint: (0.0625, 0.0625)
+            # pos_hint: {"x":1 - 1.5 * 0.0625, "y":1 - 1.5 * 0.0625}
+            size_hint: (0.15, 0.15)
+            pos_hint: {"x": 1 - 0.15, "y": 1 - 0.15}
             disabled: True
             on_press: 
                 root.confirmLoadGame()
@@ -2546,8 +2761,9 @@ WindowManager:
             text: 'Click here to choose a file to load:'
             values: []
             on_text: root.spinnerSelect()
-            size_hint: (0.8, 0.1)
-            pos_hint: {"x": 0.1, "y": 0.7}
+            background_color: 0.2, 1, 0.2, 1
+            size_hint: (0.7, 0.1)
+            pos_hint: {"x": 0.15, "y": 0.8}
         Button:
             id: delete_file_button
             text: "DELETE SELECTED FILE"
@@ -2582,8 +2798,8 @@ WindowManager:
             # pythonFileColumnNumber: -1
             background_color: 0, 1, 0.2, 1
             # font_size: '10sp'
-            size_hint: (0.2, 0.075)
-            pos_hint: {"x":0, "y":1 - 0.075}
+            size_hint: (0.2, 0.1)
+            pos_hint: {"x":0, "y":1 - 0.1}
             on_release: 
                 app.root.current = "ExecuteTurnScreen"
                 # root.manager.transition.direction = "right"            
@@ -2611,7 +2827,7 @@ WindowManager:
             color: 0.3, 0.3, 0.3, 1
             column: 'ignore me'
 
-        #:set fontSize 14 
+        #:set fontSize '9sp'
         #:set leftBuffer 0.06
         #:set topRowYLevel 0.89
         Label:

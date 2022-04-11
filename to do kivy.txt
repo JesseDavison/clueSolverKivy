@@ -5,7 +5,9 @@ Friday, stopwatch at 12:51
 
 
 build an APK file and see how it performs on emulator / phone
-
+	it crashes when you load a game with lots of turns and you try to view the suggestionHistoryScreen
+	I believe this will be fixed if, instead of using a separate label for every single number, a single label was used for each entire turn
+	for now, though, this is not a priority and i'll be moving on to other projects
 
 
 
